@@ -1,4 +1,5 @@
 package domain
 
-type User struct {
+type UserPo struct {
+	Name string
 }

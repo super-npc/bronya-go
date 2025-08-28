@@ -26,5 +26,5 @@ func AppStart(e *echo.Echo) {
 }
 
 func registerDatabaseBean() {
-	util.RegisterByStruct(&domain.User{})
+	util.RegisterByStruct(&domain.UserPo{})
 }
