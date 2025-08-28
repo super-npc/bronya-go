@@ -6,9 +6,12 @@ import (
 )
 
 func InitRouting(e *echo.Echo) {
+	routingAdmin(e)
+}
 
+func routingAdmin(e *echo.Echo) {
 	admin := e.Group("/admin")
 	{
-		admin.GET("/", controller.Page(e.AcquireContext()))
+		admin.GET("/", controller.Page)
 	}
 }
