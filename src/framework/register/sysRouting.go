@@ -1,4 +1,4 @@
-package framework
+package register
 
 import (
 	"github.com/labstack/echo/v4"
