@@ -49,7 +49,7 @@ type LogConfig struct {
 	MaxBackups int    `mapstructure:"max_backups"`
 }
 
-func Init() (err error) {
+func InitSettings() (err error) {
 	// 方式1：直接指定配置文件路径（相对路径或者绝对路径）
 	// 相对路径：相对执行的可执行文件的相对路径
 	viper.SetConfigFile("./conf/config.yaml")
@@ -74,7 +74,7 @@ func Init() (err error) {
 	if err != nil {
 		// 读取配置信息失败
 		fmt.Printf("viper.ReadInConfig failed, err:%v\n", err)
-		return
+		return err
 	}
 
 	// 把读取到的配置信息反序列化到 Conf 变量中
