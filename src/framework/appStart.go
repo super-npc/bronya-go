@@ -5,7 +5,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/super-npc/bronya-go/src/commons/util"
-	"github.com/super-npc/bronya-go/src/framework/conf"
 	"github.com/super-npc/bronya-go/src/framework/register"
 	"github.com/super-npc/bronya-go/src/module/sys/domain"
 )
@@ -17,10 +16,11 @@ func AppStart(e *echo.Echo) {
 
 	e.HTTPErrorHandler = appFramework.CustomHttpErrorHandler // 全局异常处理
 
-	err := conf.InitSettings()
-	if err != nil {
-		panic(err)
-	}
+	// todo 配置文件读取
+	//err := conf.InitSettings()
+	//if err != nil {
+	//	panic(err)
+	//}
 	// 初始化中间件
 	register.InitDatabase()
 }
