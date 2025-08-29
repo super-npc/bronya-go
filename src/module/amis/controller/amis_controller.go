@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -52,15 +51,39 @@ func Create(c echo.Context) error {
 	bean := findBean(c)
 	// 使用接口获取数据库连接
 	res := dbProvider.GetDb().Create(bean)
-	fmt.Println(res)
+	if res.RowsAffected == 0 {
+		return errors.New("新增失败")
+	}
 	return c.String(http.StatusOK, "Hello, World! ")
 }
 
 func Update(c echo.Context) error {
 	bean := findBean(c)
 	// 使用接口获取数据库连接
-	res := dbProvider.GetDb().Updates(bean) // 得到该bean是通过反射得到的,导致执行后reflect: reflect.Value.SetUint
-	fmt.Println(res)
+	res := dbProvider.GetDb().Updates(bean)
+	if res.RowsAffected == 0 {
+		return errors.New("更新失败")
+	}
+	return c.String(http.StatusOK, "Hello, World! ")
+}
+
+func DeleteBatch(c echo.Context) error {
+	deleteBatchReq := new(req.DeleteBatchReq)
+	if c.Bind(deleteBatchReq) != nil {
+		return errors.New("非法参数")
+	}
+	amisHeader := getAmisHeader(c.Request().Header)
+	bean, err := util.NewStructFromName(amisHeader.Bean)
+	if err != nil {
+		return errors.New("未注册bean")
+	}
+
+	// 使用接口获取数据库连接
+	ids := strings.Split(deleteBatchReq.Ids, ",")
+	res := dbProvider.GetDb().Delete(bean, ids)
+	if res.RowsAffected == 0 {
+		return errors.New("删除失败")
+	}
 	return c.String(http.StatusOK, "Hello, World! ")
 }
 

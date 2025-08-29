@@ -16,5 +16,6 @@ func routingAdmin(e *echo.Echo) {
 		admin.POST("/view", controller.View)
 		admin.POST("/create", controller.Create)
 		admin.POST("/update", controller.Update)
+		admin.POST("/delete-batch", controller.DeleteBatch)
 	}
 }
