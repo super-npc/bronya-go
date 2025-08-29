@@ -10,8 +10,9 @@ func InitRouting(e *echo.Echo) {
 }
 
 func routingAdmin(e *echo.Echo) {
-	admin := e.Group("/admin")
+	admin := e.Group("/admin/base/amis")
 	{
-		admin.GET("/", controller.Page)
+		admin.POST("/page", controller.Page)
+		admin.POST("/view", controller.View)
 	}
 }
