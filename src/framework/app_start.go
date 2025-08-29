@@ -6,11 +6,18 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/super-npc/bronya-go/src/commons/util"
 	"github.com/super-npc/bronya-go/src/framework/register"
+	"github.com/super-npc/bronya-go/src/module/amis/controller"
 	"github.com/super-npc/bronya-go/src/module/sys/user_po"
 )
 
 func AppStart(e *echo.Echo) {
 	registerDatabaseBean() // 初始化数据库表对象
+
+	// 初始化数据库
+	register.InitDatabase()
+
+	// 注入依赖，打破循环引用
+	controller.SetDbProvider(register.GetDbProvider())
 
 	register.InitRouting(e) // 注册路由
 
@@ -23,8 +30,6 @@ func AppStart(e *echo.Echo) {
 	//if err != nil {
 	//	panic(err)
 	//}
-	// 初始化中间件
-	register.InitDatabase()
 }
 
 func registerDatabaseBean() {

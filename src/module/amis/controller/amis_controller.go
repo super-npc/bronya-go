@@ -8,11 +8,18 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/super-npc/bronya-go/src/commons/db"
 	"github.com/super-npc/bronya-go/src/commons/util"
-	"github.com/super-npc/bronya-go/src/framework/register"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/req"
-	"gorm.io/gorm"
 )
+
+// 使用全局变量存储DB提供者
+var dbProvider db.DBProvider
+
+// SetDbProvider 设置数据库提供者（由外部注入）
+func SetDbProvider(provider db.DBProvider) {
+	dbProvider = provider
+}
 
 func Page(c echo.Context) error {
 	pageReq := new(req.PageReq)
@@ -42,24 +49,38 @@ func View(c echo.Context) error {
 }
 
 func Create(c echo.Context) error {
+	bean := findBean(c)
+	// 使用接口获取数据库连接
+	res := dbProvider.GetDb().Create(bean)
+	fmt.Println(res)
+	return c.String(http.StatusOK, "Hello, World! ")
+}
+
+func Update(c echo.Context) error {
+	bean := findBean(c)
+	// 使用接口获取数据库连接
+	res := dbProvider.GetDb().Updates(bean)
+	fmt.Println(res)
+	return c.String(http.StatusOK, "Hello, World! ")
+}
+
+func findBean(c echo.Context) interface{} {
 	var body map[string]interface{}
 	if c.Bind(&body) != nil {
-		return errors.New("非法参数")
+		return nil
 	}
 	amisHeader := getAmisHeader(c.Request().Header)
 	byStruct := changeMapByStruct(amisHeader, body)
 	marshal, _ := json.Marshal(byStruct)
 	bean, err := util.NewStructFromJSONAndName(amisHeader.Bean, marshal)
 	if err != nil {
-		return errors.New("未注册bean")
+		return nil
 	}
-	res := register.MyDb.Create(bean)
-	fmt.Println(res)
-	return c.String(http.StatusOK, "Hello, World! ")
+	return bean
 }
 
 func changeMapByStruct(header req.AmisHeader, body map[string]interface{}) map[string]interface{} {
-	var bodyNew map[string]interface{} = make(map[string]interface{})
+	var bodyNew = make(map[string]interface{})
 	var beanPre = header.Bean + "__"
 	for s, i := range body {
 		key := strings.TrimPrefix(s, beanPre)
