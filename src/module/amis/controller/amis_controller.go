@@ -9,7 +9,9 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/super-npc/bronya-go/src/commons/util"
+	"github.com/super-npc/bronya-go/src/framework/register"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/req"
+	"gorm.io/gorm"
 )
 
 func Page(c echo.Context) error {
@@ -47,14 +49,13 @@ func Create(c echo.Context) error {
 	amisHeader := getAmisHeader(c.Request().Header)
 	byStruct := changeMapByStruct(amisHeader, body)
 	marshal, _ := json.Marshal(byStruct)
-	var json1 = string(marshal)
-	fmt.Println(json1)
 	bean, err := util.NewStructFromJSONAndName(amisHeader.Bean, marshal)
 	if err != nil {
 		return errors.New("未注册bean")
 	}
-	fmt.Println(bean)
-	return c.String(http.StatusOK, "Hello, World!")
+	res := register.MyDb.Create(bean)
+	fmt.Println(res)
+	return c.String(http.StatusOK, "Hello, World! ")
 }
 
 func changeMapByStruct(header req.AmisHeader, body map[string]interface{}) map[string]interface{} {
