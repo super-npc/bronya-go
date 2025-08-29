@@ -59,7 +59,7 @@ func Create(c echo.Context) error {
 func Update(c echo.Context) error {
 	bean := findBean(c)
 	// 使用接口获取数据库连接
-	res := dbProvider.GetDb().Updates(bean)
+	res := dbProvider.GetDb().Updates(bean) // 得到该bean是通过反射得到的,导致执行后reflect: reflect.Value.SetUint
 	fmt.Println(res)
 	return c.String(http.StatusOK, "Hello, World! ")
 }

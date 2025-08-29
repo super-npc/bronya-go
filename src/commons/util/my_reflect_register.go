@@ -58,6 +58,6 @@ func NewStructFromJSONAndName(typeName string, jsonData []byte) (interface{}, er
 		return nil, err
 	}
 
-	// 4. 返回真正的结构体对象（去掉指针层）
-	return ptr.Elem().Interface(), nil
+	// 4. 返回指针而不是值，以便GORM可以使用反射
+	return ptr.Interface(), nil
 }
