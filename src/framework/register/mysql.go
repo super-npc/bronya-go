@@ -1,6 +1,7 @@
 package register
 
 import (
+	"github.com/acmestack/gorm-plus/gplus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -19,4 +20,7 @@ func InitDatabase() {
 		panic(err)
 	}
 	MyDb = db
+
+	// 初始化gplus
+	gplus.Init(db)
 }
