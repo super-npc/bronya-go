@@ -14,5 +14,6 @@ func routingAdmin(e *echo.Echo) {
 	{
 		admin.POST("/page", controller.Page)
 		admin.POST("/view", controller.View)
+		admin.POST("/create", controller.Create)
 	}
 }
