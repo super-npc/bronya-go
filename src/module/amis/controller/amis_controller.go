@@ -46,7 +46,7 @@ func Page(c echo.Context) error {
 	// 获取实际的切片值
 	sliceValue := slicePtr.Elem().Interface()
 
-	// 将结果转换为 []map[string]interface{}
+	// 将结果转换为 []map[string]amis_proxy{}
 	var list []map[string]interface{}
 	if sliceValue != nil {
 		jsonData, err := json.Marshal(sliceValue)
@@ -77,6 +77,10 @@ func View(c echo.Context) error {
 	registerObj := util.NewStructFromName(amisHeader.Bean)
 	poBean := registerObj.Po
 	res := dbProvider.GetDb().First(poBean, viewReq.Id)
+	if registerObj.Proxy != nil {
+		//var a amis_proxy.IAmisProxy registerObj.Proxy
+		//fmt.Printf("", a)
+	}
 
 	if res.RowsAffected == 0 {
 		return errors.New("不能存在记录")

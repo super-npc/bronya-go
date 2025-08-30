@@ -48,7 +48,7 @@ func ParseToken(tokenString string) (*CustomClaims, error) {
 	// 如果是自定义Claim结构体则需要使用 ParseWithClaims 方法
 	token, err := jwt.ParseWithClaims(tokenString, cc, func(token *jwt.Token) (i interface{}, err error) {
 		// 直接使用标准的Claim则可以直接使用Parse方法
-		//token, err := jwt.Parse(tokenString, func(token *jwt.Token) (i interface{}, err error) {
+		//token, err := jwt.Parse(tokenString, func(token *jwt.Token) (i amis_proxy{}, err error) {
 		return CustomSecret, nil
 	})
 	if err != nil {
