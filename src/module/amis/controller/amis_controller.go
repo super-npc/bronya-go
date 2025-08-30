@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/super-npc/bronya-go/src/commons"
 	"github.com/super-npc/bronya-go/src/commons/constant"
 	"github.com/super-npc/bronya-go/src/commons/db"
 	"github.com/super-npc/bronya-go/src/commons/util"
@@ -93,14 +94,24 @@ func View(c echo.Context) error {
 }
 
 func Create(c echo.Context) error {
-	reqBody, registerObj := findBean(c)
+	var reqBody map[string]interface{}
+	if c.Bind(&reqBody) != nil {
+		panic("无法绑定请求参数")
+	}
+
+	_, registerObj := findBean(c, reqBody)
+	proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
+	if registerObj.Proxy != nil {
+		proxy.BeforeAdd(reqBody)
+		// 修改后重新序列化
+		_, registerObj = findBean(c, reqBody)
+	}
+
 	poBean := registerObj.Po
 
 	// 通过反射调用BeforeAdd方法
 	var res *gorm.DB
 	if registerObj.Proxy != nil {
-		proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
-		proxy.BeforeAdd(reqBody)
 		res = dbProvider.GetDb().Create(poBean)
 		proxy.AfterAdd(poBean)
 	} else {
@@ -114,14 +125,23 @@ func Create(c echo.Context) error {
 }
 
 func Update(c echo.Context) error {
-	reqBody, registerObj := findBean(c)
+	var reqBody map[string]interface{}
+	if c.Bind(&reqBody) != nil {
+		panic("无法绑定请求参数")
+	}
+
+	_, registerObj := findBean(c, reqBody)
+	proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
+	if registerObj.Proxy != nil {
+		proxy.BeforeUpdate(reqBody)
+		// 修改后重新序列化
+		_, registerObj = findBean(c, reqBody)
+	}
+
 	poBean := registerObj.Po
 	// 使用接口获取数据库连接
 	var res *gorm.DB
-
 	if registerObj.Proxy != nil {
-		proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
-		proxy.BeforeAdd(reqBody)
 		res = dbProvider.GetDb().Updates(poBean)
 		proxy.AfterUpdate(poBean)
 	} else {
@@ -143,8 +163,18 @@ func DeleteBatch(c echo.Context) error {
 	poBean := registerObj.Po
 
 	// 使用接口获取数据库连接
-	ids := strings.Split(deleteBatchReq.Ids, ",")
-	tx := dbProvider.GetDb().Delete(poBean, ids)
+	idsStr := strings.Split(deleteBatchReq.Ids, ",")
+	ids, _ := commons.StringsToUints(idsStr)
+
+	var tx *gorm.DB
+	if registerObj.Proxy != nil {
+		proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
+		proxy.BeforeDelete(ids)
+		tx = dbProvider.GetDb().Delete(poBean, ids)
+		proxy.AfterDelete(ids)
+	} else {
+		tx = dbProvider.GetDb().Delete(poBean, ids)
+	}
 	if tx.RowsAffected == 0 {
 		return errors.New("删除失败")
 	}
@@ -168,11 +198,7 @@ func table(header req.AmisHeader, registerObj util.RegisterResp, record interfac
 	return resTable
 }
 
-func findBean(c echo.Context) (map[string]interface{}, util.RegisterResp) {
-	var reqBody map[string]interface{}
-	if c.Bind(&reqBody) != nil {
-		panic("无法绑定请求参数")
-	}
+func findBean(c echo.Context, reqBody map[string]interface{}) (map[string]interface{}, util.RegisterResp) {
 	amisHeader := getAmisHeader(c.Request().Header)
 	byStruct := changeMapByStruct(amisHeader, reqBody)
 	marshal, _ := json.Marshal(byStruct)
