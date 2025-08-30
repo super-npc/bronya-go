@@ -40,9 +40,15 @@ func View(c echo.Context) error {
 		return errors.New("非法参数")
 	}
 
-	_, err := util.NewStructFromJSONAndName("", []byte{})
+	amisHeader := getAmisHeader(c.Request().Header)
+	bean, err := util.NewStructFromName(amisHeader.Bean)
 	if err != nil {
-		return errors.New("")
+		return errors.New("未注册bean")
+	}
+	res := dbProvider.GetDb().First(bean, viewReq.Id)
+
+	if res.RowsAffected == 0 {
+		return errors.New("不能存在记录")
 	}
 	return c.String(http.StatusOK, "Hello, World!")
 }
