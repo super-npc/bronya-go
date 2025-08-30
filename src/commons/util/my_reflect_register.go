@@ -58,7 +58,7 @@ func RegisterByStruct(v interface{}) reflect.Type {
 	return t
 }
 
-func NewStructFromName(typeName string) (RegisterObj, error) {
+func NewStructFromName(typeName string) RegisterObj {
 	// 1. 从注册表拿到类型的 reflect.Type
 	t, ok := typeRegistry[typeName]
 	if !ok {
@@ -73,7 +73,7 @@ func NewStructFromName(typeName string) (RegisterObj, error) {
 	}
 
 	// 4. 返回指针而不是值，以便GORM可以使用反射
-	return obj, nil
+	return obj
 }
 
 // NewStructFromJSONAndName 业务逻辑：传入 JSON 和类型名字符串，返回填充好的结构体对象

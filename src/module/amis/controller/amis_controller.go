@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -27,37 +28,43 @@ func Page(c echo.Context) error {
 	if c.Bind(pageReq) != nil {
 		return errors.New("非法参数")
 	}
-	//amisHeader := getAmisHeader(c.Request().Header)
-	//bean, err := util.NewStructFromName(amisHeader.Bean)
-	////query.Eq(&model.Username, users[0].Username).Or().Eq(&model.Username, users[5].Username)
-	//if err != nil {
-	//	return errors.New("未注册bean")
-	//}
+	amisHeader := getAmisHeader(c.Request().Header)
+	registerObj := util.NewStructFromName(amisHeader.Bean)
+	poBean := registerObj.Po
 
-	//page := 1      // 第几页，从 1 开始
-	//pageSize := 10 // 每页条数
-	//offset := (page - 1) * pageSize
+	page := 1      // 第几页，从 1 开始
+	pageSize := 10 // 每页条数
+	offset := (page - 1) * pageSize
 
-	//var aa = []bean
-	//dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(&aa)
-	//fmt.Println("page", aa)
+	// 根据 bean 的类型创建对应切片
+	sliceType := reflect.SliceOf(reflect.TypeOf(poBean))
+	slicePtr := reflect.New(sliceType)
 
-	//page := gplus.NewPage[bean](1, 10)
-	//query, _ := gplus.NewQuery[bean]()
-	//resultPage, _ := gplus.SelectPage(page, query)
-	//var list []map[string]interface{}
-	//for _, record := range resultPage.Records {
-	//	var result map[string]interface{}
-	//	marshal, err := json.Marshal(record)
-	//	err1 := json.Unmarshal(marshal, &result)
-	//	if err1 != nil {
-	//		panic(err)
-	//	}
-	//	list = append(list, result)
-	//}
-	//res := resp.PageRes{Total: resultPage.Total, Rows: list}
-	//return resp.Success(c, res)
-	return c.String(http.StatusOK, "Hello, World! ")
+	// 使用 GORM 查询数据
+	dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface())
+
+	// 获取实际的切片值
+	sliceValue := slicePtr.Elem().Interface()
+
+	// 将结果转换为 []map[string]interface{}
+	var list []map[string]interface{}
+	if sliceValue != nil {
+		jsonData, err := json.Marshal(sliceValue)
+		if err != nil {
+			return errors.New("序列化数据失败")
+		}
+		err = json.Unmarshal(jsonData, &list)
+		if err != nil {
+			return errors.New("反序列化数据失败")
+		}
+	}
+
+	// 获取总数
+	var total int64
+	dbProvider.GetDb().Model(poBean).Count(&total)
+
+	res := resp.PageRes{Total: total, Rows: list}
+	return resp.Success(c, res)
 }
 
 func View(c echo.Context) error {
@@ -67,23 +74,21 @@ func View(c echo.Context) error {
 	}
 
 	amisHeader := getAmisHeader(c.Request().Header)
-	bean, err := util.NewStructFromName(amisHeader.Bean)
-
-	if err != nil {
-		return errors.New("未注册bean")
-	}
-	res := dbProvider.GetDb().First(bean, viewReq.Id)
+	registerObj := util.NewStructFromName(amisHeader.Bean)
+	poBean := registerObj.Po
+	res := dbProvider.GetDb().First(poBean, viewReq.Id)
 
 	if res.RowsAffected == 0 {
 		return errors.New("不能存在记录")
 	}
-	return resp.Success(c, bean)
+	return resp.Success(c, poBean)
 }
 
 func Create(c echo.Context) error {
-	bean := findBean(c)
+	registerObj := findBean(c)
+	poBean := registerObj.Po
 	// 使用接口获取数据库连接
-	res := dbProvider.GetDb().Create(bean)
+	res := dbProvider.GetDb().Create(poBean)
 	if res.RowsAffected == 0 {
 		return errors.New("新增失败")
 	}
@@ -91,9 +96,10 @@ func Create(c echo.Context) error {
 }
 
 func Update(c echo.Context) error {
-	bean := findBean(c)
+	registerObj := findBean(c)
+	poBean := registerObj.Po
 	// 使用接口获取数据库连接
-	res := dbProvider.GetDb().Updates(bean)
+	res := dbProvider.GetDb().Updates(poBean)
 	if res.RowsAffected == 0 {
 		return errors.New("更新失败")
 	}
@@ -106,21 +112,18 @@ func DeleteBatch(c echo.Context) error {
 		return errors.New("非法参数")
 	}
 	amisHeader := getAmisHeader(c.Request().Header)
-	bean, err := util.NewStructFromName(amisHeader.Bean)
-	if err != nil {
-		return errors.New("未注册bean")
-	}
+	registerObj := util.NewStructFromName(amisHeader.Bean)
+	poBean := registerObj.Po
 
 	// 使用接口获取数据库连接
 	ids := strings.Split(deleteBatchReq.Ids, ",")
-	res := dbProvider.GetDb().Delete(bean, ids)
+	res := dbProvider.GetDb().Delete(poBean, ids)
 	if res.RowsAffected == 0 {
 		return errors.New("删除失败")
 	}
-	return resp.Success(c, bean)
+	return resp.Success(c, poBean)
 }
 
-// todo 返回类型变了
 func findBean(c echo.Context) util.RegisterObj {
 	var body map[string]interface{}
 	if c.Bind(&body) != nil {
