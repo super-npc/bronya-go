@@ -1,18 +1,19 @@
 package user_po
 
 import (
+	"github.com/labstack/gommon/log"
 	"github.com/super-npc/bronya-go/src/commons/util"
 )
 
 type UserPoProxy struct {
 }
 
-func (this *UserPoProxy) BeforeAdd() {
-
+func (this *UserPoProxy) BeforeAdd(reqBody map[string]interface{}) {
+	log.Infof("新增前: %s", reqBody)
 }
 
-func (this *UserPoProxy) AfterAdd() {
-
+func (this *UserPoProxy) AfterAdd(PoBean interface{}) {
+	log.Infof("新增后: %s", PoBean)
 }
 
 func (this *UserPoProxy) BeforeUpdate() {

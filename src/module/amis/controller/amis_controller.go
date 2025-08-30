@@ -15,6 +15,7 @@ import (
 	"github.com/super-npc/bronya-go/src/module/amis/amis_proxy"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/req"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/resp"
+	"gorm.io/gorm"
 )
 
 // 使用全局变量存储DB提供者
@@ -92,17 +93,20 @@ func View(c echo.Context) error {
 }
 
 func Create(c echo.Context) error {
-	registerObj := findBean(c)
+	reqBody, registerObj := findBean(c)
 	poBean := registerObj.Po
 
 	// 通过反射调用BeforeAdd方法
+	var res *gorm.DB
 	if registerObj.Proxy != nil {
-		a := registerObj.Proxy.(amis_proxy.IAmisProxy)
-		a.BeforeAdd()
+		proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
+		proxy.BeforeAdd(reqBody)
+		res = dbProvider.GetDb().Create(poBean)
+		proxy.AfterAdd(poBean)
+	} else {
+		res = dbProvider.GetDb().Create(poBean)
 	}
 
-	// 使用接口获取数据库连接
-	res := dbProvider.GetDb().Create(poBean)
 	if res.RowsAffected == 0 {
 		return errors.New("新增失败")
 	}
@@ -110,7 +114,7 @@ func Create(c echo.Context) error {
 }
 
 func Update(c echo.Context) error {
-	registerObj := findBean(c)
+	_, registerObj := findBean(c)
 	poBean := registerObj.Po
 	// 使用接口获取数据库连接
 	res := dbProvider.GetDb().Updates(poBean)
@@ -131,8 +135,8 @@ func DeleteBatch(c echo.Context) error {
 
 	// 使用接口获取数据库连接
 	ids := strings.Split(deleteBatchReq.Ids, ",")
-	res := dbProvider.GetDb().Delete(poBean, ids)
-	if res.RowsAffected == 0 {
+	tx := dbProvider.GetDb().Delete(poBean, ids)
+	if tx.RowsAffected == 0 {
 		return errors.New("删除失败")
 	}
 	return resp.Success(c, poBean)
@@ -155,17 +159,17 @@ func table(header req.AmisHeader, registerObj util.RegisterResp, record interfac
 	return resTable
 }
 
-func findBean(c echo.Context) util.RegisterResp {
-	var body map[string]interface{}
-	if c.Bind(&body) != nil {
+func findBean(c echo.Context) (map[string]interface{}, util.RegisterResp) {
+	var reqBody map[string]interface{}
+	if c.Bind(&reqBody) != nil {
 		panic("无法绑定请求参数")
 	}
 	amisHeader := getAmisHeader(c.Request().Header)
-	byStruct := changeMapByStruct(amisHeader, body)
+	byStruct := changeMapByStruct(amisHeader, reqBody)
 	marshal, _ := json.Marshal(byStruct)
 	bean := util.NewStructFromJSONAndName(amisHeader.Bean, marshal)
 
-	return bean
+	return reqBody, bean
 }
 
 func changeMapByStruct(header req.AmisHeader, body map[string]interface{}) map[string]interface{} {

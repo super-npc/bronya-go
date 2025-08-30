@@ -1,8 +1,8 @@
 package amis_proxy
 
 type IAmisProxy interface {
-	BeforeAdd()
-	AfterAdd()
+	BeforeAdd(reqBody map[string]interface{})
+	AfterAdd(PoBean interface{})
 	BeforeUpdate()
 	AfterUpdate()
 
