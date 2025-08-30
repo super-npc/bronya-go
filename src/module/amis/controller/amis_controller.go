@@ -27,20 +27,20 @@ func Page(c echo.Context) error {
 	if c.Bind(pageReq) != nil {
 		return errors.New("非法参数")
 	}
-	amisHeader := getAmisHeader(c.Request().Header)
-	bean, err := util.NewStructFromName(amisHeader.Bean)
-	//query.Eq(&model.Username, users[0].Username).Or().Eq(&model.Username, users[5].Username)
-	if err != nil {
-		return errors.New("未注册bean")
-	}
+	//amisHeader := getAmisHeader(c.Request().Header)
+	//bean, err := util.NewStructFromName(amisHeader.Bean)
+	////query.Eq(&model.Username, users[0].Username).Or().Eq(&model.Username, users[5].Username)
+	//if err != nil {
+	//	return errors.New("未注册bean")
+	//}
 
-	page := 1      // 第几页，从 1 开始
-	pageSize := 10 // 每页条数
-	offset := (page - 1) * pageSize
+	//page := 1      // 第几页，从 1 开始
+	//pageSize := 10 // 每页条数
+	//offset := (page - 1) * pageSize
 
-	var aa = []bean
-	dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(&aa)
-	fmt.Println("page", aa)
+	//var aa = []bean
+	//dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(&aa)
+	//fmt.Println("page", aa)
 
 	//page := gplus.NewPage[bean](1, 10)
 	//query, _ := gplus.NewQuery[bean]()
@@ -87,7 +87,7 @@ func Create(c echo.Context) error {
 	if res.RowsAffected == 0 {
 		return errors.New("新增失败")
 	}
-	return c.String(http.StatusOK, "Hello, World! ")
+	return resp.Success(c, fmt.Sprintf("新增 %d", res.RowsAffected))
 }
 
 func Update(c echo.Context) error {
@@ -120,18 +120,17 @@ func DeleteBatch(c echo.Context) error {
 	return resp.Success(c, bean)
 }
 
-func findBean(c echo.Context) interface{} {
+// todo 返回类型变了
+func findBean(c echo.Context) util.RegisterObj {
 	var body map[string]interface{}
 	if c.Bind(&body) != nil {
-		return nil
+		panic("无法绑定请求参数")
 	}
 	amisHeader := getAmisHeader(c.Request().Header)
 	byStruct := changeMapByStruct(amisHeader, body)
 	marshal, _ := json.Marshal(byStruct)
-	bean, err := util.NewStructFromJSONAndName(amisHeader.Bean, marshal)
-	if err != nil {
-		return nil
-	}
+	bean := util.NewStructFromJSONAndName(amisHeader.Bean, marshal)
+
 	return bean
 }
 
