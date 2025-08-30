@@ -10,6 +10,7 @@ import (
 	"github.com/super-npc/bronya-go/src/commons/db"
 	"github.com/super-npc/bronya-go/src/commons/util"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/req"
+	"github.com/super-npc/bronya-go/src/module/amis/controller/resp"
 )
 
 // 使用全局变量存储DB提供者
@@ -42,6 +43,7 @@ func View(c echo.Context) error {
 
 	amisHeader := getAmisHeader(c.Request().Header)
 	bean, err := util.NewStructFromName(amisHeader.Bean)
+
 	if err != nil {
 		return errors.New("未注册bean")
 	}
@@ -50,7 +52,7 @@ func View(c echo.Context) error {
 	if res.RowsAffected == 0 {
 		return errors.New("不能存在记录")
 	}
-	return c.String(http.StatusOK, "Hello, World!")
+	return resp.Success(c, bean)
 }
 
 func Create(c echo.Context) error {
@@ -90,7 +92,7 @@ func DeleteBatch(c echo.Context) error {
 	if res.RowsAffected == 0 {
 		return errors.New("删除失败")
 	}
-	return c.String(http.StatusOK, "Hello, World! ")
+	return resp.Success(c, bean)
 }
 
 func findBean(c echo.Context) interface{} {
