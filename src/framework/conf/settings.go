@@ -2,6 +2,8 @@ package conf
 
 import (
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -50,25 +52,32 @@ type LogConfig struct {
 }
 
 func InitSettings() (err error) {
-	// 方式1：直接指定配置文件路径（相对路径或者绝对路径）
-	// 相对路径：相对执行的可执行文件的相对路径
-	viper.SetConfigFile("./conf/config.yaml")
-	//viper.SetConfigFile("./config.yaml")
+	// 获取运行环境
+	mode := os.Getenv("APP_MODE")
+	if mode == "" {
+		mode = "develop" // 默认为开发环境
+	}
 
-	// 绝对路径：系统中实际的文件路径
-	//viper.SetConfigFile("/Users/liwenzhou/Desktop/nil/conf/config.yaml")
+	var configFile string
+	switch mode {
+	case "production":
+		configFile = "./resources/config.production.yaml"
+	case "develop":
+		configFile = "./resources/config.yaml"
+	default:
+		configFile = "./resources/config.yaml"
+	}
 
-	// 方式2：指定配置文件名和配置文件的位置，viper自行查找可用的配置文件
-	// 配置文件名不需要带后缀
-	// 配置文件位置可配置多个
-	//viper.SetConfigName("config.yaml") // 指定配置文件名（不带后缀）
-	//viper.AddConfigPath(".")           // 指定查找配置文件的路径（这里使用相对路径）
-	//viper.AddConfigPath("./conf") // 指定查找配置文件的路径（这里使用相对路径）
+	// 设置配置文件路径
+	viper.SetConfigFile(configFile)
+	viper.SetConfigType("yaml")
 
-	// 基本上是配合远程配置中心使用的，告诉viper当前的数据使用什么格式去解析
-	//viper.SetConfigType("json")
+	// 设置环境变量前缀，支持环境变量覆盖配置文件
+	viper.SetEnvPrefix("APP")
+	viper.AutomaticEnv()
 
-	//viper.SetConfigFile(filePath)
+	// 替换配置中的点分隔符为下划线，使环境变量更易读
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	err = viper.ReadInConfig() // 读取配置信息
 	if err != nil {
@@ -80,6 +89,26 @@ func InitSettings() (err error) {
 	// 把读取到的配置信息反序列化到 Conf 变量中
 	if err := viper.Unmarshal(Conf); err != nil {
 		fmt.Printf("viper.Unmarshal failed, err:%v\n", err)
+		return err
+	}
+
+	// 设置默认模式
+	if Conf.Mode == "" {
+		Conf.Mode = mode
+	}
+
+	// 设置默认日志路径
+	if Conf.LogConfig.Filename == "" {
+		Conf.LogConfig.Filename = "./logs/app.log"
+	}
+	if Conf.LogConfig.MaxSize == 0 {
+		Conf.LogConfig.MaxSize = 100
+	}
+	if Conf.LogConfig.MaxAge == 0 {
+		Conf.LogConfig.MaxAge = 30
+	}
+	if Conf.LogConfig.MaxBackups == 0 {
+		Conf.LogConfig.MaxBackups = 7
 	}
 
 	viper.WatchConfig()

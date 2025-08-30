@@ -4,17 +4,39 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/super-npc/bronya-go/src/commons/util"
+	"github.com/super-npc/bronya-go/src/framework/conf"
+	"github.com/super-npc/bronya-go/src/framework/logger"
 	"github.com/super-npc/bronya-go/src/framework/middle_ware"
 	"github.com/super-npc/bronya-go/src/framework/register"
 	"github.com/super-npc/bronya-go/src/module/amis/controller"
 	"github.com/super-npc/bronya-go/src/module/sys/user_po"
+	"go.uber.org/zap"
 )
 
 func AppStart(e *echo.Echo) {
+	// 初始化配置
+	err := conf.InitSettings()
+	if err != nil {
+		panic(err)
+	}
+
+	// 初始化日志
+	err = logger.InitLogger()
+	if err != nil {
+		panic(err)
+	}
+	defer logger.Sync()
+
+	logger.Info("应用启动中...",
+		zap.String("mode", conf.Conf.Mode),
+		zap.String("version", conf.Conf.Version),
+	)
+
 	registerDatabaseBean() // 初始化数据库表对象
 
 	// 初始化数据库
 	register.InitDatabase()
+	logger.Info("数据库初始化完成")
 
 	// 注入依赖，打破循环引用
 	controller.SetDbProvider(register.GetDbProvider())
@@ -22,17 +44,15 @@ func AppStart(e *echo.Echo) {
 	register.InitRouting(e) // 注册路由
 
 	// 注册中间件
+	// 使用自定义日志中间件替换默认的
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())                             // 捕获 panic
 	e.HTTPErrorHandler = middle_ware.CustomHttpErrorHandler // 全局异常处理
+
 	// 配置资源
 	e.Static("/", "public")
 
-	// todo 配置文件读取
-	//err := conf.InitSettings()
-	//if err != nil {
-	//	panic(err)
-	//}
+	logger.Info("应用启动完成", zap.Int("port", conf.Conf.Port))
 }
 
 func registerDatabaseBean() {
