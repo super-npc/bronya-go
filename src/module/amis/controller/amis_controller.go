@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -27,12 +28,36 @@ func Page(c echo.Context) error {
 		return errors.New("非法参数")
 	}
 	amisHeader := getAmisHeader(c.Request().Header)
-	_, err := util.NewStructFromJSONAndName(amisHeader.Bean, []byte{})
-
+	bean, err := util.NewStructFromName(amisHeader.Bean)
+	//query.Eq(&model.Username, users[0].Username).Or().Eq(&model.Username, users[5].Username)
 	if err != nil {
-		return errors.New("")
+		return errors.New("未注册bean")
 	}
-	return c.String(http.StatusOK, "Hello, World!")
+
+	page := 1      // 第几页，从 1 开始
+	pageSize := 10 // 每页条数
+	offset := (page - 1) * pageSize
+
+	var aa = []bean
+	dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(&aa)
+	fmt.Println("page", aa)
+
+	//page := gplus.NewPage[bean](1, 10)
+	//query, _ := gplus.NewQuery[bean]()
+	//resultPage, _ := gplus.SelectPage(page, query)
+	//var list []map[string]interface{}
+	//for _, record := range resultPage.Records {
+	//	var result map[string]interface{}
+	//	marshal, err := json.Marshal(record)
+	//	err1 := json.Unmarshal(marshal, &result)
+	//	if err1 != nil {
+	//		panic(err)
+	//	}
+	//	list = append(list, result)
+	//}
+	//res := resp.PageRes{Total: resultPage.Total, Rows: list}
+	//return resp.Success(c, res)
+	return c.String(http.StatusOK, "Hello, World! ")
 }
 
 func View(c echo.Context) error {
