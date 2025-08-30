@@ -11,6 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/super-npc/bronya-go/src/commons/db"
 	"github.com/super-npc/bronya-go/src/commons/util"
+	"github.com/super-npc/bronya-go/src/module/amis/amis_proxy"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/req"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/resp"
 )
@@ -78,8 +79,8 @@ func View(c echo.Context) error {
 	poBean := registerObj.Po
 	res := dbProvider.GetDb().First(poBean, viewReq.Id)
 	if registerObj.Proxy != nil {
-		//var a amis_proxy.IAmisProxy registerObj.Proxy
-		//fmt.Printf("", a)
+		a := registerObj.Proxy.(amis_proxy.IAmisProxy)
+		a.BeforeAdd()
 	}
 
 	if res.RowsAffected == 0 {
@@ -91,6 +92,13 @@ func View(c echo.Context) error {
 func Create(c echo.Context) error {
 	registerObj := findBean(c)
 	poBean := registerObj.Po
+
+	// 通过反射调用BeforeAdd方法
+	if registerObj.Proxy != nil {
+		a := registerObj.Proxy.(amis_proxy.IAmisProxy)
+		a.BeforeAdd()
+	}
+
 	// 使用接口获取数据库连接
 	res := dbProvider.GetDb().Create(poBean)
 	if res.RowsAffected == 0 {

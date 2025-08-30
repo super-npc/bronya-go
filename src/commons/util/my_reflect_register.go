@@ -36,7 +36,7 @@ func Register(registerAmis RegisterReq) {
 	poType := RegisterByStruct(registerAmis.Po)
 	resp := RegisterResp{Po: poType}
 	// 代理类可有可无
-	if registerAmis.Proxy == nil {
+	if registerAmis.Proxy != nil {
 		proxyType := RegisterByStruct(registerAmis.Proxy)
 		resp.Proxy = proxyType
 	}
