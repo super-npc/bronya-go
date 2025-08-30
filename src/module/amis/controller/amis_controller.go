@@ -64,6 +64,11 @@ func Page(c echo.Context) error {
 	var total int64
 	dbProvider.GetDb().Model(poBean).Count(&total)
 
+	// 处理动态代理数据 todo 后续优化点,不需要顺序处理,go协程处理多任务
+	for _, m := range list {
+		table(registerObj, m)
+	}
+
 	res := resp.PageRes{Total: total, Rows: list}
 	return resp.Success(c, res)
 }
@@ -78,14 +83,10 @@ func View(c echo.Context) error {
 	registerObj := util.NewStructFromName(amisHeader.Bean)
 	poBean := registerObj.Po
 	res := dbProvider.GetDb().First(poBean, viewReq.Id)
-	if registerObj.Proxy != nil {
-		a := registerObj.Proxy.(amis_proxy.IAmisProxy)
-		a.BeforeAdd()
-	}
-
 	if res.RowsAffected == 0 {
 		return errors.New("不能存在记录")
 	}
+	table(registerObj, poBean)
 	return resp.Success(c, poBean)
 }
 
@@ -136,7 +137,15 @@ func DeleteBatch(c echo.Context) error {
 	return resp.Success(c, poBean)
 }
 
-func findBean(c echo.Context) util.RegisterObj {
+func table(registerObj util.RegisterResp, record interface{}) {
+	if registerObj.Proxy != nil {
+		a := registerObj.Proxy.(amis_proxy.IAmisProxy)
+		a.Table(record)
+	}
+	// 对数据加上前缀
+}
+
+func findBean(c echo.Context) util.RegisterResp {
 	var body map[string]interface{}
 	if c.Bind(&body) != nil {
 		panic("无法绑定请求参数")

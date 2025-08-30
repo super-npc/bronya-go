@@ -13,6 +13,9 @@ type UserPo struct {
 	Status UserStatus
 }
 
+type UserPoExt struct {
+}
+
 func temp() {
 	t := reflect.TypeOf(UserPo{})
 	for i := 0; i < t.NumField(); i++ {
