@@ -1,10 +1,10 @@
 package framework
 
 import (
-	"bronya-go-demo/src/app_framework"
-
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/super-npc/bronya-go/src/commons/util"
+	"github.com/super-npc/bronya-go/src/framework/middle_ware"
 	"github.com/super-npc/bronya-go/src/framework/register"
 	"github.com/super-npc/bronya-go/src/module/amis/controller"
 	"github.com/super-npc/bronya-go/src/module/sys/user_po"
@@ -21,9 +21,12 @@ func AppStart(e *echo.Echo) {
 
 	register.InitRouting(e) // 注册路由
 
+	// 注册中间件
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())                             // 捕获 panic
+	e.HTTPErrorHandler = middle_ware.CustomHttpErrorHandler // 全局异常处理
+	// 配置资源
 	e.Static("/", "public")
-
-	e.HTTPErrorHandler = app_framework.CustomHttpErrorHandler // 全局异常处理
 
 	// todo 配置文件读取
 	//err := conf.InitSettings()
