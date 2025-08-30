@@ -1,8 +1,6 @@
 package user_po
 
 import (
-	"fmt"
-
 	"github.com/super-npc/bronya-go/src/commons/util"
 )
 
@@ -10,7 +8,26 @@ type UserPoProxy struct {
 }
 
 func (this *UserPoProxy) BeforeAdd() {
-	fmt.Println("调用代理了...")
+
+}
+
+func (this *UserPoProxy) AfterAdd() {
+
+}
+
+func (this *UserPoProxy) BeforeUpdate() {
+
+}
+func (this *UserPoProxy) AfterUpdate() {
+
+}
+
+func (this *UserPoProxy) BeforeDelete() {
+
+}
+
+func (this *UserPoProxy) AfterDelete() {
+
 }
 
 func (this *UserPoProxy) Table(tableFieldPre string, resTable map[string]interface{}) {

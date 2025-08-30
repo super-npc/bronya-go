@@ -170,7 +170,7 @@ func findBean(c echo.Context) util.RegisterResp {
 
 func changeMapByStruct(header req.AmisHeader, body map[string]interface{}) map[string]interface{} {
 	var bodyNew = make(map[string]interface{})
-	var beanPre = header.Bean + "__"
+	var beanPre = header.Bean + constant.AmisSplitSymbol
 	for s, i := range body {
 		key := strings.TrimPrefix(s, beanPre)
 		bodyNew[key] = i
