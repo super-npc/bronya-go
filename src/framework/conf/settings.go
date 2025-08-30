@@ -1,7 +1,7 @@
 package conf
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -82,13 +82,13 @@ func InitSettings() (err error) {
 	err = viper.ReadInConfig() // 读取配置信息
 	if err != nil {
 		// 读取配置信息失败
-		fmt.Printf("viper.ReadInConfig failed, err:%v\n", err)
+		log.Printf("viper.ReadInConfig failed, err:%v\n", err)
 		return err
 	}
 
 	// 把读取到的配置信息反序列化到 Conf 变量中
 	if err := viper.Unmarshal(Conf); err != nil {
-		fmt.Printf("viper.Unmarshal failed, err:%v\n", err)
+		log.Printf("viper.Unmarshal failed, err:%v\n", err)
 		return err
 	}
 
@@ -113,9 +113,9 @@ func InitSettings() (err error) {
 
 	viper.WatchConfig()
 	viper.OnConfigChange(func(in fsnotify.Event) {
-		fmt.Println("配置文件修改了...")
+		log.Println("配置文件已修改")
 		if err := viper.Unmarshal(Conf); err != nil {
-			fmt.Printf("viper.Unmarshal failed, err:%v\n", err)
+			log.Printf("viper.Unmarshal failed, err:%v\n", err)
 		}
 	})
 	return

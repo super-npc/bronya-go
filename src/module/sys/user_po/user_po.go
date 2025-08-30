@@ -1,8 +1,10 @@
 package user_po
 
 import (
-	"fmt"
 	"reflect"
+
+	"github.com/super-npc/bronya-go/src/framework/logger"
+	"go.uber.org/zap"
 )
 
 // UserPo 表
@@ -21,7 +23,7 @@ func temp() {
 	t := reflect.TypeOf(UserPo{})
 	for i := 0; i < t.NumField(); i++ {
 		if tag := t.Field(i).Tag.Get("meta"); tag != "" {
-			fmt.Println("Struct meta:", tag)
+			logger.Info("Struct meta", zap.String("tag", tag))
 		}
 	}
 }
