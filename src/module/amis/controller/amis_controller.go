@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
+	"github.com/super-npc/bronya-go/src/commons/constant"
 	"github.com/super-npc/bronya-go/src/commons/db"
 	"github.com/super-npc/bronya-go/src/commons/util"
 	"github.com/super-npc/bronya-go/src/module/amis/amis_proxy"
@@ -66,7 +67,7 @@ func Page(c echo.Context) error {
 
 	// 处理动态代理数据 todo 后续优化点,不需要顺序处理,go协程处理多任务
 	for _, m := range list {
-		table(registerObj, m)
+		table(amisHeader, registerObj, m)
 	}
 
 	res := resp.PageRes{Total: total, Rows: list}
@@ -86,8 +87,8 @@ func View(c echo.Context) error {
 	if res.RowsAffected == 0 {
 		return errors.New("不能存在记录")
 	}
-	table(registerObj, poBean)
-	return resp.Success(c, poBean)
+	beanTableMap := table(amisHeader, registerObj, poBean)
+	return resp.Success(c, beanTableMap)
 }
 
 func Create(c echo.Context) error {
@@ -137,12 +138,21 @@ func DeleteBatch(c echo.Context) error {
 	return resp.Success(c, poBean)
 }
 
-func table(registerObj util.RegisterResp, record interface{}) {
-	if registerObj.Proxy != nil {
-		a := registerObj.Proxy.(amis_proxy.IAmisProxy)
-		a.Table(record)
+func table(header req.AmisHeader, registerObj util.RegisterResp, record interface{}) map[string]interface{} {
+	var tableFieldPre = header.Bean + constant.AmisSplitSymbol
+	var resTable = make(map[string]interface{})
+	for k, v := range util.StructToMap(record) {
+		if strings.EqualFold(k, constant.PrimaryKey) {
+			resTable[k] = v
+		}
+		resTable[tableFieldPre+k] = v
 	}
 	// 对数据加上前缀
+	if registerObj.Proxy != nil {
+		a := registerObj.Proxy.(amis_proxy.IAmisProxy)
+		a.Table(tableFieldPre, resTable)
+	}
+	return resTable
 }
 
 func findBean(c echo.Context) util.RegisterResp {

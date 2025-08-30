@@ -2,5 +2,5 @@ package amis_proxy
 
 type IAmisProxy interface {
 	BeforeAdd()
-	Table(record interface{})
+	Table(tableFieldPre string, resTable map[string]interface{})
 }
