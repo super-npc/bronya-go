@@ -9,18 +9,18 @@ type UserPoProxy struct {
 }
 
 func (this *UserPoProxy) BeforeAdd(reqBody map[string]interface{}) {
-	log.Infof("新增前: %s", reqBody)
+	log.Infof("新增参数: %s", reqBody)
 }
 
 func (this *UserPoProxy) AfterAdd(PoBean interface{}) {
 	log.Infof("新增后: %s", PoBean)
 }
 
-func (this *UserPoProxy) BeforeUpdate() {
-
+func (this *UserPoProxy) BeforeUpdate(reqBody map[string]interface{}) {
+	log.Infof("修改参数: %s", reqBody)
 }
-func (this *UserPoProxy) AfterUpdate() {
-
+func (this *UserPoProxy) AfterUpdate(PoBean interface{}) {
+	log.Infof("修改后: %s", PoBean)
 }
 
 func (this *UserPoProxy) BeforeDelete() {

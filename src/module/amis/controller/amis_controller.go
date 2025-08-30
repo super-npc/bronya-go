@@ -114,10 +114,19 @@ func Create(c echo.Context) error {
 }
 
 func Update(c echo.Context) error {
-	_, registerObj := findBean(c)
+	reqBody, registerObj := findBean(c)
 	poBean := registerObj.Po
 	// 使用接口获取数据库连接
-	res := dbProvider.GetDb().Updates(poBean)
+	var res *gorm.DB
+
+	if registerObj.Proxy != nil {
+		proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
+		proxy.BeforeAdd(reqBody)
+		res = dbProvider.GetDb().Updates(poBean)
+		proxy.AfterUpdate(poBean)
+	} else {
+		res = dbProvider.GetDb().Updates(poBean)
+	}
 	if res.RowsAffected == 0 {
 		return errors.New("更新失败")
 	}

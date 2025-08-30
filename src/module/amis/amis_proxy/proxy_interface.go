@@ -3,8 +3,8 @@ package amis_proxy
 type IAmisProxy interface {
 	BeforeAdd(reqBody map[string]interface{})
 	AfterAdd(PoBean interface{})
-	BeforeUpdate()
-	AfterUpdate()
+	BeforeUpdate(reqBody map[string]interface{})
+	AfterUpdate(PoBean interface{})
 
 	BeforeDelete()
 	AfterDelete()
