@@ -1,6 +1,6 @@
 package resp
 
-type T struct {
+type SiteResp struct {
 	Pages []struct {
 		Id       string `json:"id"`
 		ParentId string `json:"parentId"`

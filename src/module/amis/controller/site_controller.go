@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"runtime/debug"
 
 	"github.com/labstack/echo/v4"
 	"github.com/super-npc/bronya-go/src/commons/util"
@@ -11,10 +10,6 @@ import (
 
 func Site(c echo.Context) error {
 	amisMenus := util.GetAmisMenus()
-	{
-		info, _ := debug.ReadBuildInfo()
-		fmt.Println(info.Path)
-	}
 
 	for beanName, amisMenuObj := range amisMenus {
 		fmt.Println(beanName, amisMenuObj)
@@ -23,8 +18,9 @@ func Site(c echo.Context) error {
 		fmt.Println(amisMenu)
 
 		fmt.Println(field.PkgPath) // github.com/super-npc/bronya-go/src/module/sys/user_po
-
 	}
 
-	return resp.Success(c, "")
+	siteResp := resp.SiteResp{}
+
+	return resp.Success(c, siteResp)
 }
