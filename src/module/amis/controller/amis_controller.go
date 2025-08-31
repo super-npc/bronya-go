@@ -110,7 +110,7 @@ func Page(c echo.Context) error {
 		zap.Duration("total_duration", time.Since(start)),
 	)
 
-	res := resp.PageRes{Total: total, Rows: list}
+	res := resp.PageResp{Total: total, Rows: list}
 	return resp.Success(c, res)
 }
 
