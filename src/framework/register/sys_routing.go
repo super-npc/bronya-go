@@ -10,12 +10,14 @@ func InitRouting(e *echo.Echo) {
 }
 
 func routingAdmin(e *echo.Echo) {
-	admin := e.Group("/admin/base/amis")
+	admin := e.Group("/admin/base")
 	{
-		admin.POST("/page", controller.Page)
-		admin.POST("/view", controller.View)
-		admin.POST("/create", controller.Create)
-		admin.POST("/update", controller.Update)
-		admin.POST("/delete-batch", controller.DeleteBatch)
+		admin.POST("/amis/page", controller.Page)
+		admin.POST("/amis/view", controller.View)
+		admin.POST("/amis/create", controller.Create)
+		admin.POST("/amis/update", controller.Update)
+		admin.POST("/amis/delete-batch", controller.DeleteBatch)
+
+		admin.POST("/site", controller.Site)
 	}
 }

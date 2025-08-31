@@ -3,16 +3,16 @@ package util
 import (
 	"encoding/json"
 	"reflect"
+	"runtime/debug"
+	"strings"
+
+	"github.com/super-npc/bronya-go/src/commons/constant"
+	"github.com/super-npc/bronya-go/src/model"
 )
 
 // 全局注册表：名字 -> 类型(Type)
 var typeRegistry = make(map[string]RegisterRefType)
-
-//func init() {
-//	// 把将来可能用到的结构体注册进来；key 就是字符串名字
-//	//registerByName("RefletDemo", reflect.TypeOf(RefletDemo{}))
-//	//registerByStruct(&RefletDemo{})   // 或 RefletDemo{}
-//}
+var amisMenus = make(map[string]model.AmisMenu)
 
 type RegisterReq struct {
 	Po    interface{}
@@ -32,21 +32,62 @@ type RegisterResp struct {
 	Proxy interface{}
 }
 
-func Register(registerAmis RegisterReq) {
+func GetAmisMenus() map[string]model.AmisMenu {
+	return amisMenus
+}
+
+func RegisterProject(registerAmis RegisterReq) {
+	register(false, registerAmis)
+}
+
+func RegisterFramework(registerAmis RegisterReq) {
+	register(true, registerAmis)
+}
+
+func register(isFramework bool, registerAmis RegisterReq) {
 	if registerAmis.Po == nil {
 		panic("未传递po类")
 	}
 	poType := registerByStruct(registerAmis.Po)
+	tags := getPoFieldTags(isFramework, poType)
 	resp := RegisterRefType{Po: poType}
 	// 代理类可有可无
 	if registerAmis.Proxy != nil {
 		resp.Proxy = registerByStruct(registerAmis.Proxy)
+		// 记录所有的tag
 	}
 	// 拓展类,可有可无
 	if registerAmis.PoExt != nil {
 		resp.PoExt = registerByStruct(registerAmis.PoExt)
 	}
 	typeRegistry[poType.Name()] = resp
+	amisMenus[poType.Name()] = tags
+}
+
+func getPoFieldTags(isFramework bool, poType reflect.Type) model.AmisMenu {
+	var field_ reflect.StructField
+	for i := range poType.NumField() {
+		field := poType.Field(i)
+		if !strings.EqualFold(field.Name, "_") {
+			continue
+		}
+		// 所有构造字段,用于提取非普通字段的tag
+		field_ = field
+	}
+	var tag = field_.Tag
+	module := tag.Get("module")
+	group := tag.Get("group")
+	menu := tag.Get("menu")
+	groupMenu := model.Menu{Module: module, Group: group, Menu: menu}
+	return model.AmisMenu{ModulePath: getModulePath(isFramework), Field_: field_, Menu: groupMenu}
+}
+
+func getModulePath(isFramework bool) string {
+	if isFramework {
+		return constant.FrameworkModule
+	}
+	info, _ := debug.ReadBuildInfo()
+	return info.Path
 }
 
 // RegisterByStruct 注册一个结构体（传入指针或值都行）

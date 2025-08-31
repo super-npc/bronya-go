@@ -56,5 +56,5 @@ func AppStart(e *echo.Echo) {
 }
 
 func registerDatabaseBean() {
-	util.Register(util.RegisterReq{Po: &user_po.UserPo{}, Proxy: &user_po.UserPoProxy{}})
+	util.RegisterFramework(util.RegisterReq{Po: &user_po.UserPo{}, Proxy: &user_po.UserPoProxy{}})
 }
