@@ -9,6 +9,12 @@ import (
 	"github.com/super-npc/bronya-go/src/framework/middle_ware"
 	"github.com/super-npc/bronya-go/src/framework/register"
 	"github.com/super-npc/bronya-go/src/module/amis/controller"
+	"github.com/super-npc/bronya-go/src/module/db/audit/domain/sys_data_audit"
+	"github.com/super-npc/bronya-go/src/module/db/badge/domain/badge"
+	"github.com/super-npc/bronya-go/src/module/db/distributed/domain/sys_distributed_lock"
+	"github.com/super-npc/bronya-go/src/module/db/env/domain/sys_env_obj"
+	"github.com/super-npc/bronya-go/src/module/db/env/domain/sys_env_obj_field"
+	"github.com/super-npc/bronya-go/src/module/db/threadpool/domain/sys_thread_pool"
 	"github.com/super-npc/bronya-go/src/module/sys/user_po"
 	"go.uber.org/zap"
 )
@@ -55,6 +61,12 @@ func AppStart(e *echo.Echo) {
 func registerDatabaseBean() {
 	log.Info("注册数据库表对象")
 	util.RegisterFramework(util.RegisterReq{Po: &user_po.UserPo{}, Proxy: &user_po.UserPoProxy{}})
+	util.RegisterFramework(util.RegisterReq{Po: &sys_data_audit.SysDataAudit{}, Proxy: &sys_data_audit.SysDataAuditProxy{}})
+	util.RegisterFramework(util.RegisterReq{Po: &badge.Badge{}, Proxy: &badge.BadgeProxy{}})
+	util.RegisterFramework(util.RegisterReq{Po: &sys_distributed_lock.SysDistributedLock{}})
+	util.RegisterFramework(util.RegisterReq{Po: &sys_env_obj.SysEnvObj{}, Proxy: &sys_env_obj.SysEnvObjProxy{}})
+	util.RegisterFramework(util.RegisterReq{Po: &sys_env_obj_field.SysEnvObjField{}, Proxy: &sys_env_obj_field.SysEnvObjFieldProxy{}})
+	util.RegisterFramework(util.RegisterReq{Po: &sys_thread_pool.SysThreadPool{}, Proxy: &sys_thread_pool.SysThreadPoolProxy{}})
 
 	log.Info("注册数据库表对象.finish")
 }
