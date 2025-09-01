@@ -6,7 +6,7 @@ import (
 
 // SysEnvObjField 变量属性
 type SysEnvObjField struct {
-	_ struct{} `module:"系统" group:"数据管理" menu:"系统变量"`
+	_ struct{} `module:"系统" group:"数据管理" menu:"系统变量" comment:"变量属性"`
 
 	Id uint `json:"id" gorm:"primaryKey"` // id主键
 
@@ -28,7 +28,7 @@ type SysEnvObjField struct {
 
 }
 
-// EnvPropertyExt
+// EnvPropertyExt 变量属性 拓展
 type EnvPropertyExt struct {
 	Status EnvStatus `json:"status"` // 状态
 

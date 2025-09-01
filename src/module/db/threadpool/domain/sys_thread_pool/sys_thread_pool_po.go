@@ -1,8 +1,10 @@
 package sys_thread_pool
 
+import ()
+
 // SysThreadPool 线程池
 type SysThreadPool struct {
-	_ struct{} `module:"系统" group:"配置" menu:"系统配置"`
+	_ struct{} `module:"系统" group:"配置" menu:"系统配置" comment:"线程池"`
 
 	Id uint `json:"id" gorm:"primaryKey"` // id主键
 
@@ -16,7 +18,7 @@ type SysThreadPool struct {
 
 }
 
-// SysThreadPoolExt
+// SysThreadPoolExt 线程池 拓展
 type SysThreadPoolExt struct {
 	Status ActivationStatus `json:"status"` // 状态
 

@@ -6,7 +6,7 @@ import (
 
 // SysDataAudit 数据审计
 type SysDataAudit struct {
-	_ struct{} `module:"系统" group:"数据管理" menu:"审计管理"`
+	_ struct{} `module:"系统" group:"数据管理" menu:"审计管理" comment:"数据审计"`
 
 	Id uint `json:"id" gorm:"primaryKey"` // id主键
 
@@ -24,7 +24,7 @@ type SysDataAudit struct {
 
 }
 
-// SysDataAuditExt
+// SysDataAuditExt 数据审计 拓展
 type SysDataAuditExt struct {
 	Diff *string `json:"diff"` // 差异
 

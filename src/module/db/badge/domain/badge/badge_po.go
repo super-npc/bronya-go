@@ -6,7 +6,7 @@ import (
 
 // Badge 徽章事件
 type Badge struct {
-	_ struct{} `module:"系统" group:"数据管理" menu:"菜单"`
+	_ struct{} `module:"系统" group:"数据管理" menu:"菜单" comment:"徽章事件"`
 
 	Id uint `json:"id" gorm:"primaryKey"` // id主键
 
@@ -22,6 +22,6 @@ type Badge struct {
 
 }
 
-// BadgeExt
+// BadgeExt 徽章事件 拓展
 type BadgeExt struct {
 }

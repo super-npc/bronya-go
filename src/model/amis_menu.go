@@ -9,7 +9,8 @@ type AmisMenu struct {
 }
 
 type Menu struct {
-	Module string
-	Group  string
-	Menu   string
+	Module  string
+	Group   string
+	Menu    string
+	Comment string
 }
