@@ -21,6 +21,7 @@ func routingAdmin(e *echo.Echo) {
 		admin.GET("/site", controller.Site)
 		admin.GET("/sys/top-right-header", controller.TopRightHeader)
 		admin.GET("/sys/app-info", controller.AppInfo)
+		admin.GET("/sys/change-site", controller.ChangeSite)
 
 	}
 }

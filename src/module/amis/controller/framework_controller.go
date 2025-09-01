@@ -2,8 +2,16 @@ package controller
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/super-npc/bronya-go/src/framework/log"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/resp"
+	"go.uber.org/zap"
 )
+
+func ChangeSite(c echo.Context) error {
+	param := c.QueryParam("site")
+	log.Info("切换主菜单", zap.String("site", param))
+	return resp.Success(c, true)
+}
 
 func AppInfo(c echo.Context) error {
 	infoResp := resp.AppInfoResp{}
