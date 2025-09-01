@@ -49,9 +49,6 @@ func AppStart(e *echo.Echo) {
 	e.Use(middleware.Recover())                             // 捕获 panic
 	e.HTTPErrorHandler = middle_ware.CustomHttpErrorHandler // 全局异常处理
 
-	// 配置资源
-	e.Static("/", "public")
-
 	log.Info("应用启动完成", zap.Int("port", conf.Conf.Port))
 }
 
