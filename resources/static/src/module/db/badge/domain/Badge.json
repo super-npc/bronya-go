@@ -1,0 +1,275 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": true,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "Badge"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "Badge"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions",
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'随机扔徽章'?",
+          "label": "随机扔徽章",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$id"
+            },
+            "method": "GET",
+            "url": "/admin/badge/random-add-badge"
+          }
+        }
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "label": "详情",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "查看数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "Badge"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "Badge__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "状态",
+                  "name": "Badge__readStatus",
+                  "options":
+                  [
+                    {
+                      "label": "已读",
+                      "value": "READ"
+                    },
+                    {
+                      "label": "未读",
+                      "value": "UNREAD"
+                    }
+                  ],
+                  "required": true,
+                  "static": true,
+                  "type": "button-group-select"
+                },
+                {
+                  "label": "bean",
+                  "name": "Badge__bean",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "主键",
+                  "name": "Badge__primaryKey",
+                  "required": true,
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "原因",
+                  "name": "Badge__reason",
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "Badge__createTime",
+                  "required": true,
+                  "static": true,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "Badge__id",
+          "sort": -100,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "itemSchema":
+          {
+            "color": "${color}",
+            "displayMode": "normal",
+            "label": "${label}",
+            "type": "tag"
+          },
+          "label": "状态",
+          "labelField": "label",
+          "map":
+          [
+            {
+              "color": "#4B0082",
+              "displayMode": "normal",
+              "label": "已读",
+              "name": "READ",
+              "type": "tag"
+            },
+            {
+              "color": "#D3D3D3",
+              "displayMode": "normal",
+              "label": "未读",
+              "name": "UNREAD",
+              "type": "tag"
+            }
+          ],
+          "name": "Badge__readStatus",
+          "searchable":
+          {
+            "label": "状态",
+            "mode": "horizontal",
+            "name": "Badge__readStatus",
+            "options":
+            [
+              {
+                "label": "已读",
+                "value": "READ"
+              },
+              {
+                "label": "未读",
+                "value": "UNREAD"
+              }
+            ],
+            "placeholder": "请输入状态",
+            "type": "select"
+          },
+          "sortable": true,
+          "static": true,
+          "type": "static-mapping",
+          "valueField": "name"
+        },
+        {
+          "label": "bean",
+          "name": "Badge__bean",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "主键",
+          "name": "Badge__primaryKey",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "原因",
+          "name": "Badge__reason",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "创建时间",
+          "name": "Badge__createTime",
+          "sort": 100,
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ]
+    }
+  ]
+}

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -26,7 +27,9 @@ func GetSiteModuleMap() {
 		pkgPath := field.PkgPath
 		beanPath := strings.TrimPrefix(pkgPath, path) // 路径相减得到bean路径  /src/module/sys/user_po
 		//计算json资源路径 "get:/src/module/sys/user_po/SysThreadPool.json",
-		var jsonPath = "get:" + beanPath + "/" + beanName + ".json"
+		//snakeCase := strutil.SnakeCase(beanName)
+		basePath := filepath.Dir(beanPath)
+		var jsonPath = "get:" + basePath + "/" + beanName + ".json"
 		menu := amisMenu.Menu
 
 		siteDto := dto.SiteDto{}
@@ -53,7 +56,6 @@ func Site(c echo.Context) error {
 	GetSiteModuleMap()
 	menuTable := SiteModuleMap["系统"]
 	groups := menuTable.Rows()
-	//var sort = 1;
 	groupLeafs := make([]resp.Module, 0)
 	for _, group := range groups {
 		groupId := util.ToPinyin(group)

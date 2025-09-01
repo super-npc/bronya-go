@@ -1,0 +1,524 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": false,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "SysEnvObjField"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "SysEnvObjField"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions"
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        },
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'刷新数据'?,选中:$ids",
+          "label": "刷新数据",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$ids"
+            },
+            "method": "GET",
+            "url": "/admin/"
+          }
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "label": "对象",
+          "type": "button",
+          "level": "enhance",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "变量属性.主键:「$id」 多对一关联 变量对象",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/bind-many2-one-view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "SysEnvObjField",
+                  "bind-many2-one-class-field": "envObjId"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "SysEnvObj__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "对象名",
+                  "name": "SysEnvObj__objName",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "描述",
+                  "name": "SysEnvObj__description",
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "SysEnvObj__createTime",
+                  "required": true,
+                  "static": true,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'刷新数据'?,选中:$id",
+          "label": "刷新数据",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$id"
+            },
+            "method": "GET",
+            "url": "/admin/"
+          }
+        },
+        {
+          "type": "button",
+          "label": "修改",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "修改数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "SysEnvObjField"
+                }
+              },
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/update",
+                "headers":
+                {
+                  "bean": "SysEnvObjField"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "SysEnvObjField__id",
+                  "required": false,
+                  "static": false,
+                  "type": "hidden"
+                },
+                {
+                  "disabled": true,
+                  "label": "键",
+                  "name": "SysEnvObjField__dataKey",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text"
+                },
+                {
+                  "label": "值",
+                  "name": "SysEnvObjField__dataValue",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text"
+                },
+                {
+                  "disabled": true,
+                  "label": "描述",
+                  "name": "SysEnvObjField__description",
+                  "static": false,
+                  "type": "input-text"
+                },
+                {
+                  "type": "picker",
+                  "name": "SysEnvObjField__envObjId",
+                  "joinValues": true,
+                  "required": true,
+                  "disabled": true,
+                  "valueField": "id",
+                  "labelField": "SysEnvObj__description",
+                  "label": "对象",
+                  "source":
+                  {
+                    "method": "post",
+                    "url": "/admin/base/amis/page",
+                    "data":
+                    {
+                      "&": "$$"
+                    },
+                    "headers":
+                    {
+                      "bean": "SysEnvObj"
+                    }
+                  },
+                  "modalSize": "xl",
+                  "size": "xl",
+                  "embed": false,
+                  "multiple": false,
+                  "pickerSchema":
+                  {
+                    "type": "crud",
+                    "syncLocation": false,
+                    "autoGenerateFilter": true,
+                    "defaultCollapsed": true,
+                    "draggable": true,
+                    "headerToolbar":
+                    {
+                      
+                    },
+                    "footerToolbar":
+                    [
+                      "statistics",
+                      {
+                        "type": "pagination",
+                        "showPageInput": true,
+                        "layout": "perPage,pager,go"
+                      }
+                    ],
+                    "columns":
+                    [
+                      {
+                        "label": "主键",
+                        "name": "SysEnvObj__id",
+                        "sort": -100,
+                        "static": true,
+                        "toggled": false,
+                        "type": "static"
+                      },
+                      {
+                        "label": "对象名",
+                        "name": "SysEnvObj__objName",
+                        "static": true,
+                        "type": "static"
+                      },
+                      {
+                        "label": "描述",
+                        "name": "SysEnvObj__description",
+                        "static": true,
+                        "type": "static"
+                      },
+                      {
+                        "label": "创建时间",
+                        "name": "SysEnvObj__createTime",
+                        "sort": 100,
+                        "static": true,
+                        "type": "static-datetime",
+                        "width": "153px"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "SysEnvObjField__id",
+          "sort": -100,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "键",
+          "name": "SysEnvObjField__dataKey",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "值",
+          "name": "SysEnvObjField__dataValue",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "描述",
+          "name": "SysEnvObjField__description",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "对象",
+          "name": "SysEnvObjField__envObjId",
+          "searchable":
+          {
+            "type": "picker",
+            "name": "SysEnvObjField__envObjId",
+            "joinValues": true,
+            "disabled": false,
+            "valueField": "id",
+            "labelField": "SysEnvObj__description",
+            "label": "对象",
+            "source":
+            {
+              "method": "post",
+              "url": "/admin/base/amis/page",
+              "data":
+              {
+                "&": "$$"
+              },
+              "headers":
+              {
+                "bean": "SysEnvObj"
+              }
+            },
+            "modalSize": "xl",
+            "size": "xl",
+            "embed": false,
+            "multiple": false,
+            "pickerSchema":
+            {
+              "type": "crud",
+              "syncLocation": false,
+              "autoGenerateFilter": true,
+              "defaultCollapsed": true,
+              "draggable": true,
+              "headerToolbar":
+              {
+                
+              },
+              "footerToolbar":
+              [
+                "statistics",
+                {
+                  "type": "pagination",
+                  "showPageInput": true,
+                  "layout": "perPage,pager,go"
+                }
+              ],
+              "columns":
+              [
+                {
+                  "label": "主键",
+                  "name": "SysEnvObj__id",
+                  "sort": -100,
+                  "static": true,
+                  "toggled": false,
+                  "type": "static"
+                },
+                {
+                  "label": "对象名",
+                  "name": "SysEnvObj__objName",
+                  "static": true,
+                  "type": "static"
+                },
+                {
+                  "label": "描述",
+                  "name": "SysEnvObj__description",
+                  "static": true,
+                  "type": "static"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "SysEnvObj__createTime",
+                  "sort": 100,
+                  "static": true,
+                  "type": "static-datetime",
+                  "width": "153px"
+                }
+              ]
+            }
+          },
+          "static": true,
+          "type": "static",
+          "visibleOn": "1 != 1"
+        },
+        {
+          "itemSchema":
+          {
+            "color": "${color}",
+            "displayMode": "normal",
+            "label": "${label}",
+            "type": "tag"
+          },
+          "label": "状态",
+          "labelField": "label",
+          "map":
+          [
+            {
+              "color": "#008000",
+              "displayMode": "normal",
+              "label": "同步",
+              "name": "SYNC",
+              "type": "tag"
+            },
+            {
+              "color": "#8B0000",
+              "displayMode": "normal",
+              "label": "不存在",
+              "name": "NON_EXIST",
+              "type": "tag"
+            },
+            {
+              "color": "#4B0082",
+              "displayMode": "normal",
+              "label": "差异",
+              "name": "DIFF",
+              "type": "tag"
+            }
+          ],
+          "name": "SysEnvObjField__status",
+          "static": true,
+          "type": "static-mapping",
+          "valueField": "name",
+          "className": "text-success"
+        },
+        {
+          "label": "对象",
+          "name": "SysEnvObjField__envObjIdDesc",
+          "sort": 99,
+          "static": true,
+          "type": "static",
+          "className": "text-info"
+        },
+        {
+          "label": "创建人",
+          "name": "SysEnvObjField__createBy",
+          "sort": 100,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "最后更新人",
+          "name": "SysEnvObjField__updateBy",
+          "sort": 101,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "创建时间",
+          "name": "SysEnvObjField__createTime",
+          "sort": 102,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "最后更新时间",
+          "name": "SysEnvObjField__updateTime",
+          "sort": 103,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ]
+    }
+  ]
+}
