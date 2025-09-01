@@ -58,7 +58,7 @@ func CustomHttpErrorHandler(err error, c echo.Context) {
 				Msg:    fmt.Sprintf("%v", he.Message),
 				Data:   nil,
 			}
-			err = c.JSON(http.StatusOK, result)
+			err = c.JSON(0, result)
 		}
 		if err != nil {
 			logger.Error(err)

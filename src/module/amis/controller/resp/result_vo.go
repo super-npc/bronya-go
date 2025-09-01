@@ -18,7 +18,7 @@ type ResultVo struct {
 }
 
 func Success(c echo.Context, data interface{}) error {
-	return c.JSON(http.StatusOK, ResultVo{Status: 200, Msg: "success", Data: data})
+	return c.JSON(http.StatusOK, ResultVo{Status: 0, Msg: "success", Data: data})
 }
 
 func Fail(c echo.Context, msg string) error {

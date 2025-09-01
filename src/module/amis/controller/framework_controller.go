@@ -1,10 +1,7 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/labstack/echo/v4"
-	"github.com/super-npc/bronya-go/src/commons/util"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/resp"
 )
 
@@ -18,18 +15,20 @@ func AppInfo(c echo.Context) error {
 }
 
 func TopRightHeader(c echo.Context) error {
-	amisMenus := util.GetAmisMenus()
+	res := resp.TopRightHeaderResp{}
+	var btnList = make([]resp.SubSystemButtons, 0)
+	btnList = append(btnList, resp.SubSystemButtons{Label: "杂货铺1", Level: "light"})
+	btnList = append(btnList, resp.SubSystemButtons{Label: "系统1", Level: "primary"})
+	btnList = append(btnList, resp.SubSystemButtons{Label: "杂货铺2", Level: "light"})
+	btnList = append(btnList, resp.SubSystemButtons{Label: "杂货铺3", Level: "light"})
+	res.SubSystemButtons = btnList
 
-	for beanName, amisMenuObj := range amisMenus {
-		fmt.Println(beanName, amisMenuObj)
-		field := amisMenuObj.Field_
-		amisMenu := amisMenuObj.Menu
-		fmt.Println(amisMenu)
+	roles := make([]resp.Role, 0)
+	roles = append(roles, resp.Role{Id: "1", RoleName: "超级管理员"})
+	roles = append(roles, resp.Role{Id: "2", RoleName: "普通用户"})
 
-		fmt.Println(field.PkgPath) // github.com/super-npc/bronya-go/src/module/sys/user_po
-	}
+	user := resp.LoginUser{Id: "1", UserAvatar: "/admin/sys-file/image/null", UserName: "admin1", Roles: roles}
+	res.LoginUser = user
 
-	siteResp := resp.SiteResp{}
-
-	return resp.Success(c, siteResp)
+	return resp.Success(c, res)
 }
