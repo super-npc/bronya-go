@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/super-npc/bronya-go/src/framework/logger"
+	"github.com/super-npc/bronya-go/src/framework/log"
 	"go.uber.org/zap"
 	"time"
 )
@@ -30,7 +30,7 @@ func LoggerMiddleware() echo.MiddlewareFunc {
 			}
 
 			// 记录日志
-			logger.Info("HTTP请求",
+			log.Info("HTTP请求",
 				zap.String("method", c.Request().Method),
 				zap.String("path", c.Request().URL.Path),
 				zap.String("query", c.Request().URL.RawQuery),
@@ -57,7 +57,7 @@ func RequestLogger() echo.MiddlewareFunc {
 			latency := time.Since(start)
 			status := c.Response().Status
 
-			logger.Info("HTTP",
+			log.Info("HTTP",
 				zap.String("method", c.Request().Method),
 				zap.String("uri", c.Request().RequestURI),
 				zap.Int("status", status),

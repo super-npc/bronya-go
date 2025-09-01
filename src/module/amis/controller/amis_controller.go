@@ -14,7 +14,7 @@ import (
 	"github.com/super-npc/bronya-go/src/commons/constant"
 	"github.com/super-npc/bronya-go/src/commons/db"
 	"github.com/super-npc/bronya-go/src/commons/util"
-	"github.com/super-npc/bronya-go/src/framework/logger"
+	"github.com/super-npc/bronya-go/src/framework/log"
 	"github.com/super-npc/bronya-go/src/module/amis/amis_proxy"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/req"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/resp"
@@ -28,14 +28,14 @@ var dbProvider db.DBProvider
 // SetDbProvider 设置数据库提供者（由外部注入）
 func SetDbProvider(provider db.DBProvider) {
 	dbProvider = provider
-	logger.Info("数据库提供者已设置", zap.String("provider_type", fmt.Sprintf("%T", provider)))
+	log.Info("数据库提供者已设置", zap.String("provider_type", fmt.Sprintf("%T", provider)))
 }
 
 func Page(c echo.Context) error {
 	start := time.Now()
 	pageReq := new(req.PageReq)
 	if c.Bind(pageReq) != nil {
-		logger.Warn("Page接口参数绑定失败", zap.String("error", "invalid_params"))
+		log.Warn("Page接口参数绑定失败", zap.String("error", "invalid_params"))
 		return errors.New("非法参数")
 	}
 
@@ -47,7 +47,7 @@ func Page(c echo.Context) error {
 	pageSize := 10 // 每页条数
 	offset := (page - 1) * pageSize
 
-	logger.Debug("Page接口查询开始",
+	log.Debug("Page接口查询开始",
 		zap.String("bean", amisHeader.Bean),
 		zap.Int("page", page),
 		zap.Int("page_size", pageSize),
@@ -71,7 +71,7 @@ func Page(c echo.Context) error {
 	if sliceValue != nil {
 		jsonData, err := json.Marshal(sliceValue)
 		if err != nil {
-			logger.Error("Page接口数据序列化失败",
+			log.Error("Page接口数据序列化失败",
 				zap.Error(err),
 				zap.String("operation", "marshal_data"),
 			)
@@ -79,7 +79,7 @@ func Page(c echo.Context) error {
 		}
 		err = json.Unmarshal(jsonData, &list)
 		if err != nil {
-			logger.Error("Page接口数据反序列化失败",
+			log.Error("Page接口数据反序列化失败",
 				zap.Error(err),
 				zap.String("operation", "unmarshal_data"),
 			)
@@ -100,7 +100,7 @@ func Page(c echo.Context) error {
 	}
 	processDuration := time.Since(processStart)
 
-	logger.Info("Page接口查询完成",
+	log.Info("Page接口查询完成",
 		zap.String("bean", amisHeader.Bean),
 		zap.Int64("total", total),
 		zap.Int("rows", len(list)),
@@ -118,7 +118,7 @@ func View(c echo.Context) error {
 	start := time.Now()
 	viewReq := new(req.ViewReq)
 	if c.Bind(viewReq) != nil {
-		logger.Warn("View接口参数绑定失败", zap.String("error", "invalid_params"))
+		log.Warn("View接口参数绑定失败", zap.String("error", "invalid_params"))
 		return errors.New("非法参数")
 	}
 
@@ -126,7 +126,7 @@ func View(c echo.Context) error {
 	registerObj := util.NewStructFromName(amisHeader.Bean)
 	poBean := registerObj.Po
 
-	logger.Debug("View接口查询开始",
+	log.Debug("View接口查询开始",
 		zap.String("bean", amisHeader.Bean),
 		zap.Uint("id", viewReq.Id),
 	)
@@ -136,7 +136,7 @@ func View(c echo.Context) error {
 	queryDuration := time.Since(queryStart)
 
 	if res.RowsAffected == 0 {
-		logger.Warn("View接口记录不存在",
+		log.Warn("View接口记录不存在",
 			zap.Uint("id", viewReq.Id),
 			zap.String("bean", amisHeader.Bean),
 		)
@@ -144,7 +144,7 @@ func View(c echo.Context) error {
 	}
 
 	beanTableMap := table(amisHeader, registerObj, poBean)
-	logger.Info("View接口查询完成",
+	log.Info("View接口查询完成",
 		zap.String("bean", amisHeader.Bean),
 		zap.Uint("id", viewReq.Id),
 		zap.Duration("duration", time.Since(start)),
@@ -157,7 +157,7 @@ func Create(c echo.Context) error {
 	start := time.Now()
 	var reqBody map[string]interface{}
 	if c.Bind(&reqBody) != nil {
-		logger.Error("Create接口参数绑定失败", zap.String("error", "bind_failed"))
+		log.Error("Create接口参数绑定失败", zap.String("error", "bind_failed"))
 		panic("无法绑定请求参数")
 	}
 
@@ -171,7 +171,7 @@ func Create(c echo.Context) error {
 
 	poBean := registerObj.Po
 
-	logger.Debug("Create接口开始",
+	log.Debug("Create接口开始",
 		zap.String("bean_type", fmt.Sprintf("%T", poBean)),
 		zap.Any("request_body", reqBody),
 	)
@@ -188,7 +188,7 @@ func Create(c echo.Context) error {
 	createDuration := time.Since(createStart)
 
 	if res.RowsAffected == 0 {
-		logger.Warn("Create接口新增失败", zap.String("error", "create_failed"))
+		log.Warn("Create接口新增失败", zap.String("error", "create_failed"))
 		return errors.New("新增失败")
 	}
 
@@ -196,14 +196,14 @@ func Create(c echo.Context) error {
 	var newID uint
 	if idValue.IsValid() && idValue.CanUint() {
 		newID = uint(idValue.Uint())
-		logger.Info("Create接口完成",
+		log.Info("Create接口完成",
 			zap.Uint("id", newID),
 			zap.Int64("rows_affected", res.RowsAffected),
 			zap.Duration("duration", time.Since(start)),
 			zap.Duration("create_duration", createDuration),
 		)
 	} else {
-		logger.Info("Create接口完成",
+		log.Info("Create接口完成",
 			zap.Int64("rows_affected", res.RowsAffected),
 			zap.Duration("duration", time.Since(start)),
 			zap.Duration("create_duration", createDuration),
@@ -217,7 +217,7 @@ func Update(c echo.Context) error {
 	start := time.Now()
 	var reqBody map[string]interface{}
 	if c.Bind(&reqBody) != nil {
-		logger.Error("Update接口参数绑定失败", zap.String("error", "bind_failed"))
+		log.Error("Update接口参数绑定失败", zap.String("error", "bind_failed"))
 		panic("无法绑定请求参数")
 	}
 
@@ -231,7 +231,7 @@ func Update(c echo.Context) error {
 
 	poBean := registerObj.Po
 
-	logger.Debug("Update接口开始",
+	log.Debug("Update接口开始",
 		zap.String("bean_type", fmt.Sprintf("%T", poBean)),
 		zap.Any("request_body", reqBody),
 	)
@@ -248,11 +248,11 @@ func Update(c echo.Context) error {
 	updateDuration := time.Since(updateStart)
 
 	if res.RowsAffected == 0 {
-		logger.Warn("Update接口更新失败", zap.String("error", "update_failed"))
+		log.Warn("Update接口更新失败", zap.String("error", "update_failed"))
 		return errors.New("更新失败")
 	}
 
-	logger.Info("Update接口完成",
+	log.Info("Update接口完成",
 		zap.Int64("rows_affected", res.RowsAffected),
 		zap.Duration("duration", time.Since(start)),
 		zap.Duration("update_duration", updateDuration),
@@ -264,7 +264,7 @@ func DeleteBatch(c echo.Context) error {
 	start := time.Now()
 	deleteBatchReq := new(req.DeleteBatchReq)
 	if c.Bind(deleteBatchReq) != nil {
-		logger.Warn("DeleteBatch接口参数绑定失败", zap.String("error", "invalid_params"))
+		log.Warn("DeleteBatch接口参数绑定失败", zap.String("error", "invalid_params"))
 		return errors.New("非法参数")
 	}
 	amisHeader := getAmisHeader(c.Request().Header)
@@ -275,7 +275,7 @@ func DeleteBatch(c echo.Context) error {
 	idsStr := strings.Split(deleteBatchReq.Ids, ",")
 	ids, _ := commons.StringsToUints(idsStr)
 
-	logger.Debug("DeleteBatch接口开始",
+	log.Debug("DeleteBatch接口开始",
 		zap.String("bean", amisHeader.Bean),
 		zap.Uints("ids", ids),
 		zap.String("raw_ids", deleteBatchReq.Ids),
@@ -294,7 +294,7 @@ func DeleteBatch(c echo.Context) error {
 	deleteDuration := time.Since(deleteStart)
 
 	if tx.RowsAffected == 0 {
-		logger.Warn("DeleteBatch接口删除失败",
+		log.Warn("DeleteBatch接口删除失败",
 			zap.String("bean", amisHeader.Bean),
 			zap.Uints("ids", ids),
 			zap.String("error", "delete_failed"),
@@ -302,7 +302,7 @@ func DeleteBatch(c echo.Context) error {
 		return errors.New("删除失败")
 	}
 
-	logger.Info("DeleteBatch接口完成",
+	log.Info("DeleteBatch接口完成",
 		zap.String("bean", amisHeader.Bean),
 		zap.Uints("ids", ids),
 		zap.Int64("deleted_count", tx.RowsAffected),
@@ -336,7 +336,7 @@ func findBean(c echo.Context, reqBody map[string]interface{}) (map[string]interf
 	marshal, _ := json.Marshal(byStruct)
 	bean := util.NewStructFromJSONAndName(amisHeader.Bean, marshal)
 
-	logger.Debug("findBean处理完成",
+	log.Debug("findBean处理完成",
 		zap.String("bean", amisHeader.Bean),
 		zap.String("site", amisHeader.Site),
 		zap.Int("request_body_size", len(reqBody)),
@@ -349,7 +349,7 @@ func changeMapByStruct(header req.AmisHeader, body map[string]interface{}) map[s
 	var bodyNew = make(map[string]interface{})
 	var beanPre = header.Bean + constant.AmisSplitSymbol
 
-	logger.Debug("changeMapByStruct处理",
+	log.Debug("changeMapByStruct处理",
 		zap.String("bean", header.Bean),
 		zap.String("prefix", beanPre),
 		zap.Int("original_fields", len(body)),
@@ -360,7 +360,7 @@ func changeMapByStruct(header req.AmisHeader, body map[string]interface{}) map[s
 		bodyNew[key] = i
 	}
 
-	logger.Debug("changeMapByStruct完成",
+	log.Debug("changeMapByStruct完成",
 		zap.String("bean", header.Bean),
 		zap.Int("processed_fields", len(bodyNew)),
 	)
@@ -371,7 +371,7 @@ func changeMapByStruct(header req.AmisHeader, body map[string]interface{}) map[s
 func getAmisHeader(header http.Header) req.AmisHeader {
 	bean := header.Get("bean")
 	site := header.Get("site")
-	logger.Debug("获取AmisHeader",
+	log.Debug("获取AmisHeader",
 		zap.String("bean", bean),
 		zap.String("site", site),
 	)

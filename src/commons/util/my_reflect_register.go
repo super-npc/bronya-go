@@ -7,7 +7,9 @@ import (
 	"strings"
 
 	"github.com/super-npc/bronya-go/src/commons/constant"
+	"github.com/super-npc/bronya-go/src/framework/log"
 	"github.com/super-npc/bronya-go/src/model"
+	"go.uber.org/zap"
 )
 
 // 全局注册表：名字 -> 类型(Type)
@@ -102,6 +104,7 @@ func registerByStruct(v interface{}) reflect.Type {
 	}
 	// 用结构体自身的名字作为 key
 	//typeRegistry[t.Name()] = t
+	log.Info("注册结构体", zap.String("struct", t.Name()))
 	return t
 }
 

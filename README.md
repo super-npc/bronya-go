@@ -62,7 +62,7 @@ export APP_MYSQL_HOST=localhost
 ### 基本日志
 
 ```go
-import "github.com/super-npc/bronya-go/src/framework/logger"
+import "github.com/super-npc/bronya-go/src/framework/log"
 
 // 不同级别的日志
 logger.Debug("调试信息", zap.String("key", "value"))

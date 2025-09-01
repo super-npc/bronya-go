@@ -1,17 +1,22 @@
-package logger
+package log
 
 import (
+	"os"
+
 	"github.com/super-npc/bronya-go/src/framework/conf"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
-	"os"
 )
 
 var Logger *zap.Logger
 
 // InitLogger 初始化日志系统
 func InitLogger() error {
+	logDir := "./logs"
+	if err := os.MkdirAll(logDir, 0755); err != nil {
+		panic(err)
+	}
 	var config zap.Config
 
 	if conf.Conf.Mode == "production" {
