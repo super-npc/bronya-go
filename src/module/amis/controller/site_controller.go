@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
-	"github.com/mozillazg/go-pinyin"
 	"github.com/super-npc/bronya-go/src/commons/util"
 	tool "github.com/super-npc/bronya-go/src/commons/util/guava"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/dto"
@@ -53,20 +52,29 @@ func Site(c echo.Context) error {
 	GetSiteModuleMap()
 	menuTable := SiteModuleMap["系统"]
 	groups := menuTable.Rows()
+	//var sort = 1;
 	for _, group := range groups {
-		lazyPinyin := pinyin.LazyPinyin(group, pinyin.NewArgs())
-		groupId := strings.Join(lazyPinyin, "_")
+		groupId := util.ToPinyin(group)
+
 		groupLeaf := resp.Leaf{}
 		groupLeaf.Id = groupId
+		groupLeaf.ParentId = "0"
+		groupLeaf.Label = group
 		// 组
 		menuSiteDto := menuTable.Row(group)
 		for menuName, siteDtoList := range menuSiteDto {
 			// 第一层菜单
+			menuId := util.ToPinyin(group)
+			menuLeaf := resp.Leaf{}
+			menuLeaf.Id = groupId
+			menuLeaf.ParentId = "0"
+			menuLeaf.Label = group
+
 			for _, siteDto := range *siteDtoList {
 				// 叶子
 				// 菜单叶子集合
 				leaf := resp.Leaf{}
-				leaf.ParentId = groupId
+				leaf.ParentId = menuId
 				leaf.Id = ""
 				leaf.Label = menuName
 				leaf.Url = ""
