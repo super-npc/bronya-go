@@ -95,8 +95,9 @@ func Page(c echo.Context) error {
 
 	// 处理动态代理数据 todo 后续优化点,不需要顺序处理,go协程处理多任务
 	processStart := time.Now()
+	var pageFinalRes = make([]map[string]interface{}, 0)
 	for _, m := range list {
-		table(amisHeader, registerObj, m)
+		pageFinalRes = append(pageFinalRes, table(amisHeader, registerObj, m))
 	}
 	processDuration := time.Since(processStart)
 
@@ -110,7 +111,7 @@ func Page(c echo.Context) error {
 		zap.Duration("total_duration", time.Since(start)),
 	)
 
-	res := resp.PageResp{Total: total, Rows: list}
+	res := resp.PageResp{Total: total, Rows: pageFinalRes}
 	return resp.Success(c, res)
 }
 
