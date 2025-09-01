@@ -5,6 +5,6 @@ type UserStatus string
 
 // 2. 枚举值常量
 const (
-	Enable  UserStatus = "enable"
-	Disable UserStatus = "disable"
+	Enable  UserStatus = "enable"  //
+	Disable UserStatus = "disable" //
 )

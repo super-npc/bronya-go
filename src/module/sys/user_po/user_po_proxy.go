@@ -10,7 +10,6 @@ type UserPoProxy struct {
 
 func (this *UserPoProxy) BeforeAdd(reqBody map[string]interface{}) {
 	log.Infof("新增参数: %s", reqBody)
-
 }
 
 func (this *UserPoProxy) AfterAdd(PoBean interface{}) {
@@ -34,7 +33,7 @@ func (this *UserPoProxy) AfterDelete(ids []uint) {
 
 func (this *UserPoProxy) Table(tableFieldPre string, resTable map[string]interface{}) {
 	// 处理拓展类
-	ext := UserPoExt{ExtName: "测试拓展字段"}
+	ext := UserPoExt{}
 	toMap := util.StructToMap(ext)
 	for k, v := range toMap {
 		resTable[tableFieldPre+k] = v
