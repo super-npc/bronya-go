@@ -1,0 +1,352 @@
+{
+  "type": "page",
+  "title": "工作台",
+  "body": [
+    {
+      "type": "sse",
+      "url": "/admin/sse/dash",
+      "loading": {
+        "type": "spinner",
+        "label": "正在建立实时连接..."
+      },
+      "error": {
+        "type": "alert",
+        "level": "error",
+        "message": "实时连接失败: ${$error}"
+      },
+      "body": [
+        {
+          "type": "grid",
+          "columns": [
+            {
+              "md": 6,
+              "body": {
+                "type": "card",
+                "className": "welcome-card",
+                "body": {
+                  "type": "flex",
+                  "items": [
+                    {
+                      "type": "avatar",
+                      "src": "/amis/static/avatar.jpg",
+                      "size": 64
+                    },
+                    {
+                      "type": "container",
+                      "body": [
+                        {
+                          "type": "tpl",
+                          "tpl": "早安，Admin，开始您一天的工作吧！",
+                          "className": "welcome-title"
+                        },
+                        {
+                          "type": "tpl",
+                          "tpl": "今日晴朗，15℃ - 25℃，适合外出办公",
+                          "className": "text-muted"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "md": 6,
+              "body": {
+                "type": "grid",
+                "columns": [
+                  {
+                    "md": 3,
+                    "body": {
+                      "type": "card",
+                      "className": "stat-card",
+                      "body": [
+                        {
+                          "type": "tpl",
+                          "tpl": "项目数",
+                          "className": "stat-label"
+                        },
+                        {
+                          "type": "tpl",
+                          "tpl": "${chatDataList[0].value}}",
+                          "className": "stat-value"
+                        },
+                        {
+                          "type": "tpl",
+                          "tpl": "↑16.2%",
+                          "className": "stat-trend"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "md": 3,
+                    "body": {
+                      "type": "card",
+                      "className": "stat-card",
+                      "body": [
+                        {
+                          "type": "tpl",
+                          "tpl": "团队规模",
+                          "className": "stat-label"
+                        },
+                        {
+                          "type": "tpl",
+                          "tpl": "28",
+                          "className": "stat-value"
+                        },
+                        {
+                          "type": "tpl",
+                          "tpl": "↑5.6%",
+                          "className": "stat-trend"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "md": 3,
+                    "body": {
+                      "type": "card",
+                      "className": "stat-card",
+                      "body": [
+                        {
+                          "type": "tpl",
+                          "tpl": "任务完成",
+                          "className": "stat-label"
+                        },
+                        {
+                          "type": "tpl",
+                          "tpl": "89%",
+                          "className": "stat-value"
+                        },
+                        {
+                          "type": "tpl",
+                          "tpl": "↑12.5%",
+                          "className": "stat-trend"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "md": 3,
+                    "body": {
+                      "type": "card",
+                      "className": "stat-card",
+                      "body": [
+                        {
+                          "type": "tpl",
+                          "tpl": "项目收益",
+                          "className": "stat-label"
+                        },
+                        {
+                          "type": "tpl",
+                          "tpl": "￥568.8w",
+                          "className": "stat-value"
+                        },
+                        {
+                          "type": "tpl",
+                          "tpl": "↑8.7%",
+                          "className": "stat-trend"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid",
+          "columns": [
+            {
+              "md": 8,
+              "body": [
+                {
+                  "type": "chart",
+                  "title": "项目进展趋势",
+                  "height": 300,
+                  "config": {
+                    "xAxis": {
+                      "type": "category",
+                      "data": ["1月", "2月", "3月", "4月", "5月", "6月"]
+                    },
+                    "yAxis": {
+                      "type": "value"
+                    },
+                    "series": [
+                      {
+                        "name": "已完成",
+                        "type": "line",
+                        "data": [150, 230, 224, 218, 135, 147]
+                      },
+                      {
+                        "name": "进行中",
+                        "type": "line",
+                        "data": [89, 112, 125, 145, 122, 165]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "grid",
+                  "columns": [
+                    {
+                      "md": 6,
+                      "body": {
+                        "type": "chart",
+                        "interval": 1000,
+                        "title": "项目类型分布",
+                        "height": 300,
+                        "trackExpression": "${chatDataList|json}",
+                        "config": {
+                          "series": [
+                            {
+                              "type": "pie",
+                              "data": "${chatDataList}"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "md": 6,
+                      "body": {
+                        "type": "chart",
+                        "title": "团队贡献度",
+                        "height": 300,
+                        "config": {
+                          "tooltip": {
+                            "trigger": "item"
+                          },
+                          "legend": {
+                            "data": ["预期", "实际"],
+                            "bottom": 0
+                          },
+                          "radar": {
+                            "indicator": [
+                              { "name": "需求分析", "max": 60000 },
+                              { "name": "技术方案", "max": 50000 },
+                              { "name": "开发进度", "max": 30000 },
+                              { "name": "代码质量", "max": 40000 },
+                              { "name": "测试覆盖", "max": 50000 },
+                              { "name": "文档完整", "max": 30000 }
+                            ]
+                          },
+                          "series": [
+                            {
+                              "type": "radar",
+                              "name": "团队贡献度",
+                              "data": [
+                                {
+                                  "value": [42000, 30000, 20000, 35000, 50000, 18000],
+                                  "name": "预期",
+                                  "itemStyle": {
+                                    "color": "#5470c6"
+                                  },
+                                  "areaStyle": {
+                                    "opacity": 0.3
+                                  }
+                                },
+                                {
+                                  "value": [50000, 14000, 28000, 26000, 42000, 21000],
+                                  "name": "实际",
+                                  "itemStyle": {
+                                    "color": "#91cc75"
+                                  },
+                                  "areaStyle": {
+                                    "opacity": 0.3
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "md": 4,
+              "body": [
+                {
+                  "type": "panel",
+                  "title": "重要事项",
+                  "body": {
+                    "type": "timeline",
+                    "items": [
+                      {
+                        "time": "今天 14:00",
+                        "title": "产品评审会议",
+                        "detail": "讨论新功能原型设计",
+                        "badge": "进行中",
+                        "color": "warning"
+                      },
+                      {
+                        "time": "明天 10:00",
+                        "title": "技术架构讨论",
+                        "detail": "评估新技术方案可行性",
+                        "badge": "待开始",
+                        "color": "info"
+                      },
+                      {
+                        "time": "后天 15:00",
+                        "title": "迭代复盘会议",
+                        "detail": "总结本次迭代经验教训",
+                        "badge": "待开始",
+                        "color": "primary"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "style": {
+    ".welcome-card": {
+      "background": "linear-gradient(to right, #1890ff, #36cfc9)",
+      "color": "#fff",
+      "padding": "20px"
+    },
+    ".welcome-title": {
+      "font-size": "20px",
+      "margin-bottom": "10px"
+    },
+    ".stat-card": {
+      "text-align": "center",
+      "padding": "15px"
+    },
+    ".stat-label": {
+      "color": "#666",
+      "font-size": "14px"
+    },
+    ".stat-value": {
+      "font-size": "24px",
+      "font-weight": "bold",
+      "margin": "10px 0"
+    },
+    ".stat-trend": {
+      "color": "#52c41a"
+    },
+    ".m-t-lg": {
+      "margin-top": "20px"
+    },
+    ".timeline-item": {
+      "padding": "12px 0"
+    },
+    ".timeline-item-title": {
+      "font-weight": "bold",
+      "margin-bottom": "8px"
+    },
+    ".timeline-item-detail": {
+      "color": "#666",
+      "font-size": "13px"
+    }
+  }
+}

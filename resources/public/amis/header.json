@@ -1,0 +1,106 @@
+{
+  "type": "service",
+  "api": "get:/admin/base/sys/top-right-header",
+  "body": {
+    "type": "flex",
+    "items": [
+      {
+        "type": "container",
+        "body": [
+          {
+            "type": "each",
+            "source": "${subSystemButtons}",
+            "items": {
+              "type": "button",
+              "actionType": "ajax",
+              "level": "${level}",
+              "label": "${label}",
+              "api": {
+                "method": "GET",
+                "url": "/admin/base/sys/change-site?site=${label}",
+                "headers": null,
+                "sendOn": null
+              }
+            }
+          }
+        ],
+        "size": "none",
+        "className": "flex justify-between items-center px-6",
+        "wrapperBody": false,
+        "isFixedHeight": false,
+        "isFixedWidth": false
+      },
+      {
+        "type": "container",
+        "body": [
+          {
+            "type": "each",
+            "source": "${loginUser.roles}",
+            "items": {
+              "type": "tag",
+              "label": "${roleName}",
+              "displayMode": "normal",
+              "color": "warning",
+              "className": "mr-2 font-bold"
+            }
+          }
+        ],
+        "size": "none",
+        "className": "flex items-center px-2",
+        "wrapperBody": false,
+        "isFixedHeight": false,
+        "isFixedWidth": false
+      },
+      {
+        "type": "container",
+        "body": [
+          {
+            "type": "avatar",
+            "src": "$loginUser.userAvatar",
+            "icon": "fa fa-user",
+            "text": "avatar",
+            "fit": "cover",
+            "className": "mr-3",
+            "size": 32
+          },
+          {
+            "label": "退出",
+            "type": "button",
+            "actionType": "dialog",
+            "level": "link",
+            "icon": "fa fa-sign-out",
+            "className": "text-gray",
+            "dialog": {
+              "title": "确认退出",
+              "body": "确定要退出系统吗？",
+              "size": "sm",
+              "actions": [
+                {
+                  "type": "button",
+                  "label": "取消",
+                  "actionType": "close"
+                },
+                {
+                  "type": "button",
+                  "label": "确认",
+                  "level": "primary",
+                  "actionType": "ajax",
+                  "api": "post:/admin/user/logout",
+                  "reload": "window"
+                }
+              ]
+            }
+          }
+        ],
+        "size": "none",
+        "className": "flex items-center justify-end px-6 py-2 border-bottom",
+        "wrapperBody": false,
+        "isFixedHeight": false,
+        "isFixedWidth": false
+      }
+    ],
+    "className": "transparent",
+    "justify": "space-between",
+    "alignItems": "center"
+  }
+}

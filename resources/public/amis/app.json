@@ -1,0 +1,66 @@
+{
+  "type": "app",
+  "brandName": "后台管理",
+  "logo": "/icon/柠檬.svg",
+  "id": "the_app",
+  "data": {
+    "init": {
+      "appName": "",
+      "gitCommitInfo": "",
+      "userName": "",
+      "roleName": "",
+      "avatarSrc": "",
+      "version": ""
+    },
+    "unRead": {
+      "count": 0,
+      "isFirst": true
+    }
+  },
+  "header": {
+    "type": "service",
+    "className": "origin-top-right absolute right-5",
+    "schemaApi": "get:/public/amis/header.json"
+  },
+  "footer": {
+    "type": "service",
+    "body": [
+      {
+        "type": "html",
+        "html": "<div class=\"p-2 origin-bottom-right absolute right-5\">版本:${init.version} ${init.gitCommitInfo}</div>"
+      },
+      {
+        "type": "service",
+        "silentPolling": true,
+        "onEvent": {
+          "fetchInited": {
+            "weight": 0,
+            "actions": [
+              {
+                "componentId": "the_app",
+                "args": {
+                  "value": {
+                    "init.userName": "${event.data.userName}",
+                    "init.roleName": "${event.data.roleName}",
+                    "init.avatarSrc": "${event.data.avatarSrc}",
+                    "init.version": "${event.data.version}",
+                    "init.appName": "${event.data.appName}",
+                    "init.gitCommitInfo": "${event.data.gitCommitInfo}"
+                  }
+                },
+                "actionType": "setValue"
+              }
+            ]
+          }
+        },
+        "api": {
+          "url": "/admin/base/sys/app-info",
+          "method": "get"
+        },
+        "interval": 60000
+      }
+    ]
+  },
+  "asideBefore": "<div class=\"p-2 text-center\">${ls:site}</div>",
+  "api": "/admin/base/site"
+}
