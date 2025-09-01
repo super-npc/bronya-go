@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/labstack/echo/v4"
@@ -53,38 +54,48 @@ func Site(c echo.Context) error {
 	menuTable := SiteModuleMap["系统"]
 	groups := menuTable.Rows()
 	//var sort = 1;
+	groupLeafs := make([]resp.Module, 0)
 	for _, group := range groups {
 		groupId := util.ToPinyin(group)
 
-		groupLeaf := resp.Leaf{}
+		groupLeaf := resp.Module{}
 		groupLeaf.Id = groupId
 		groupLeaf.ParentId = "0"
 		groupLeaf.Label = group
 		// 组
 		menuSiteDto := menuTable.Row(group)
+
+		menuLeafs := make([]resp.Menu, 0)
 		for menuName, siteDtoList := range menuSiteDto {
 			// 第一层菜单
-			menuId := util.ToPinyin(group)
-			menuLeaf := resp.Leaf{}
+			menuId := util.ToPinyin(menuName)
+			menuLeaf := resp.Menu{}
 			menuLeaf.Id = groupId
 			menuLeaf.ParentId = "0"
 			menuLeaf.Label = group
 
+			leafs := make([]resp.Leaf, 0)
 			for _, siteDto := range *siteDtoList {
-				// 叶子
 				// 菜单叶子集合
+				leafId := util.ToPinyin(siteDto.Label)
 				leaf := resp.Leaf{}
 				leaf.ParentId = menuId
-				leaf.Id = ""
-				leaf.Label = menuName
-				leaf.Url = ""
+				leaf.Id = leafId
+				leaf.Label = siteDto.Label
+				leaf.Url = fmt.Sprintf("/%s/%s/%s", groupId, menuId, leafId)
 				leaf.SchemaApi = siteDto.SchemaApi
-				leaf.Icon = "/icon/香蕉水果.svg"
+				//leaf.Icon = "/icon/香蕉水果.svg"
+				leafs = append(leafs, leaf)
 			}
+			menuLeaf.Children = leafs
+			menuLeafs = append(menuLeafs, menuLeaf)
 		}
+		groupLeaf.Menu = menuLeafs
+		groupLeafs = append(groupLeafs, groupLeaf)
 	}
 
 	siteResp := resp.SiteResp{}
+	siteResp.Pages = groupLeafs
 
 	return resp.Success(c, siteResp)
 }
