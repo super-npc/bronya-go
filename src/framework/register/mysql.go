@@ -1,10 +1,15 @@
 package register
 
 import (
+	"log"
+	"os"
+	"time"
+
 	"github.com/acmestack/gorm-plus/gplus"
 	"github.com/super-npc/bronya-go/src/commons/db"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
 
@@ -36,6 +41,14 @@ func InitDatabase() {
 			//TablePrefix: "app_", // 表前缀
 			SingularTable: true, // 使用单数表名
 		},
+		Logger: logger.New(
+			log.New(os.Stdout, "\r\n", log.LstdFlags), // 输出到标准输出
+			logger.Config{
+				SlowThreshold: time.Second, // 慢查询阈值
+				LogLevel:      logger.Info, // 日志级别：Silent、Error、Warn、Info
+				Colorful:      true,        // 彩色输出
+			},
+		),
 	})
 	if err != nil {
 		panic(err)

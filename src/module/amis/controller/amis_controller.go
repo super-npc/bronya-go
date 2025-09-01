@@ -210,8 +210,7 @@ func Create(c echo.Context) error {
 			zap.Duration("create_duration", createDuration),
 		)
 	}
-
-	return resp.Success(c, fmt.Sprintf("新增 %d", res.RowsAffected))
+	return resp.Success(c, true)
 }
 
 func Update(c echo.Context) error {
@@ -258,7 +257,7 @@ func Update(c echo.Context) error {
 		zap.Duration("duration", time.Since(start)),
 		zap.Duration("update_duration", updateDuration),
 	)
-	return c.String(http.StatusOK, "Hello, World! ")
+	return resp.Success(c, true)
 }
 
 func DeleteBatch(c echo.Context) error {
@@ -310,7 +309,7 @@ func DeleteBatch(c echo.Context) error {
 		zap.Duration("duration", time.Since(start)),
 		zap.Duration("delete_duration", deleteDuration),
 	)
-	return resp.Success(c, poBean)
+	return resp.Success(c, true)
 }
 
 func table(header req.AmisHeader, registerObj util.RegisterResp, record interface{}) map[string]interface{} {
