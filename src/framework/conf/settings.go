@@ -19,6 +19,12 @@ type AppConfig struct {
 	*LogConfig   `mapstructure:"log"`
 	*MySQLConfig `mapstructure:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
+	*Etcd        `mapstructure:"etcd"`
+}
+
+type Etcd struct {
+	Host string `mapstructure:"host"`
+	Port int    `mapstructure:"port"`
 }
 
 type MySQLConfig struct {

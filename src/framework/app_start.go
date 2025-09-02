@@ -38,12 +38,13 @@ func Start(e *echo.Echo) {
 
 	registerDatabaseBean() // 初始化数据库表对象
 
-	// 初始化数据库
-	register.InitDatabase()
-	log.Info("数据库初始化完成")
+	// etcd 配置
+	register.InitEtcd()
 
+	register.InitDatabase()
 	// 注入依赖，打破循环引用
 	controller.SetDbProvider(register.GetDbProvider())
+	log.Info("数据库初始化完成")
 
 	register.InitRouting(e) // 注册路由
 
