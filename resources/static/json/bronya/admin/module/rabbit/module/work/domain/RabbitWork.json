@@ -1,0 +1,206 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": true,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "RabbitWork"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "RabbitWork"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions"
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "actionType": "dialog",
+          "dialog":
+          {
+            "body":
+            {
+              "data":
+              {
+                "One2ManyReq.entityField": "rabbitWorkId",
+                "One2ManyReq.entity": "RabbitWork",
+                "One2ManyReq.entityFieldVal": "$id"
+              },
+              "schemaApi": "get:/json/bronya/admin/module/rabbit/module/work/domain/RabbitWorkMsg.json",
+              "type": "service"
+            },
+            "size": "xl",
+            "title": "一对多 [工作模式 - 关联工作模式] = 「$id」"
+          },
+          "hiddenOnHover": true,
+          "label": "工作模式消息",
+          "type": "button"
+        },
+        {
+          "label": "详情",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "查看数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "RabbitWork"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "RabbitWork__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "实例",
+                  "name": "RabbitWork__entityClass",
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "RabbitWork__createTime",
+                  "required": true,
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "更新时间",
+                  "name": "RabbitWork__updateTime",
+                  "required": true,
+                  "static": true,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "RabbitWork__id",
+          "sort": -100,
+          "static": false,
+          "type": "static"
+        },
+        {
+          "label": "实例",
+          "name": "RabbitWork__entityClass",
+          "searchable":
+          {
+            "label": "实例",
+            "mode": "horizontal",
+            "name": "RabbitWork__entityClass",
+            "placeholder": "请输入实例",
+            "type": "input-text"
+          },
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "创建时间",
+          "name": "RabbitWork__createTime",
+          "sort": 100,
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "更新时间",
+          "name": "RabbitWork__updateTime",
+          "sort": 101,
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ]
+    }
+  ]
+}

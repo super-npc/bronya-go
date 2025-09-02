@@ -1,0 +1,1437 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": true,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "Hobby"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "Hobby"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions",
+        {
+          "label": "新增",
+          "type": "button",
+          "actionType": "dialog",
+          "level": "primary",
+          "dialog":
+          {
+            "title": "新增数据",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/create",
+                "headers":
+                {
+                  "bean": "Hobby"
+                }
+              },
+              "body":
+              [
+                {
+                  "type": "input-text",
+                  "required": true,
+                  "name": "Hobby__name",
+                  "label": "爱好",
+                  "value": "xx爱好",
+                  "staticX": false
+                },
+                {
+                  "type": "picker",
+                  "name": "Hobby__studentId",
+                  "joinValues": true,
+                  "required": true,
+                  "disabled": false,
+                  "valueField": "id",
+                  "labelField": "Student__name",
+                  "label": "关联学生id",
+                  "source":
+                  {
+                    "method": "post",
+                    "url": "/admin/base/amis/page",
+                    "data":
+                    {
+                      "&": "$$"
+                    },
+                    "headers":
+                    {
+                      "bean": "Student"
+                    }
+                  },
+                  "modalSize": "xl",
+                  "size": "xl",
+                  "embed": false,
+                  "multiple": false,
+                  "pickerSchema":
+                  {
+                    "type": "crud",
+                    "syncLocation": false,
+                    "autoGenerateFilter": true,
+                    "defaultCollapsed": true,
+                    "draggable": true,
+                    "headerToolbar":
+                    {
+                      
+                    },
+                    "footerToolbar":
+                    [
+                      "statistics",
+                      {
+                        "type": "pagination",
+                        "showPageInput": true,
+                        "layout": "perPage,pager,go"
+                      }
+                    ],
+                    "columns":
+                    [
+                      {
+                        "label": "主键",
+                        "name": "Student__id",
+                        "searchable":
+                        {
+                          "label": "主键",
+                          "mode": "horizontal",
+                          "name": "Student__id",
+                          "placeholder": "请输入主键",
+                          "type": "input-number"
+                        },
+                        "sort": -100,
+                        "static": true,
+                        "type": "static"
+                      },
+                      {
+                        "label": "学生名字",
+                        "name": "Student__name",
+                        "searchable":
+                        {
+                          "label": "学生名字",
+                          "mode": "horizontal",
+                          "name": "Student__name",
+                          "placeholder": "请输入学生名字",
+                          "type": "input-text"
+                        },
+                        "static": true,
+                        "type": "static"
+                      },
+                      {
+                        "label": "年龄",
+                        "name": "Student__age",
+                        "searchable":
+                        {
+                          "label": "年龄",
+                          "mode": "horizontal",
+                          "name": "Student__age",
+                          "placeholder": "请输入年龄",
+                          "precision": -1,
+                          "type": "input-number"
+                        },
+                        "static": true,
+                        "type": "static"
+                      },
+                      {
+                        "itemSchema":
+                        {
+                          "color": "${color}",
+                          "displayMode": "normal",
+                          "label": "${label}",
+                          "type": "tag"
+                        },
+                        "label": "性别",
+                        "labelField": "label",
+                        "map":
+                        [
+                          {
+                            "color": "#87CEEB",
+                            "displayMode": "normal",
+                            "label": "男",
+                            "name": "BOY",
+                            "type": "tag"
+                          },
+                          {
+                            "color": "#4B0082",
+                            "displayMode": "normal",
+                            "label": "女",
+                            "name": "GIRL",
+                            "type": "tag"
+                          }
+                        ],
+                        "name": "Student__sex",
+                        "searchable":
+                        {
+                          "label": "性别",
+                          "mode": "horizontal",
+                          "name": "Student__sex",
+                          "options":
+                          [
+                            {
+                              "label": "男",
+                              "value": "BOY"
+                            },
+                            {
+                              "label": "女",
+                              "value": "GIRL"
+                            }
+                          ],
+                          "placeholder": "请输入性别",
+                          "type": "select"
+                        },
+                        "static": true,
+                        "type": "static-mapping",
+                        "valueField": "name"
+                      },
+                      {
+                        "label": "创建人",
+                        "name": "Student__createBy",
+                        "sort": 100,
+                        "static": true,
+                        "toggled": false,
+                        "type": "static"
+                      },
+                      {
+                        "label": "最后更新人",
+                        "name": "Student__updateBy",
+                        "sort": 101,
+                        "static": true,
+                        "toggled": false,
+                        "type": "static"
+                      },
+                      {
+                        "label": "创建时间",
+                        "name": "Student__createTime",
+                        "sort": 102,
+                        "static": true,
+                        "toggled": false,
+                        "type": "static-datetime",
+                        "width": "153px"
+                      },
+                      {
+                        "label": "最后更新时间",
+                        "name": "Student__updateTime",
+                        "sort": 103,
+                        "static": true,
+                        "toggled": false,
+                        "type": "static-datetime",
+                        "width": "153px"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "className": "",
+                  "fieldClassName": "",
+                  "embed": true,
+                  "title": "",
+                  "fields":
+                  [
+                    {
+                      "label": "名称",
+                      "name": "name",
+                      "type": "text"
+                    },
+                    {
+                      "label": "次数",
+                      "maximum": "100000000000000000000000000",
+                      "minimum": "-100000000000000000000000000",
+                      "name": "count",
+                      "type": "number"
+                    },
+                    {
+                      "label": "百分比",
+                      "maximum": "6.0",
+                      "minimum": "2.0",
+                      "name": "percentage",
+                      "operators":
+                      [
+                        "equal",
+                        "less"
+                      ],
+                      "precision": 5,
+                      "type": "number"
+                    },
+                    {
+                      "label": "流程",
+                      "name": "foods",
+                      "options":
+                      [
+                        {
+                          "label": "已创建",
+                          "value": "CREATED"
+                        },
+                        {
+                          "label": "队列中",
+                          "value": "PENDING"
+                        },
+                        {
+                          "label": "运行中",
+                          "value": "RUNNING"
+                        },
+                        {
+                          "label": "已暂停",
+                          "value": "PAUSED"
+                        },
+                        {
+                          "label": "完成",
+                          "value": "SUCCESS"
+                        },
+                        {
+                          "label": "失败",
+                          "value": "FAIL"
+                        },
+                        {
+                          "label": "已取消",
+                          "value": "CANCELED"
+                        }
+                      ],
+                      "type": "select"
+                    },
+                    {
+                      "label": "jdk.date",
+                      "name": "date",
+                      "type": "datetime"
+                    },
+                    {
+                      "label": "dateTime",
+                      "name": "localDateTime",
+                      "type": "datetime"
+                    },
+                    {
+                      "label": "年月日时分秒",
+                      "name": "localDate",
+                      "type": "date"
+                    },
+                    {
+                      "label": "时分",
+                      "name": "localTime",
+                      "type": "time"
+                    }
+                  ],
+                  "showANDOR": false,
+                  "showNot": false,
+                  "draggable": true,
+                  "searchable": false,
+                  "selectMode": "list",
+                  "addBtnVisibleOn": "",
+                  "addGroupBtnVisibleOn": "this.depth < 2",
+                  "type": "condition-builder",
+                  "name": "Hobby__myRule",
+                  "label": "风控"
+                },
+                {
+                  "body":
+                  [
+                    {
+                      "type": "input-text",
+                      "required": true,
+                      "name": "Hobby__json",
+                      "label": "json格式",
+                      "value": "{}",
+                      "staticX": false
+                    },
+                    {
+                      "type": "input-text",
+                      "required": true,
+                      "name": "Hobby__remark",
+                      "label": "备注",
+                      "value": "xxx备注",
+                      "staticX": false
+                    }
+                  ],
+                  "className": "",
+                  "collapsable": true,
+                  "collapseTitle": "附加信息",
+                  "collapsed": false,
+                  "headingClassName": "",
+                  "mode": "",
+                  "size": "base",
+                  "title": "附加信息",
+                  "type": "fieldSet"
+                },
+                {
+                  "title": "附加信息",
+                  "type": "divider"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'全局按钮'?",
+          "label": "全局按钮",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$id"
+            },
+            "method": "GET",
+            "url": "/admin/diagram/re-gen"
+          }
+        }
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        },
+        {
+          "label": "批量删除",
+          "actionType": "ajax",
+          "level": "danger",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$ids"
+            },
+            "headers":
+            {
+              "bean": "Hobby"
+            }
+          },
+          "confirmText": "确认批量删除? ids:「$ids」"
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "label": "关联学生id",
+          "type": "button",
+          "level": "enhance",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "爱好.主键:「$id」 多对一关联 学生",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/bind-many2-one-view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "Hobby",
+                  "bind-many2-one-class-field": "studentId"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "Student__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "学生名字",
+                  "name": "Student__name",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "年龄",
+                  "name": "Student__age",
+                  "required": true,
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "性别",
+                  "name": "Student__sex",
+                  "options":
+                  [
+                    {
+                      "label": "男",
+                      "value": "BOY"
+                    },
+                    {
+                      "label": "女",
+                      "value": "GIRL"
+                    }
+                  ],
+                  "static": true,
+                  "type": "button-group-select"
+                },
+                {
+                  "label": "创建人",
+                  "name": "Student__createBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "最后更新人",
+                  "name": "Student__updateBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "Student__createTime",
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "最后更新时间",
+                  "name": "Student__updateTime",
+                  "static": true,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "详情",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "查看数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "Hobby"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "Hobby__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "爱好",
+                  "name": "Hobby__name",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "备注",
+                  "name": "Hobby__remark",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "json格式",
+                  "name": "Hobby__json",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "关联学生id",
+                  "name": "Hobby__studentId",
+                  "required": true,
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "风控",
+                  "name": "Hobby__myRule",
+                  "static": true,
+                  "type": "condition-builder"
+                },
+                {
+                  "label": "创建人",
+                  "name": "Hobby__createBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "最后更新人",
+                  "name": "Hobby__updateBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "Hobby__createTime",
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "最后更新时间",
+                  "name": "Hobby__updateTime",
+                  "static": true,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "button",
+          "label": "修改",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "修改数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "Hobby"
+                }
+              },
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/update",
+                "headers":
+                {
+                  "bean": "Hobby"
+                }
+              },
+              "body":
+              [
+                {
+                  "type": "input-text",
+                  "required": true,
+                  "name": "Hobby__name",
+                  "label": "爱好",
+                  "value": "xx爱好",
+                  "staticX": false
+                },
+                {
+                  "type": "picker",
+                  "name": "Hobby__studentId",
+                  "joinValues": true,
+                  "required": true,
+                  "disabled": false,
+                  "valueField": "id",
+                  "labelField": "Student__name",
+                  "label": "关联学生id",
+                  "source":
+                  {
+                    "method": "post",
+                    "url": "/admin/base/amis/page",
+                    "data":
+                    {
+                      "&": "$$"
+                    },
+                    "headers":
+                    {
+                      "bean": "Student"
+                    }
+                  },
+                  "modalSize": "xl",
+                  "size": "xl",
+                  "embed": false,
+                  "multiple": false,
+                  "pickerSchema":
+                  {
+                    "type": "crud",
+                    "syncLocation": false,
+                    "autoGenerateFilter": true,
+                    "defaultCollapsed": true,
+                    "draggable": true,
+                    "headerToolbar":
+                    {
+                      
+                    },
+                    "footerToolbar":
+                    [
+                      "statistics",
+                      {
+                        "type": "pagination",
+                        "showPageInput": true,
+                        "layout": "perPage,pager,go"
+                      }
+                    ],
+                    "columns":
+                    [
+                      {
+                        "label": "主键",
+                        "name": "Student__id",
+                        "searchable":
+                        {
+                          "label": "主键",
+                          "mode": "horizontal",
+                          "name": "Student__id",
+                          "placeholder": "请输入主键",
+                          "type": "input-number"
+                        },
+                        "sort": -100,
+                        "static": true,
+                        "type": "static"
+                      },
+                      {
+                        "label": "学生名字",
+                        "name": "Student__name",
+                        "searchable":
+                        {
+                          "label": "学生名字",
+                          "mode": "horizontal",
+                          "name": "Student__name",
+                          "placeholder": "请输入学生名字",
+                          "type": "input-text"
+                        },
+                        "static": true,
+                        "type": "static"
+                      },
+                      {
+                        "label": "年龄",
+                        "name": "Student__age",
+                        "searchable":
+                        {
+                          "label": "年龄",
+                          "mode": "horizontal",
+                          "name": "Student__age",
+                          "placeholder": "请输入年龄",
+                          "precision": -1,
+                          "type": "input-number"
+                        },
+                        "static": true,
+                        "type": "static"
+                      },
+                      {
+                        "itemSchema":
+                        {
+                          "color": "${color}",
+                          "displayMode": "normal",
+                          "label": "${label}",
+                          "type": "tag"
+                        },
+                        "label": "性别",
+                        "labelField": "label",
+                        "map":
+                        [
+                          {
+                            "color": "#87CEEB",
+                            "displayMode": "normal",
+                            "label": "男",
+                            "name": "BOY",
+                            "type": "tag"
+                          },
+                          {
+                            "color": "#4B0082",
+                            "displayMode": "normal",
+                            "label": "女",
+                            "name": "GIRL",
+                            "type": "tag"
+                          }
+                        ],
+                        "name": "Student__sex",
+                        "searchable":
+                        {
+                          "label": "性别",
+                          "mode": "horizontal",
+                          "name": "Student__sex",
+                          "options":
+                          [
+                            {
+                              "label": "男",
+                              "value": "BOY"
+                            },
+                            {
+                              "label": "女",
+                              "value": "GIRL"
+                            }
+                          ],
+                          "placeholder": "请输入性别",
+                          "type": "select"
+                        },
+                        "static": true,
+                        "type": "static-mapping",
+                        "valueField": "name"
+                      },
+                      {
+                        "label": "创建人",
+                        "name": "Student__createBy",
+                        "sort": 100,
+                        "static": true,
+                        "toggled": false,
+                        "type": "static"
+                      },
+                      {
+                        "label": "最后更新人",
+                        "name": "Student__updateBy",
+                        "sort": 101,
+                        "static": true,
+                        "toggled": false,
+                        "type": "static"
+                      },
+                      {
+                        "label": "创建时间",
+                        "name": "Student__createTime",
+                        "sort": 102,
+                        "static": true,
+                        "toggled": false,
+                        "type": "static-datetime",
+                        "width": "153px"
+                      },
+                      {
+                        "label": "最后更新时间",
+                        "name": "Student__updateTime",
+                        "sort": 103,
+                        "static": true,
+                        "toggled": false,
+                        "type": "static-datetime",
+                        "width": "153px"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "hidden",
+                  "required": false,
+                  "name": "Hobby__id",
+                  "label": "主键",
+                  "staticX": false
+                },
+                {
+                  "className": "",
+                  "fieldClassName": "",
+                  "embed": true,
+                  "title": "",
+                  "fields":
+                  [
+                    {
+                      "label": "名称",
+                      "name": "name",
+                      "type": "text"
+                    },
+                    {
+                      "label": "次数",
+                      "maximum": "100000000000000000000000000",
+                      "minimum": "-100000000000000000000000000",
+                      "name": "count",
+                      "type": "number"
+                    },
+                    {
+                      "label": "百分比",
+                      "maximum": "6.0",
+                      "minimum": "2.0",
+                      "name": "percentage",
+                      "operators":
+                      [
+                        "equal",
+                        "less"
+                      ],
+                      "precision": 5,
+                      "type": "number"
+                    },
+                    {
+                      "label": "流程",
+                      "name": "foods",
+                      "options":
+                      [
+                        {
+                          "label": "已创建",
+                          "value": "CREATED"
+                        },
+                        {
+                          "label": "队列中",
+                          "value": "PENDING"
+                        },
+                        {
+                          "label": "运行中",
+                          "value": "RUNNING"
+                        },
+                        {
+                          "label": "已暂停",
+                          "value": "PAUSED"
+                        },
+                        {
+                          "label": "完成",
+                          "value": "SUCCESS"
+                        },
+                        {
+                          "label": "失败",
+                          "value": "FAIL"
+                        },
+                        {
+                          "label": "已取消",
+                          "value": "CANCELED"
+                        }
+                      ],
+                      "type": "select"
+                    },
+                    {
+                      "label": "jdk.date",
+                      "name": "date",
+                      "type": "datetime"
+                    },
+                    {
+                      "label": "dateTime",
+                      "name": "localDateTime",
+                      "type": "datetime"
+                    },
+                    {
+                      "label": "年月日时分秒",
+                      "name": "localDate",
+                      "type": "date"
+                    },
+                    {
+                      "label": "时分",
+                      "name": "localTime",
+                      "type": "time"
+                    }
+                  ],
+                  "showANDOR": false,
+                  "showNot": false,
+                  "draggable": true,
+                  "searchable": false,
+                  "selectMode": "list",
+                  "addBtnVisibleOn": "",
+                  "addGroupBtnVisibleOn": "this.depth < 2",
+                  "type": "condition-builder",
+                  "name": "Hobby__myRule",
+                  "label": "风控"
+                },
+                {
+                  "body":
+                  [
+                    {
+                      "type": "input-text",
+                      "required": true,
+                      "name": "Hobby__json",
+                      "label": "json格式",
+                      "value": "{}",
+                      "staticX": false
+                    },
+                    {
+                      "type": "input-text",
+                      "required": true,
+                      "name": "Hobby__remark",
+                      "label": "备注",
+                      "value": "xxx备注",
+                      "staticX": false
+                    }
+                  ],
+                  "className": "",
+                  "collapsable": true,
+                  "collapseTitle": "附加信息",
+                  "collapsed": false,
+                  "headingClassName": "",
+                  "mode": "",
+                  "size": "base",
+                  "title": "附加信息",
+                  "type": "fieldSet"
+                },
+                {
+                  "title": "附加信息",
+                  "type": "divider"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "删除",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "ajax",
+          "level": "danger",
+          "confirmText": "确认要删除? id:「$id」",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$id"
+            },
+            "headers":
+            {
+              "bean": "Hobby"
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "Hobby__id",
+          "sort": -100,
+          "static": true,
+          "type": "static"
+        },
+        {
+          "copyable": true,
+          "label": "爱好",
+          "name": "Hobby__name",
+          "quickEdit": true,
+          "remark": "这个是备注",
+          "searchable":
+          {
+            "label": "爱好",
+            "mode": "horizontal",
+            "name": "Hobby__name",
+            "placeholder": "请输入爱好",
+            "type": "input-text"
+          },
+          "sortable": true,
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "备注",
+          "name": "Hobby__remark",
+          "sortable": true,
+          "static": true,
+          "type": "static"
+        },
+        {
+          "required": true,
+          "type": "json",
+          "label": "json格式",
+          "name": "Hobby__json",
+          "className": "",
+          "levelExpand": 1,
+          "source": "",
+          "jsonTheme": "twilight",
+          "placeholder": "请稍等..",
+          "mutable": false,
+          "static": true
+        },
+        {
+          "label": "关联学生id",
+          "name": "Hobby__studentId",
+          "searchable":
+          {
+            "type": "picker",
+            "name": "Hobby__studentId",
+            "joinValues": true,
+            "disabled": false,
+            "valueField": "id",
+            "labelField": "Student__name",
+            "label": "关联学生id",
+            "source":
+            {
+              "method": "post",
+              "url": "/admin/base/amis/page",
+              "data":
+              {
+                "&": "$$"
+              },
+              "headers":
+              {
+                "bean": "Student"
+              }
+            },
+            "modalSize": "xl",
+            "size": "xl",
+            "embed": false,
+            "multiple": false,
+            "pickerSchema":
+            {
+              "type": "crud",
+              "syncLocation": false,
+              "autoGenerateFilter": true,
+              "defaultCollapsed": true,
+              "draggable": true,
+              "headerToolbar":
+              {
+                
+              },
+              "footerToolbar":
+              [
+                "statistics",
+                {
+                  "type": "pagination",
+                  "showPageInput": true,
+                  "layout": "perPage,pager,go"
+                }
+              ],
+              "columns":
+              [
+                {
+                  "label": "主键",
+                  "name": "Student__id",
+                  "searchable":
+                  {
+                    "label": "主键",
+                    "mode": "horizontal",
+                    "name": "Student__id",
+                    "placeholder": "请输入主键",
+                    "type": "input-number"
+                  },
+                  "sort": -100,
+                  "static": true,
+                  "type": "static"
+                },
+                {
+                  "label": "学生名字",
+                  "name": "Student__name",
+                  "searchable":
+                  {
+                    "label": "学生名字",
+                    "mode": "horizontal",
+                    "name": "Student__name",
+                    "placeholder": "请输入学生名字",
+                    "type": "input-text"
+                  },
+                  "static": true,
+                  "type": "static"
+                },
+                {
+                  "label": "年龄",
+                  "name": "Student__age",
+                  "searchable":
+                  {
+                    "label": "年龄",
+                    "mode": "horizontal",
+                    "name": "Student__age",
+                    "placeholder": "请输入年龄",
+                    "precision": -1,
+                    "type": "input-number"
+                  },
+                  "static": true,
+                  "type": "static"
+                },
+                {
+                  "itemSchema":
+                  {
+                    "color": "${color}",
+                    "displayMode": "normal",
+                    "label": "${label}",
+                    "type": "tag"
+                  },
+                  "label": "性别",
+                  "labelField": "label",
+                  "map":
+                  [
+                    {
+                      "color": "#87CEEB",
+                      "displayMode": "normal",
+                      "label": "男",
+                      "name": "BOY",
+                      "type": "tag"
+                    },
+                    {
+                      "color": "#4B0082",
+                      "displayMode": "normal",
+                      "label": "女",
+                      "name": "GIRL",
+                      "type": "tag"
+                    }
+                  ],
+                  "name": "Student__sex",
+                  "searchable":
+                  {
+                    "label": "性别",
+                    "mode": "horizontal",
+                    "name": "Student__sex",
+                    "options":
+                    [
+                      {
+                        "label": "男",
+                        "value": "BOY"
+                      },
+                      {
+                        "label": "女",
+                        "value": "GIRL"
+                      }
+                    ],
+                    "placeholder": "请输入性别",
+                    "type": "select"
+                  },
+                  "static": true,
+                  "type": "static-mapping",
+                  "valueField": "name"
+                },
+                {
+                  "label": "创建人",
+                  "name": "Student__createBy",
+                  "sort": 100,
+                  "static": true,
+                  "toggled": false,
+                  "type": "static"
+                },
+                {
+                  "label": "最后更新人",
+                  "name": "Student__updateBy",
+                  "sort": 101,
+                  "static": true,
+                  "toggled": false,
+                  "type": "static"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "Student__createTime",
+                  "sort": 102,
+                  "static": true,
+                  "toggled": false,
+                  "type": "static-datetime",
+                  "width": "153px"
+                },
+                {
+                  "label": "最后更新时间",
+                  "name": "Student__updateTime",
+                  "sort": 103,
+                  "static": true,
+                  "toggled": false,
+                  "type": "static-datetime",
+                  "width": "153px"
+                }
+              ]
+            }
+          },
+          "static": true,
+          "type": "static",
+          "visibleOn": "1 != 1"
+        },
+        {
+          "label": "风控",
+          "className": "",
+          "title": "",
+          "addBtnVisibleOn": "",
+          "fieldClassName": "",
+          "name": "Hobby__myRule",
+          "embed": true,
+          "fields":
+          [
+            {
+              "label": "名称",
+              "name": "name",
+              "type": "text"
+            },
+            {
+              "label": "次数",
+              "maximum": "100000000000000000000000000",
+              "minimum": "-100000000000000000000000000",
+              "name": "count",
+              "type": "number"
+            },
+            {
+              "label": "百分比",
+              "maximum": "6.0",
+              "minimum": "2.0",
+              "name": "percentage",
+              "operators":
+              [
+                "equal",
+                "less"
+              ],
+              "precision": 5,
+              "type": "number"
+            },
+            {
+              "label": "流程",
+              "name": "foods",
+              "options":
+              [
+                {
+                  "label": "已创建",
+                  "value": "CREATED"
+                },
+                {
+                  "label": "队列中",
+                  "value": "PENDING"
+                },
+                {
+                  "label": "运行中",
+                  "value": "RUNNING"
+                },
+                {
+                  "label": "已暂停",
+                  "value": "PAUSED"
+                },
+                {
+                  "label": "完成",
+                  "value": "SUCCESS"
+                },
+                {
+                  "label": "失败",
+                  "value": "FAIL"
+                },
+                {
+                  "label": "已取消",
+                  "value": "CANCELED"
+                }
+              ],
+              "type": "select"
+            },
+            {
+              "label": "jdk.date",
+              "name": "date",
+              "type": "datetime"
+            },
+            {
+              "label": "dateTime",
+              "name": "localDateTime",
+              "type": "datetime"
+            },
+            {
+              "label": "年月日时分秒",
+              "name": "localDate",
+              "type": "date"
+            },
+            {
+              "label": "时分",
+              "name": "localTime",
+              "type": "time"
+            }
+          ],
+          "addGroupBtnVisibleOn": "this.depth < 2",
+          "type": "condition-builder",
+          "selectMode": "list",
+          "showNot": false,
+          "draggable": true,
+          "searchable": false,
+          "showANDOR": false,
+          "static": true
+        },
+        {
+          "label": "哈哈哈",
+          "name": "Hobby__myName",
+          "static": true,
+          "type": "static",
+          "className": "text-success"
+        },
+        {
+          "label": "关联学生id",
+          "name": "Hobby__studentIdDesc",
+          "sort": 99,
+          "static": true,
+          "type": "static",
+          "className": "text-info"
+        },
+        {
+          "label": "创建人",
+          "name": "Hobby__createBy",
+          "sort": 100,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "最后更新人",
+          "name": "Hobby__updateBy",
+          "sort": 101,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "创建时间",
+          "name": "Hobby__createTime",
+          "sort": 102,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "最后更新时间",
+          "name": "Hobby__updateTime",
+          "sort": 103,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ],
+      "interval": 2000
+    }
+  ]
+}

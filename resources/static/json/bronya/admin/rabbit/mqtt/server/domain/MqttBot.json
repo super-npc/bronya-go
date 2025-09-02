@@ -1,0 +1,555 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": false,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "MqttBot"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "MqttBot"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions",
+        {
+          "label": "新增",
+          "type": "button",
+          "actionType": "dialog",
+          "level": "primary",
+          "dialog":
+          {
+            "title": "新增数据",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/create",
+                "headers":
+                {
+                  "bean": "MqttBot"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "设备id",
+                  "name": "MqttBot__deviceId",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text"
+                },
+                {
+                  "label": "状态",
+                  "name": "MqttBot__status",
+                  "options":
+                  [
+                    {
+                      "label": "在线",
+                      "value": "online"
+                    },
+                    {
+                      "label": "下线",
+                      "value": "offline"
+                    }
+                  ],
+                  "required": true,
+                  "static": false,
+                  "type": "button-group-select",
+                  "value": "offline"
+                },
+                {
+                  "label": "私有订阅",
+                  "name": "MqttBot__topic",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        },
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'上线'?,选中:$ids",
+          "label": "上线",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$ids"
+            },
+            "method": "GET",
+            "url": "/demo/rabbit/mqtt/up"
+          }
+        },
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'下线'?,选中:$ids",
+          "label": "下线",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$ids"
+            },
+            "method": "GET",
+            "url": "/demo/rabbit/mqtt/down"
+          }
+        },
+        {
+          "label": "批量删除",
+          "actionType": "ajax",
+          "level": "danger",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$ids"
+            },
+            "headers":
+            {
+              "bean": "MqttBot"
+            }
+          },
+          "confirmText": "确认批量删除? ids:「$ids」"
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'上线'?,选中:$id",
+          "label": "上线",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$id"
+            },
+            "method": "GET",
+            "url": "/demo/rabbit/mqtt/up"
+          }
+        },
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'下线'?,选中:$id",
+          "label": "下线",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$id"
+            },
+            "method": "GET",
+            "url": "/demo/rabbit/mqtt/down"
+          }
+        },
+        {
+          "label": "详情",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "查看数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "MqttBot"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "MqttBot__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "设备id",
+                  "name": "MqttBot__deviceId",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "状态",
+                  "name": "MqttBot__status",
+                  "options":
+                  [
+                    {
+                      "label": "在线",
+                      "value": "online"
+                    },
+                    {
+                      "label": "下线",
+                      "value": "offline"
+                    }
+                  ],
+                  "required": true,
+                  "static": true,
+                  "type": "button-group-select"
+                },
+                {
+                  "label": "私有订阅",
+                  "name": "MqttBot__topic",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "创建人",
+                  "name": "MqttBot__createBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "最后更新人",
+                  "name": "MqttBot__updateBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "MqttBot__createTime",
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "最后更新时间",
+                  "name": "MqttBot__updateTime",
+                  "static": true,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "button",
+          "label": "修改",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "修改数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "MqttBot"
+                }
+              },
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/update",
+                "headers":
+                {
+                  "bean": "MqttBot"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "MqttBot__id",
+                  "required": false,
+                  "static": false,
+                  "type": "hidden"
+                },
+                {
+                  "label": "设备id",
+                  "name": "MqttBot__deviceId",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text"
+                },
+                {
+                  "label": "状态",
+                  "name": "MqttBot__status",
+                  "options":
+                  [
+                    {
+                      "label": "在线",
+                      "value": "online"
+                    },
+                    {
+                      "label": "下线",
+                      "value": "offline"
+                    }
+                  ],
+                  "required": true,
+                  "static": false,
+                  "type": "button-group-select",
+                  "value": "offline"
+                },
+                {
+                  "label": "私有订阅",
+                  "name": "MqttBot__topic",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "删除",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "ajax",
+          "level": "danger",
+          "confirmText": "确认要删除? id:「$id」",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$id"
+            },
+            "headers":
+            {
+              "bean": "MqttBot"
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "MqttBot__id",
+          "searchable":
+          {
+            "label": "主键",
+            "mode": "horizontal",
+            "name": "MqttBot__id",
+            "placeholder": "请输入主键",
+            "type": "input-number"
+          },
+          "sort": -100,
+          "static": true,
+          "type": "static"
+        },
+        {
+          "copyable": true,
+          "label": "设备id",
+          "name": "MqttBot__deviceId",
+          "quickEdit": true,
+          "searchable":
+          {
+            "label": "设备id",
+            "mode": "horizontal",
+            "name": "MqttBot__deviceId",
+            "placeholder": "请输入设备id",
+            "type": "input-text"
+          },
+          "sortable": true,
+          "static": true,
+          "type": "static"
+        },
+        {
+          "itemSchema":
+          {
+            "color": "${color}",
+            "displayMode": "normal",
+            "label": "${label}",
+            "type": "tag"
+          },
+          "label": "状态",
+          "labelField": "label",
+          "map":
+          [
+            {
+              "color": "#006400",
+              "displayMode": "normal",
+              "label": "在线",
+              "name": "online",
+              "type": "tag"
+            },
+            {
+              "color": "#8B0000",
+              "displayMode": "normal",
+              "label": "下线",
+              "name": "offline",
+              "type": "tag"
+            }
+          ],
+          "name": "MqttBot__status",
+          "static": true,
+          "type": "static-mapping",
+          "valueField": "name"
+        },
+        {
+          "copyable": true,
+          "label": "私有订阅",
+          "name": "MqttBot__topic",
+          "quickEdit": true,
+          "remark": "多个以逗号分隔",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "allowFullscreen": true,
+          "label": "运行信息",
+          "language": "markdown",
+          "name": "MqttBot__running",
+          "options":
+          {
+            "lineNumbers": "off",
+            "automaticLayout": true
+          },
+          "placeholder": "",
+          "size": "md",
+          "type": "markdown",
+          "width": "300px",
+          "className": "text-success",
+          "static": true
+        },
+        {
+          "label": "创建人",
+          "name": "MqttBot__createBy",
+          "sort": 100,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "最后更新人",
+          "name": "MqttBot__updateBy",
+          "sort": 101,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "创建时间",
+          "name": "MqttBot__createTime",
+          "sort": 102,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "最后更新时间",
+          "name": "MqttBot__updateTime",
+          "sort": 103,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ]
+    }
+  ]
+}

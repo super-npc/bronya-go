@@ -1,0 +1,470 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": true,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "TestTable"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "TestTable"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions",
+        {
+          "label": "新增",
+          "type": "button",
+          "actionType": "dialog",
+          "level": "primary",
+          "dialog":
+          {
+            "title": "新增数据",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/create",
+                "headers":
+                {
+                  "bean": "TestTable"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "电话",
+                  "name": "TestTable__phone",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text",
+                  "value": "+00 00000000"
+                },
+                {
+                  "big": false,
+                  "borderMode": "full",
+                  "clearValueOnEmpty": false,
+                  "displayMode": "base",
+                  "keyboard": true,
+                  "kilobitSeparator": false,
+                  "label": "资产",
+                  "max": 1.0E25,
+                  "min": -99999.99999,
+                  "name": "TestTable__money",
+                  "precision": 0,
+                  "prefix": "",
+                  "readOnly": false,
+                  "showSteps": true,
+                  "step": 0,
+                  "suffix": "",
+                  "type": "input-number",
+                  "unitOptions":
+                  [
+                    
+                  ]
+                },
+                {
+                  "label": "激活状态",
+                  "name": "TestTable__active",
+                  "static": false,
+                  "type": "switch",
+                  "value": true
+                },
+                {
+                  "label": "注册时间",
+                  "name": "TestTable__registerTime",
+                  "static": false,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        },
+        {
+          "label": "批量删除",
+          "actionType": "ajax",
+          "level": "danger",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$ids"
+            },
+            "headers":
+            {
+              "bean": "TestTable"
+            }
+          },
+          "confirmText": "确认批量删除? ids:「$ids」"
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "label": "详情",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "查看数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "TestTable"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "TestTable__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "电话",
+                  "name": "TestTable__phone",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "资产",
+                  "name": "TestTable__money",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "激活状态",
+                  "name": "TestTable__active",
+                  "static": true,
+                  "type": "switch"
+                },
+                {
+                  "label": "注册时间",
+                  "name": "TestTable__registerTime",
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "创建人",
+                  "name": "TestTable__createBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "最后更新人",
+                  "name": "TestTable__updateBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "TestTable__createTime",
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "最后更新时间",
+                  "name": "TestTable__updateTime",
+                  "static": true,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "button",
+          "label": "修改",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "修改数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "TestTable"
+                }
+              },
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/update",
+                "headers":
+                {
+                  "bean": "TestTable"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "TestTable__id",
+                  "required": false,
+                  "static": false,
+                  "type": "hidden"
+                },
+                {
+                  "label": "电话",
+                  "name": "TestTable__phone",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text",
+                  "value": "+00 00000000"
+                },
+                {
+                  "big": false,
+                  "borderMode": "full",
+                  "clearValueOnEmpty": false,
+                  "displayMode": "base",
+                  "keyboard": true,
+                  "kilobitSeparator": false,
+                  "label": "资产",
+                  "max": 1.0E25,
+                  "min": -99999.99999,
+                  "name": "TestTable__money",
+                  "precision": 0,
+                  "prefix": "",
+                  "readOnly": false,
+                  "showSteps": true,
+                  "step": 0,
+                  "suffix": "",
+                  "type": "input-number",
+                  "unitOptions":
+                  [
+                    
+                  ]
+                },
+                {
+                  "label": "激活状态",
+                  "name": "TestTable__active",
+                  "static": false,
+                  "type": "switch",
+                  "value": true
+                },
+                {
+                  "label": "注册时间",
+                  "name": "TestTable__registerTime",
+                  "static": false,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "删除",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "ajax",
+          "level": "danger",
+          "confirmText": "确认要删除? id:「$id」",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$id"
+            },
+            "headers":
+            {
+              "bean": "TestTable"
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "TestTable__id",
+          "sort": -100,
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "电话",
+          "name": "TestTable__phone",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "资产",
+          "name": "TestTable__money",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "itemSchema":
+          {
+            "color": "${color}",
+            "displayMode": "normal",
+            "label": "${label}",
+            "type": "tag"
+          },
+          "label": "激活状态",
+          "labelField": "label",
+          "map":
+          [
+            {
+              "color": "#5F9EA0",
+              "displayMode": "normal",
+              "label": "开启",
+              "name": "true",
+              "type": "tag"
+            },
+            {
+              "color": "#DA70D6",
+              "displayMode": "normal",
+              "label": "关闭",
+              "name": "false",
+              "type": "tag"
+            }
+          ],
+          "name": "TestTable__active",
+          "static": true,
+          "type": "static-mapping",
+          "valueField": "name"
+        },
+        {
+          "label": "注册时间",
+          "name": "TestTable__registerTime",
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "创建人",
+          "name": "TestTable__createBy",
+          "sort": 100,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "最后更新人",
+          "name": "TestTable__updateBy",
+          "sort": 101,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "创建时间",
+          "name": "TestTable__createTime",
+          "sort": 102,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "最后更新时间",
+          "name": "TestTable__updateTime",
+          "sort": 103,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,444 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": true,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "SysFile"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "SysFile"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions",
+        {
+          "label": "新增",
+          "type": "button",
+          "actionType": "dialog",
+          "level": "primary",
+          "dialog":
+          {
+            "title": "新增数据",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/create",
+                "headers":
+                {
+                  "bean": "SysFile"
+                }
+              },
+              "body":
+              [
+                {
+                  "accept": ".jpeg,.jpg,.png,.gif",
+                  "crop": true,
+                  "cropFormat": "image/png",
+                  "cropQuality": 1,
+                  "fileField": "file",
+                  "frameImage": "",
+                  "hideUploadButton": false,
+                  "label": "文件",
+                  "name": "SysFile__filename",
+                  "receiver": "/admin/sys-file/upload/image",
+                  "required": true,
+                  "type": "input-image"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        },
+        {
+          "label": "批量删除",
+          "actionType": "ajax",
+          "level": "danger",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$ids"
+            },
+            "headers":
+            {
+              "bean": "SysFile"
+            }
+          },
+          "confirmText": "确认批量删除? ids:「$ids」"
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "label": "删除",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "ajax",
+          "level": "danger",
+          "confirmText": "确认要删除? id:「$id」",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$id"
+            },
+            "headers":
+            {
+              "bean": "SysFile"
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "SysFile__id",
+          "sort": -100,
+          "static": false,
+          "type": "static"
+        },
+        {
+          "itemSchema":
+          {
+            "color": "${color}",
+            "displayMode": "normal",
+            "label": "${label}",
+            "type": "tag"
+          },
+          "label": "平台",
+          "labelField": "label",
+          "map":
+          [
+            {
+              "color": "#40E0D0",
+              "displayMode": "normal",
+              "label": "本地",
+              "name": "LOCAL",
+              "type": "tag"
+            },
+            {
+              "color": "#8B0000",
+              "displayMode": "normal",
+              "label": "小程序云储存",
+              "name": "MINI_APP_CLOUD",
+              "type": "tag"
+            }
+          ],
+          "name": "SysFile__platform",
+          "static": true,
+          "type": "static-mapping",
+          "valueField": "name"
+        },
+        {
+          "required": true,
+          "enlargeAble": true,
+          "name": "SysFile__filename",
+          "label": "文件",
+          "type": "static-image",
+          "static": true
+        },
+        {
+          "label": "原始文件名",
+          "name": "SysFile__originalFilename",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "基础存储路径",
+          "name": "SysFile__basePath",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "存储路径",
+          "name": "SysFile__path",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "文件扩展名",
+          "name": "SysFile__ext",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "MIME类型",
+          "name": "SysFile__contentType",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "缩略图URL",
+          "name": "SysFile__thUrl",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "缩略图名称",
+          "name": "SysFile__thFilename",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "缩略图字节",
+          "name": "SysFile__thSize",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "缩略图MIME",
+          "name": "SysFile__thContentType",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "objectId",
+          "name": "SysFile__objectId",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "文件ACL",
+          "name": "SysFile__fileAcl",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "缩略图文件ACL",
+          "name": "SysFile__thFileAcl",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "字节",
+          "name": "SysFile__size",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "url",
+          "name": "SysFile__url",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "文件元数据",
+          "name": "SysFile__metadata",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "文件用户元数据",
+          "name": "SysFile__userMetadata",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "缩略图元数据",
+          "name": "SysFile__thMetadata",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "缩略图用户元数据",
+          "name": "SysFile__thUserMetadata",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "附加属性",
+          "name": "SysFile__attr",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "哈希",
+          "name": "SysFile__hashInfo",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "上传ID",
+          "name": "SysFile__uploadId",
+          "remark": "仅在手动分片上传时使用",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "上传状态",
+          "name": "SysFile__uploadStatus",
+          "remark": "仅在手动分片上传时使用，1：初始化完成，2：上传完成",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "到期时间",
+          "name": "SysFile__expirationTime",
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "itemSchema":
+          {
+            "color": "${color}",
+            "displayMode": "normal",
+            "label": "${label}",
+            "type": "tag"
+          },
+          "label": "状态",
+          "labelField": "label",
+          "map":
+          [
+            {
+              "color": "#40E0D0",
+              "displayMode": "normal",
+              "label": "存在",
+              "name": "EXIST",
+              "type": "tag"
+            },
+            {
+              "color": "#8B0000",
+              "displayMode": "normal",
+              "label": "丢失",
+              "name": "LOSE",
+              "type": "tag"
+            }
+          ],
+          "name": "SysFile__fileStatus",
+          "static": true,
+          "type": "static-mapping",
+          "valueField": "name",
+          "className": "text-success"
+        },
+        {
+          "label": "创建人",
+          "name": "SysFile__createBy",
+          "sort": 100,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "最后更新人",
+          "name": "SysFile__updateBy",
+          "sort": 101,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "创建时间",
+          "name": "SysFile__createTime",
+          "sort": 102,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "最后更新时间",
+          "name": "SysFile__updateTime",
+          "sort": 103,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,396 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": true,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "Teacher"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "Teacher"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions",
+        {
+          "label": "新增",
+          "type": "button",
+          "actionType": "dialog",
+          "level": "primary",
+          "dialog":
+          {
+            "title": "新增数据",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/create",
+                "headers":
+                {
+                  "bean": "Teacher"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "老师名字",
+                  "name": "Teacher__name",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text",
+                  "value": "xx老师"
+                },
+                {
+                  "big": false,
+                  "borderMode": "full",
+                  "clearValueOnEmpty": false,
+                  "displayMode": "base",
+                  "keyboard": true,
+                  "kilobitSeparator": false,
+                  "label": "年龄",
+                  "max": 1.0E25,
+                  "min": -99999.99999,
+                  "name": "Teacher__age",
+                  "precision": 0,
+                  "prefix": "",
+                  "readOnly": false,
+                  "required": true,
+                  "showSteps": true,
+                  "step": 0,
+                  "suffix": "",
+                  "type": "input-number",
+                  "unitOptions":
+                  [
+                    
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        },
+        {
+          "label": "批量删除",
+          "actionType": "ajax",
+          "level": "danger",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$ids"
+            },
+            "headers":
+            {
+              "bean": "Teacher"
+            }
+          },
+          "confirmText": "确认批量删除? ids:「$ids」"
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "label": "详情",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "查看数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "Teacher"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "Teacher__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "老师名字",
+                  "name": "Teacher__name",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "年龄",
+                  "name": "Teacher__age",
+                  "required": true,
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "创建人",
+                  "name": "Teacher__createBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "最后更新人",
+                  "name": "Teacher__updateBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "Teacher__createTime",
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "最后更新时间",
+                  "name": "Teacher__updateTime",
+                  "static": true,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "button",
+          "label": "修改",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "修改数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "Teacher"
+                }
+              },
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/update",
+                "headers":
+                {
+                  "bean": "Teacher"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "Teacher__id",
+                  "required": false,
+                  "static": false,
+                  "type": "hidden"
+                },
+                {
+                  "label": "老师名字",
+                  "name": "Teacher__name",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text",
+                  "value": "xx老师"
+                },
+                {
+                  "big": false,
+                  "borderMode": "full",
+                  "clearValueOnEmpty": false,
+                  "displayMode": "base",
+                  "keyboard": true,
+                  "kilobitSeparator": false,
+                  "label": "年龄",
+                  "max": 1.0E25,
+                  "min": -99999.99999,
+                  "name": "Teacher__age",
+                  "precision": 0,
+                  "prefix": "",
+                  "readOnly": false,
+                  "required": true,
+                  "showSteps": true,
+                  "step": 0,
+                  "suffix": "",
+                  "type": "input-number",
+                  "unitOptions":
+                  [
+                    
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "删除",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "ajax",
+          "level": "danger",
+          "confirmText": "确认要删除? id:「$id」",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$id"
+            },
+            "headers":
+            {
+              "bean": "Teacher"
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "Teacher__id",
+          "sort": -100,
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "老师名字",
+          "name": "Teacher__name",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "年龄",
+          "name": "Teacher__age",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "创建人",
+          "name": "Teacher__createBy",
+          "sort": 100,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "最后更新人",
+          "name": "Teacher__updateBy",
+          "sort": 101,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "创建时间",
+          "name": "Teacher__createTime",
+          "sort": 102,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "最后更新时间",
+          "name": "Teacher__updateTime",
+          "sort": 103,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,469 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": true,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "RabbitDelayedMsg"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "RabbitDelayedMsg"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions"
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "label": "关联延迟任务",
+          "type": "button",
+          "level": "enhance",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "延迟消息.主键:「$id」 多对一关联 延迟模式",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/bind-many2-one-view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "RabbitDelayedMsg",
+                  "bind-many2-one-class-field": "rabbitDelayedId"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "RabbitDelayed__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "实例",
+                  "name": "RabbitDelayed__entityClass",
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "RabbitDelayed__createTime",
+                  "required": true,
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "更新时间",
+                  "name": "RabbitDelayed__updateTime",
+                  "required": true,
+                  "static": true,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "详情",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "查看数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "RabbitDelayedMsg"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "RabbitDelayedMsg__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "状态",
+                  "name": "RabbitDelayedMsg__status",
+                  "options":
+                  [
+                    {
+                      "label": "已创建",
+                      "value": "CREATE"
+                    },
+                    {
+                      "label": "投递成功",
+                      "value": "BROKER_ACK_SUCCESS"
+                    },
+                    {
+                      "label": "投递失败",
+                      "value": "BROKER_ACK_FAILED"
+                    },
+                    {
+                      "label": "已消费",
+                      "value": "SPENT_SUCCESS"
+                    },
+                    {
+                      "label": "已消费失败",
+                      "value": "SPENT_FAILED"
+                    }
+                  ],
+                  "required": true,
+                  "static": true,
+                  "type": "button-group-select"
+                },
+                {
+                  "label": "broker失败原因",
+                  "name": "RabbitDelayedMsg__brokerCause",
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "参数",
+                  "name": "RabbitDelayedMsg__json",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "预定时间",
+                  "name": "RabbitDelayedMsg__delayedTime",
+                  "required": true,
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "执行时间",
+                  "name": "RabbitDelayedMsg__execTime",
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "RabbitDelayedMsg__createTime",
+                  "required": true,
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "更新时间",
+                  "name": "RabbitDelayedMsg__updateTime",
+                  "required": true,
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "关联延迟任务",
+                  "name": "RabbitDelayedMsg__rabbitDelayedId",
+                  "required": true,
+                  "static": true,
+                  "type": "input-number"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "RabbitDelayedMsg__id",
+          "sort": -100,
+          "static": false,
+          "type": "static"
+        },
+        {
+          "itemSchema":
+          {
+            "color": "${color}",
+            "displayMode": "normal",
+            "label": "${label}",
+            "type": "tag"
+          },
+          "label": "状态",
+          "labelField": "label",
+          "map":
+          [
+            {
+              "color": "#DA70D6",
+              "displayMode": "normal",
+              "label": "已创建",
+              "name": "CREATE",
+              "type": "tag"
+            },
+            {
+              "color": "#191970",
+              "displayMode": "normal",
+              "label": "投递成功",
+              "name": "BROKER_ACK_SUCCESS",
+              "type": "tag"
+            },
+            {
+              "color": "#FFA500",
+              "displayMode": "normal",
+              "label": "投递失败",
+              "name": "BROKER_ACK_FAILED",
+              "type": "tag"
+            },
+            {
+              "color": "#00FA9A",
+              "displayMode": "normal",
+              "label": "已消费",
+              "name": "SPENT_SUCCESS",
+              "type": "tag"
+            },
+            {
+              "color": "#FF69B4",
+              "displayMode": "normal",
+              "label": "已消费失败",
+              "name": "SPENT_FAILED",
+              "type": "tag"
+            }
+          ],
+          "name": "RabbitDelayedMsg__status",
+          "static": true,
+          "type": "static-mapping",
+          "valueField": "name"
+        },
+        {
+          "label": "broker失败原因",
+          "name": "RabbitDelayedMsg__brokerCause",
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "参数",
+          "name": "RabbitDelayedMsg__json",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "预定时间",
+          "name": "RabbitDelayedMsg__delayedTime",
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "执行时间",
+          "name": "RabbitDelayedMsg__execTime",
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "关联延迟任务",
+          "name": "RabbitDelayedMsg__rabbitDelayedId",
+          "searchable":
+          {
+            "type": "picker",
+            "name": "RabbitDelayedMsg__rabbitDelayedId",
+            "joinValues": true,
+            "disabled": false,
+            "valueField": "id",
+            "labelField": "RabbitDelayed__entityClass",
+            "label": "关联延迟任务",
+            "source":
+            {
+              "method": "post",
+              "url": "/admin/base/amis/page",
+              "data":
+              {
+                "&": "$$"
+              },
+              "headers":
+              {
+                "bean": "RabbitDelayed"
+              }
+            },
+            "modalSize": "xl",
+            "size": "xl",
+            "embed": false,
+            "multiple": false,
+            "pickerSchema":
+            {
+              "type": "crud",
+              "syncLocation": false,
+              "autoGenerateFilter": true,
+              "defaultCollapsed": true,
+              "draggable": true,
+              "headerToolbar":
+              {
+                
+              },
+              "footerToolbar":
+              [
+                "statistics",
+                {
+                  "type": "pagination",
+                  "showPageInput": true,
+                  "layout": "perPage,pager,go"
+                }
+              ],
+              "columns":
+              [
+                {
+                  "label": "主键",
+                  "name": "RabbitDelayed__id",
+                  "sort": -100,
+                  "static": false,
+                  "type": "static"
+                },
+                {
+                  "label": "实例",
+                  "name": "RabbitDelayed__entityClass",
+                  "searchable":
+                  {
+                    "label": "实例",
+                    "mode": "horizontal",
+                    "name": "RabbitDelayed__entityClass",
+                    "placeholder": "请输入实例",
+                    "type": "input-text"
+                  },
+                  "static": true,
+                  "type": "static"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "RabbitDelayed__createTime",
+                  "sort": 100,
+                  "static": true,
+                  "type": "static-datetime",
+                  "width": "153px"
+                },
+                {
+                  "label": "更新时间",
+                  "name": "RabbitDelayed__updateTime",
+                  "sort": 101,
+                  "static": true,
+                  "type": "static-datetime",
+                  "width": "153px"
+                }
+              ]
+            }
+          },
+          "static": true,
+          "type": "static",
+          "visibleOn": "1 != 1"
+        },
+        {
+          "label": "关联延迟任务",
+          "name": "RabbitDelayedMsg__rabbitDelayedIdDesc",
+          "sort": 99,
+          "static": true,
+          "type": "static",
+          "className": "text-info"
+        },
+        {
+          "label": "创建时间",
+          "name": "RabbitDelayedMsg__createTime",
+          "sort": 100,
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "更新时间",
+          "name": "RabbitDelayedMsg__updateTime",
+          "sort": 101,
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ]
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import (
 )
 
 func BindMany2OneView(c echo.Context) error {
-	fmt.Printf("")
+	bindMany2OneClassField := c.Request().Header.Get("bind-many2-one-class-field") // 绑定的 many2one 字段
+	fmt.Printf(bindMany2OneClassField)
 	return resp.Success(c, nil)
 }

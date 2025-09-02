@@ -1,0 +1,239 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": true,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "RabbitDelayed"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "RabbitDelayed"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions"
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "actionType": "dialog",
+          "dialog":
+          {
+            "body":
+            {
+              "data":
+              {
+                "One2ManyReq.entityField": "rabbitDelayedId",
+                "One2ManyReq.entity": "RabbitDelayed",
+                "One2ManyReq.entityFieldVal": "$id"
+              },
+              "schemaApi": "get:/json/bronya/admin/module/rabbit/module/delayed/domain/RabbitDelayedMsg.json",
+              "type": "service"
+            },
+            "size": "xl",
+            "title": "一对多 [延迟模式 - 关联延迟任务] = 「$id」"
+          },
+          "hiddenOnHover": true,
+          "label": "延迟消息",
+          "type": "button"
+        },
+        {
+          "label": "详情",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "查看数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "RabbitDelayed"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "RabbitDelayed__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "实例",
+                  "name": "RabbitDelayed__entityClass",
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "RabbitDelayed__createTime",
+                  "required": true,
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "更新时间",
+                  "name": "RabbitDelayed__updateTime",
+                  "required": true,
+                  "static": true,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "RabbitDelayed__id",
+          "sort": -100,
+          "static": false,
+          "type": "static"
+        },
+        {
+          "label": "实例",
+          "name": "RabbitDelayed__entityClass",
+          "searchable":
+          {
+            "label": "实例",
+            "mode": "horizontal",
+            "name": "RabbitDelayed__entityClass",
+            "placeholder": "请输入实例",
+            "type": "input-text"
+          },
+          "static": true,
+          "type": "static"
+        },
+        {
+          "itemSchema":
+          {
+            "color": "${color}",
+            "displayMode": "normal",
+            "label": "${label}",
+            "type": "tag"
+          },
+          "label": "注册状态",
+          "labelField": "label",
+          "map":
+          [
+            {
+              "color": "#228B22",
+              "displayMode": "normal",
+              "label": "已注册",
+              "name": "REGISTERED",
+              "type": "tag"
+            },
+            {
+              "color": "#EE82EE",
+              "displayMode": "normal",
+              "label": "类不存在",
+              "name": "DOWN",
+              "type": "tag"
+            }
+          ],
+          "name": "RabbitDelayed__status",
+          "static": true,
+          "type": "static-mapping",
+          "valueField": "name",
+          "className": "text-success"
+        },
+        {
+          "label": "创建时间",
+          "name": "RabbitDelayed__createTime",
+          "sort": 100,
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "更新时间",
+          "name": "RabbitDelayed__updateTime",
+          "sort": 101,
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ]
+    }
+  ]
+}

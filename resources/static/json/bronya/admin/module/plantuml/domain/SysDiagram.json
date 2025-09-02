@@ -1,0 +1,655 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": true,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "SysDiagram"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "SysDiagram"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions",
+        {
+          "label": "新增",
+          "type": "button",
+          "actionType": "dialog",
+          "level": "primary",
+          "dialog":
+          {
+            "title": "新增数据",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/create",
+                "headers":
+                {
+                  "bean": "SysDiagram"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "名称",
+                  "name": "SysDiagram__name",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text"
+                },
+                {
+                  "borderMode": "half",
+                  "itemHeight": 31,
+                  "label": "关系",
+                  "leftMode": "tree",
+                  "name": "SysDiagram__beans",
+                  "options":
+                  [
+                    {
+                      "children":
+                      [
+                        {
+                          "children":
+                          [
+                            {
+                              "label": "发布订阅消息",
+                              "value": "bronya.admin.module.rabbit.module.fanout.domain.RabbitFanoutMsg"
+                            },
+                            {
+                              "label": "发布订阅接收",
+                              "value": "bronya.admin.module.rabbit.module.fanout.domain.RabbitFanoutReceiver"
+                            },
+                            {
+                              "label": "发布订阅",
+                              "value": "bronya.admin.module.rabbit.module.fanout.domain.RabbitFanout"
+                            },
+                            {
+                              "label": "延迟消息",
+                              "value": "bronya.admin.module.rabbit.module.delayed.domain.RabbitDelayedMsg"
+                            },
+                            {
+                              "label": "工作模式消息",
+                              "value": "bronya.admin.module.rabbit.module.work.domain.RabbitWorkMsg"
+                            },
+                            {
+                              "label": "工作模式",
+                              "value": "bronya.admin.module.rabbit.module.work.domain.RabbitWork"
+                            },
+                            {
+                              "label": "延迟模式",
+                              "value": "bronya.admin.module.rabbit.module.delayed.domain.RabbitDelayed"
+                            }
+                          ],
+                          "label": "rabbit",
+                          "value": "rabbit"
+                        },
+                        {
+                          "children":
+                          [
+                            {
+                              "label": "关联图",
+                              "value": "bronya.admin.module.plantuml.domain.SysDiagram"
+                            }
+                          ],
+                          "label": "工具",
+                          "value": "工具"
+                        },
+                        {
+                          "children":
+                          [
+                            {
+                              "label": "变量对象",
+                              "value": "bronya.admin.module.db.env.domain.SysEnvObj"
+                            },
+                            {
+                              "label": "变量属性",
+                              "value": "bronya.admin.module.db.env.domain.SysEnvObjField"
+                            },
+                            {
+                              "label": "徽章事件",
+                              "value": "bronya.admin.module.db.badge.domain.Badge"
+                            },
+                            {
+                              "label": "数据审计",
+                              "value": "bronya.admin.module.db.audit.domain.SysDataAudit"
+                            },
+                            {
+                              "label": "媒体中心",
+                              "value": "bronya.admin.module.media.domain.SysFile"
+                            }
+                          ],
+                          "label": "数据管理",
+                          "value": "数据管理"
+                        },
+                        {
+                          "children":
+                          [
+                            {
+                              "label": "调度配置",
+                              "value": "bronya.admin.module.scheduled.domain.SysScheduled"
+                            }
+                          ],
+                          "label": "调度系统",
+                          "value": "调度系统"
+                        },
+                        {
+                          "children":
+                          [
+                            {
+                              "label": "线程池",
+                              "value": "bronya.admin.module.db.threadpool.domain.SysThreadPool"
+                            },
+                            {
+                              "label": "分布式锁",
+                              "value": "bronya.admin.module.db.distributed.domain.SysDistributedLock"
+                            }
+                          ],
+                          "label": "配置",
+                          "value": "配置"
+                        }
+                      ],
+                      "label": "系统",
+                      "value": "系统"
+                    },
+                    {
+                      "children":
+                      [
+                        {
+                          "children":
+                          [
+                            {
+                              "label": "mqttBot",
+                              "value": "bronya.admin.rabbit.mqtt.server.domain.MqttBot"
+                            }
+                          ],
+                          "label": "队列",
+                          "value": "队列"
+                        },
+                        {
+                          "children":
+                          [
+                            {
+                              "label": "学生",
+                              "value": "demo.one.module.naruto.domain.Student"
+                            },
+                            {
+                              "label": "虚拟数据",
+                              "value": "demo.one.module.virtual.domain.VirtualData"
+                            },
+                            {
+                              "label": "动态静态规则",
+                              "value": "demo.one.module.rule.domain.DynamicRule"
+                            },
+                            {
+                              "label": "爱好",
+                              "value": "demo.one.module.naruto.domain.Hobby"
+                            },
+                            {
+                              "label": "学校",
+                              "value": "demo.one.module.naruto.domain.School"
+                            },
+                            {
+                              "label": "demo",
+                              "value": "demo.one.module.naruto.domain.TestTable"
+                            },
+                            {
+                              "label": "老师",
+                              "value": "demo.one.module.naruto.domain.Teacher"
+                            }
+                          ],
+                          "label": "示例",
+                          "value": "示例"
+                        }
+                      ],
+                      "label": "例子",
+                      "value": "例子"
+                    }
+                  ],
+                  "pickerSize": "lg",
+                  "required": true,
+                  "resultListModeFollowSelect": true,
+                  "resultSearchPlaceholder": "",
+                  "resultSearchable": false,
+                  "resultTitle": "当前选择",
+                  "rightMode": "tree",
+                  "searchPlaceholder": "",
+                  "searchResultMode": "tree",
+                  "searchable": false,
+                  "selectMode": "tree",
+                  "selectTitle": "请选择",
+                  "sortable": false,
+                  "source":
+                  {
+                    "data":
+                    {
+                      "&": "$$"
+                    },
+                    "method": "GET",
+                    "url": ""
+                  },
+                  "statistics": true,
+                  "type": "transfer-picker",
+                  "virtualThreshold": 100
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        },
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'重新生成'?,选中:$ids",
+          "label": "重新生成",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$ids"
+            },
+            "method": "GET",
+            "url": "/admin/diagram/re-gen"
+          }
+        },
+        {
+          "label": "批量删除",
+          "actionType": "ajax",
+          "level": "danger",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$ids"
+            },
+            "headers":
+            {
+              "bean": "SysDiagram"
+            }
+          },
+          "confirmText": "确认批量删除? ids:「$ids」"
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'重新生成'?,选中:$id",
+          "label": "重新生成",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$id"
+            },
+            "method": "GET",
+            "url": "/admin/diagram/re-gen"
+          }
+        },
+        {
+          "label": "详情",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "查看数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "SysDiagram"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "SysDiagram__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "名称",
+                  "name": "SysDiagram__name",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "关系",
+                  "name": "SysDiagram__beans",
+                  "required": true,
+                  "static": true,
+                  "type": "transfer-picker"
+                },
+                {
+                  "label": "关系图",
+                  "name": "SysDiagram__plantumlFilename",
+                  "static": true,
+                  "type": "hidden"
+                },
+                {
+                  "label": "uml",
+                  "name": "SysDiagram__plantUmlCode",
+                  "static": true,
+                  "type": "editor"
+                },
+                {
+                  "label": "数据库文档",
+                  "name": "SysDiagram__dbDocCode",
+                  "static": true,
+                  "type": "editor"
+                },
+                {
+                  "label": "流程",
+                  "name": "SysDiagram__process",
+                  "options":
+                  [
+                    {
+                      "label": "已创建",
+                      "value": "CREATED"
+                    },
+                    {
+                      "label": "队列中",
+                      "value": "PENDING"
+                    },
+                    {
+                      "label": "运行中",
+                      "value": "RUNNING"
+                    },
+                    {
+                      "label": "已暂停",
+                      "value": "PAUSED"
+                    },
+                    {
+                      "label": "完成",
+                      "value": "SUCCESS"
+                    },
+                    {
+                      "label": "失败",
+                      "value": "FAIL"
+                    },
+                    {
+                      "label": "已取消",
+                      "value": "CANCELED"
+                    }
+                  ],
+                  "static": true,
+                  "type": "button-group-select"
+                },
+                {
+                  "label": "原因",
+                  "name": "SysDiagram__reason",
+                  "static": true,
+                  "type": "hidden"
+                },
+                {
+                  "label": "创建人",
+                  "name": "SysDiagram__createBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "最后更新人",
+                  "name": "SysDiagram__updateBy",
+                  "static": true,
+                  "type": "input-number"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "SysDiagram__createTime",
+                  "static": true,
+                  "type": "input-datetime"
+                },
+                {
+                  "label": "最后更新时间",
+                  "name": "SysDiagram__updateTime",
+                  "static": true,
+                  "type": "input-datetime"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "删除",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "ajax",
+          "level": "danger",
+          "confirmText": "确认要删除? id:「$id」",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$id"
+            },
+            "headers":
+            {
+              "bean": "SysDiagram"
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "SysDiagram__id",
+          "sort": -100,
+          "static": false,
+          "type": "static"
+        },
+        {
+          "label": "名称",
+          "name": "SysDiagram__name",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "name": "SysDiagram__plantumlFilename",
+          "enlargeAble": true,
+          "label": "关系图",
+          "type": "static-image",
+          "static": true
+        },
+        {
+          "itemSchema":
+          {
+            "color": "${color}",
+            "displayMode": "normal",
+            "label": "${label}",
+            "type": "tag"
+          },
+          "label": "流程",
+          "labelField": "label",
+          "map":
+          [
+            {
+              "color": "#7B68EE",
+              "displayMode": "normal",
+              "label": "已创建",
+              "name": "CREATED",
+              "type": "tag"
+            },
+            {
+              "color": "#FFA500",
+              "displayMode": "normal",
+              "label": "队列中",
+              "name": "PENDING",
+              "type": "tag"
+            },
+            {
+              "color": "#87CEEB",
+              "displayMode": "normal",
+              "label": "运行中",
+              "name": "RUNNING",
+              "type": "tag"
+            },
+            {
+              "color": "#9932CC",
+              "displayMode": "normal",
+              "label": "已暂停",
+              "name": "PAUSED",
+              "type": "tag"
+            },
+            {
+              "color": "#008000",
+              "displayMode": "normal",
+              "label": "完成",
+              "name": "SUCCESS",
+              "type": "tag"
+            },
+            {
+              "color": "#8B0000",
+              "displayMode": "normal",
+              "label": "失败",
+              "name": "FAIL",
+              "type": "tag"
+            },
+            {
+              "color": "#FF4500",
+              "displayMode": "normal",
+              "label": "已取消",
+              "name": "CANCELED",
+              "type": "tag"
+            }
+          ],
+          "name": "SysDiagram__process",
+          "static": true,
+          "type": "static-mapping",
+          "valueField": "name"
+        },
+        {
+          "label": "原因",
+          "name": "SysDiagram__reason",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "创建人",
+          "name": "SysDiagram__createBy",
+          "sort": 100,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "最后更新人",
+          "name": "SysDiagram__updateBy",
+          "sort": 101,
+          "static": true,
+          "toggled": false,
+          "type": "static"
+        },
+        {
+          "label": "创建时间",
+          "name": "SysDiagram__createTime",
+          "sort": 102,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "最后更新时间",
+          "name": "SysDiagram__updateTime",
+          "sort": 103,
+          "static": true,
+          "toggled": false,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ]
+    }
+  ]
+}

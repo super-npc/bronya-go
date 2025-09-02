@@ -1,0 +1,507 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": true,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "SysScheduled"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "SysScheduled"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions"
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        },
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'执行'?,选中:$ids",
+          "label": "执行",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$ids"
+            },
+            "method": "GET",
+            "url": "/admin/scheduled/trigger"
+          }
+        },
+        {
+          "actionType": "ajax",
+          "level": "success",
+          "confirmText": "执行'启动'?,选中:$ids",
+          "label": "启动",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$ids"
+            },
+            "method": "GET",
+            "url": "/admin/scheduled/start"
+          }
+        },
+        {
+          "actionType": "ajax",
+          "level": "warning",
+          "confirmText": "执行'停止'?,选中:$ids",
+          "label": "停止",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$ids"
+            },
+            "method": "GET",
+            "url": "/admin/scheduled/stop"
+          }
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "actionType": "ajax",
+          "level": "info",
+          "confirmText": "执行'执行'?,选中:$id",
+          "label": "执行",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$id"
+            },
+            "method": "GET",
+            "url": "/admin/scheduled/trigger"
+          }
+        },
+        {
+          "actionType": "ajax",
+          "level": "success",
+          "confirmText": "执行'启动'?,选中:$id",
+          "label": "启动",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$id"
+            },
+            "method": "GET",
+            "url": "/admin/scheduled/start"
+          }
+        },
+        {
+          "actionType": "ajax",
+          "level": "warning",
+          "confirmText": "执行'停止'?,选中:$id",
+          "label": "停止",
+          "hiddenOnHover": true,
+          "type": "button",
+          "api":
+          {
+            "headers":
+            {
+              "id": "$id"
+            },
+            "method": "GET",
+            "url": "/admin/scheduled/stop"
+          }
+        },
+        {
+          "label": "详情",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "查看数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "SysScheduled"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "SysScheduled__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "启用",
+                  "name": "SysScheduled__enable",
+                  "static": true,
+                  "type": "switch"
+                },
+                {
+                  "label": "对象名",
+                  "name": "SysScheduled__beanName",
+                  "required": true,
+                  "static": true,
+                  "type": "hidden"
+                },
+                {
+                  "label": "cron",
+                  "name": "SysScheduled__cron",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "备注",
+                  "name": "SysScheduled__remark",
+                  "required": true,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "参数",
+                  "name": "SysScheduled__params",
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "创建时间",
+                  "name": "SysScheduled__createTime",
+                  "required": true,
+                  "static": true,
+                  "type": "hidden"
+                },
+                {
+                  "label": "更新时间",
+                  "name": "SysScheduled__updateTime",
+                  "required": true,
+                  "static": true,
+                  "type": "hidden"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "button",
+          "label": "修改",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "修改数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "SysScheduled"
+                }
+              },
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/update",
+                "headers":
+                {
+                  "bean": "SysScheduled"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "SysScheduled__id",
+                  "required": false,
+                  "static": false,
+                  "type": "hidden"
+                },
+                {
+                  "label": "启用",
+                  "name": "SysScheduled__enable",
+                  "static": false,
+                  "type": "switch"
+                },
+                {
+                  "label": "cron",
+                  "name": "SysScheduled__cron",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text"
+                },
+                {
+                  "label": "备注",
+                  "name": "SysScheduled__remark",
+                  "required": true,
+                  "static": false,
+                  "type": "input-text"
+                },
+                {
+                  "label": "参数",
+                  "name": "SysScheduled__params",
+                  "static": false,
+                  "type": "input-text"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "SysScheduled__id",
+          "sort": -100,
+          "static": false,
+          "type": "static"
+        },
+        {
+          "itemSchema":
+          {
+            "color": "${color}",
+            "displayMode": "normal",
+            "label": "${label}",
+            "type": "tag"
+          },
+          "label": "启用",
+          "labelField": "label",
+          "map":
+          [
+            {
+              "color": "#5F9EA0",
+              "displayMode": "normal",
+              "label": "开启",
+              "name": "true",
+              "type": "tag"
+            },
+            {
+              "color": "#DA70D6",
+              "displayMode": "normal",
+              "label": "关闭",
+              "name": "false",
+              "type": "tag"
+            }
+          ],
+          "name": "SysScheduled__enable",
+          "static": true,
+          "type": "static-mapping",
+          "valueField": "name"
+        },
+        {
+          "label": "对象名",
+          "name": "SysScheduled__beanName",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "cron",
+          "name": "SysScheduled__cron",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "label": "备注",
+          "name": "SysScheduled__remark",
+          "static": true,
+          "type": "static"
+        },
+        {
+          "itemSchema":
+          {
+            "color": "${color}",
+            "displayMode": "normal",
+            "label": "${label}",
+            "type": "tag"
+          },
+          "label": "状态",
+          "labelField": "label",
+          "map":
+          [
+            {
+              "color": "#7B68EE",
+              "displayMode": "normal",
+              "label": "已创建",
+              "name": "CREATED",
+              "type": "tag"
+            },
+            {
+              "color": "#FFA500",
+              "displayMode": "normal",
+              "label": "队列中",
+              "name": "PENDING",
+              "type": "tag"
+            },
+            {
+              "color": "#87CEEB",
+              "displayMode": "normal",
+              "label": "运行中",
+              "name": "RUNNING",
+              "type": "tag"
+            },
+            {
+              "color": "#9932CC",
+              "displayMode": "normal",
+              "label": "已暂停",
+              "name": "PAUSED",
+              "type": "tag"
+            },
+            {
+              "color": "#008000",
+              "displayMode": "normal",
+              "label": "完成",
+              "name": "SUCCESS",
+              "type": "tag"
+            },
+            {
+              "color": "#8B0000",
+              "displayMode": "normal",
+              "label": "失败",
+              "name": "FAIL",
+              "type": "tag"
+            },
+            {
+              "color": "#FF4500",
+              "displayMode": "normal",
+              "label": "已取消",
+              "name": "CANCELED",
+              "type": "tag"
+            }
+          ],
+          "name": "SysScheduled__process",
+          "static": true,
+          "type": "static-mapping",
+          "valueField": "name",
+          "className": "text-success"
+        },
+        {
+          "allowFullscreen": true,
+          "label": "运行信息",
+          "language": "markdown",
+          "name": "SysScheduled__running",
+          "options":
+          {
+            "lineNumbers": "off",
+            "automaticLayout": true
+          },
+          "placeholder": "",
+          "size": "md",
+          "type": "markdown",
+          "width": "300px",
+          "className": "text-success",
+          "static": true
+        },
+        {
+          "label": "创建时间",
+          "name": "SysScheduled__createTime",
+          "sort": 100,
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        },
+        {
+          "label": "更新时间",
+          "name": "SysScheduled__updateTime",
+          "sort": 101,
+          "static": true,
+          "type": "static-datetime",
+          "width": "153px"
+        }
+      ]
+    }
+  ]
+}

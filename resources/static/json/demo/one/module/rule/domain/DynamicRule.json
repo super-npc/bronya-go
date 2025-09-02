@@ -1,0 +1,459 @@
+{
+  "type": "page",
+  "body":
+  [
+    {
+      "type": "crud",
+      "syncLocation": false,
+      "autoGenerateFilter":
+      {
+        "columnsNum": 5,
+        "defaultCollapsed": true,
+        "showBtnToolbar": true
+      },
+      "defaultCollapsed": true,
+      "api":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/page",
+        "data":
+        {
+          "&": "$$",
+          "One2ManyReq.entity": "${One2ManyReq.entity}",
+          "One2ManyReq.entityField": "${One2ManyReq.entityField}",
+          "One2ManyReq.entityFieldVal": "${One2ManyReq.entityFieldVal}",
+          "BindMiddleChild.entity": "${BindMiddleChild.entity}",
+          "BindMiddleChild.selfField": "${BindMiddleChild.selfField}",
+          "BindMiddleChild.selfFieldVal": "${BindMiddleChild.selfFieldVal}",
+          "BindMiddleChild.joinField": "${BindMiddleChild.joinField}"
+        },
+        "headers":
+        {
+          "bean": "DynamicRule"
+        }
+      },
+      "quickSaveApi":
+      {
+        "method": "post",
+        "url": "/admin/base/amis/quick-save-api",
+        "headers":
+        {
+          "bean": "DynamicRule"
+        }
+      },
+      "headerToolbar":
+      [
+        "reload",
+        {
+          "type": "columns-toggler",
+          "align": "right",
+          "draggable": true,
+          "icon": "fas fa-cog",
+          "footerBtnSize": "sm"
+        },
+        "bulkActions",
+        {
+          "label": "新增",
+          "type": "button",
+          "actionType": "dialog",
+          "level": "primary",
+          "dialog":
+          {
+            "title": "新增数据",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/create",
+                "headers":
+                {
+                  "bean": "DynamicRule"
+                }
+              },
+              "body":
+              [
+                {
+                  "addBtnVisibleOn": "",
+                  "addGroupBtnVisibleOn": "this.depth < 1",
+                  "className": "",
+                  "draggable": true,
+                  "embed": true,
+                  "fieldClassName": "",
+                  "label": "动态拉取",
+                  "name": "DynamicRule__dynamicPullCfg",
+                  "searchable": false,
+                  "selectMode": "chained",
+                  "showANDOR": false,
+                  "showNot": false,
+                  "source":
+                  {
+                    "data":
+                    {
+                      
+                    },
+                    "headers":
+                    {
+                      "bean": "DynamicRule"
+                    },
+                    "method": "GET",
+                    "url": "/admin/base/amis/condition-builder-target?field=dynamicPullCfg&id=$id&"
+                  },
+                  "title": "",
+                  "type": "condition-builder"
+                },
+                {
+                  "addBtnVisibleOn": "",
+                  "addGroupBtnVisibleOn": "this.depth < 2",
+                  "className": "",
+                  "draggable": true,
+                  "embed": true,
+                  "fieldClassName": "",
+                  "fields":
+                  [
+                    {
+                      "label": "年龄",
+                      "maximum": "100000000000000000000000000",
+                      "minimum": "-100000000000000000000000000",
+                      "name": "age",
+                      "type": "number"
+                    },
+                    {
+                      "label": "可用",
+                      "name": "available",
+                      "type": "boolean"
+                    },
+                    {
+                      "label": "名称",
+                      "name": "name",
+                      "type": "text"
+                    }
+                  ],
+                  "label": "静态配置",
+                  "name": "DynamicRule__staticCfgRule",
+                  "searchable": false,
+                  "selectMode": "list",
+                  "showANDOR": false,
+                  "showNot": false,
+                  "title": "",
+                  "type": "condition-builder"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "footerToolbar":
+      [
+        "statistics",
+        {
+          "type": "pagination",
+          "showPageInput": true,
+          "layout": "perPage,pager,go"
+        }
+      ],
+      "bulkActions":
+      [
+        {
+          "type": "hidden",
+          "label": "必须有兜底的按钮,不然会出现无法多选的情况"
+        },
+        {
+          "label": "批量删除",
+          "actionType": "ajax",
+          "level": "danger",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$ids"
+            },
+            "headers":
+            {
+              "bean": "DynamicRule"
+            }
+          },
+          "confirmText": "确认批量删除? ids:「$ids」"
+        }
+      ],
+      "itemActions":
+      [
+        {
+          "label": "详情",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "查看数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "DynamicRule"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "DynamicRule__id",
+                  "required": false,
+                  "static": true,
+                  "type": "input-text"
+                },
+                {
+                  "label": "动态拉取",
+                  "name": "DynamicRule__dynamicPullCfg",
+                  "static": true,
+                  "type": "condition-builder"
+                },
+                {
+                  "label": "静态配置",
+                  "name": "DynamicRule__staticCfgRule",
+                  "static": true,
+                  "type": "condition-builder"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "button",
+          "label": "修改",
+          "hiddenOnHover": true,
+          "actionType": "dialog",
+          "dialog":
+          {
+            "title": "修改数据「$id」",
+            "size": "lg",
+            "body":
+            {
+              "type": "form",
+              "initApi":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/view",
+                "data":
+                {
+                  "id": "$id"
+                },
+                "headers":
+                {
+                  "bean": "DynamicRule"
+                }
+              },
+              "api":
+              {
+                "method": "post",
+                "url": "/admin/base/amis/update",
+                "headers":
+                {
+                  "bean": "DynamicRule"
+                }
+              },
+              "body":
+              [
+                {
+                  "label": "主键",
+                  "name": "DynamicRule__id",
+                  "required": false,
+                  "static": false,
+                  "type": "hidden"
+                },
+                {
+                  "addBtnVisibleOn": "",
+                  "addGroupBtnVisibleOn": "this.depth < 1",
+                  "className": "",
+                  "draggable": true,
+                  "embed": true,
+                  "fieldClassName": "",
+                  "label": "动态拉取",
+                  "name": "DynamicRule__dynamicPullCfg",
+                  "searchable": false,
+                  "selectMode": "chained",
+                  "showANDOR": false,
+                  "showNot": false,
+                  "source":
+                  {
+                    "data":
+                    {
+                      
+                    },
+                    "headers":
+                    {
+                      "bean": "DynamicRule"
+                    },
+                    "method": "GET",
+                    "url": "/admin/base/amis/condition-builder-target?field=dynamicPullCfg&id=$id&"
+                  },
+                  "title": "",
+                  "type": "condition-builder"
+                },
+                {
+                  "addBtnVisibleOn": "",
+                  "addGroupBtnVisibleOn": "this.depth < 2",
+                  "className": "",
+                  "draggable": true,
+                  "embed": true,
+                  "fieldClassName": "",
+                  "fields":
+                  [
+                    {
+                      "label": "年龄",
+                      "maximum": "100000000000000000000000000",
+                      "minimum": "-100000000000000000000000000",
+                      "name": "age",
+                      "type": "number"
+                    },
+                    {
+                      "label": "可用",
+                      "name": "available",
+                      "type": "boolean"
+                    },
+                    {
+                      "label": "名称",
+                      "name": "name",
+                      "type": "text"
+                    }
+                  ],
+                  "label": "静态配置",
+                  "name": "DynamicRule__staticCfgRule",
+                  "searchable": false,
+                  "selectMode": "list",
+                  "showANDOR": false,
+                  "showNot": false,
+                  "title": "",
+                  "type": "condition-builder"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "删除",
+          "type": "button",
+          "hiddenOnHover": true,
+          "actionType": "ajax",
+          "level": "danger",
+          "confirmText": "确认要删除? id:「$id」",
+          "api":
+          {
+            "method": "post",
+            "url": "/admin/base/amis/delete-batch",
+            "data":
+            {
+              "ids": "$id"
+            },
+            "headers":
+            {
+              "bean": "DynamicRule"
+            }
+          }
+        }
+      ],
+      "itemBadge":
+      {
+        "text": "${badgeText}",
+        "mode": "ribbon",
+        "position": "top-left",
+        "level": "${badgeLevel}",
+        "visibleOn": "this.badgeText"
+      },
+      "rowClassNameExpr": "${badgeText == '未读' ? 'bg-green-50' : ''}",
+      "columns":
+      [
+        {
+          "label": "主键",
+          "name": "DynamicRule__id",
+          "sort": -100,
+          "static": true,
+          "type": "static",
+          "width": "100px"
+        },
+        {
+          "name": "DynamicRule__dynamicPullCfg",
+          "width": "500px",
+          "className": "",
+          "label": "动态拉取",
+          "title": "",
+          "addBtnVisibleOn": "",
+          "source":
+          {
+            "data":
+            {
+              
+            },
+            "headers":
+            {
+              "bean": "DynamicRule"
+            },
+            "method": "GET",
+            "url": "/admin/base/amis/condition-builder-target?field=dynamicPullCfg&id=$id&"
+          },
+          "fieldClassName": "",
+          "embed": true,
+          "addGroupBtnVisibleOn": "this.depth < 1",
+          "type": "condition-builder",
+          "showNot": false,
+          "draggable": true,
+          "searchable": false,
+          "showANDOR": false,
+          "selectMode": "chained",
+          "static": true
+        },
+        {
+          "label": "静态配置",
+          "name": "DynamicRule__staticCfgRule",
+          "className": "",
+          "title": "",
+          "addBtnVisibleOn": "",
+          "fieldClassName": "",
+          "embed": true,
+          "fields":
+          [
+            {
+              "label": "年龄",
+              "maximum": "100000000000000000000000000",
+              "minimum": "-100000000000000000000000000",
+              "name": "age",
+              "type": "number"
+            },
+            {
+              "label": "可用",
+              "name": "available",
+              "type": "boolean"
+            },
+            {
+              "label": "名称",
+              "name": "name",
+              "type": "text"
+            }
+          ],
+          "addGroupBtnVisibleOn": "this.depth < 2",
+          "type": "condition-builder",
+          "selectMode": "list",
+          "showNot": false,
+          "draggable": true,
+          "searchable": false,
+          "showANDOR": false,
+          "static": true
+        }
+      ]
+    }
+  ]
+}
