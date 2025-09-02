@@ -18,7 +18,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func AppStart(e *echo.Echo) {
+func Start(e *echo.Echo) {
 	// 初始化配置
 	err := conf.InitSettings()
 	if err != nil {

@@ -18,6 +18,8 @@ func routingAdmin(e *echo.Echo) {
 		admin.POST("/amis/update", controller.Update)
 		admin.POST("/amis/delete-batch", controller.DeleteBatch)
 
+		admin.POST("/amis/bind-many2-one-view", controller.BindMany2OneView)
+
 		admin.GET("/site", controller.Site)
 		admin.GET("/sys/top-right-header", controller.TopRightHeader)
 		admin.GET("/sys/app-info", controller.AppInfo)

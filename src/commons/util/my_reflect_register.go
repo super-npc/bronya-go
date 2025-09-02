@@ -51,6 +51,11 @@ func register(isFramework bool, registerAmis RegisterReq) {
 		panic("未传递po类")
 	}
 	poType := registerByStruct(registerAmis.Po)
+	refType := typeRegistry[poType.Name()]
+	if refType.Po != nil {
+		panic("重复注册" + refType.Po.Name())
+	}
+
 	tags := getPoFieldTags(isFramework, poType)
 	resp := RegisterRefType{Po: poType}
 	// 代理类可有可无
