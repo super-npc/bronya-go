@@ -32,7 +32,8 @@ func GetSiteModuleMap() {
 		//计算json资源路径 "get:/src/module/sys/user_po/SysThreadPool.json",
 		//snakeCase := strutil.SnakeCase(beanName)
 		basePath := filepath.Dir(beanPath)
-		var jsonPath = "get:" + basePath + "/" + beanName + ".json"
+		newPath := strings.Replace(basePath, "/src", "/json", 1)
+		var jsonPath = "get:" + newPath + "/" + beanName + ".json"
 		menu := amisMenu.Menu
 
 		siteDto := dto.SiteDto{}
