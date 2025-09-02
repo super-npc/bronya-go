@@ -9,15 +9,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Conf = new(AppConfig)
+var Settings = new(AppConfig)
 
 type AppConfig struct {
-	Name      string `mapstructure:"name"`
-	Mode      string `mapstructure:"mode"`
-	Version   string `mapstructure:"version"`
-	StartTime string `mapstructure:"start_time"`
-	MachineID int64  `mapstructure:"machine_id"`
-	Port      int    `mapstructure:"port"`
+	Name string `mapstructure:"name"`
+	Mode string `mapstructure:"mode"`
+	Port int    `mapstructure:"port"`
 
 	*LogConfig   `mapstructure:"log"`
 	*MySQLConfig `mapstructure:"mysql"`
@@ -28,10 +25,10 @@ type MySQLConfig struct {
 	Host         string `mapstructure:"host"`
 	User         string `mapstructure:"user"`
 	Password     string `mapstructure:"password"`
-	DB           string `mapstructure:"dbname"`
+	DbName       string `mapstructure:"dbname"`
 	Port         int    `mapstructure:"port"`
-	MaxOpenConns int    `mapstructure:"max_open_conns"`
-	MaxIdleConns int    `mapstructure:"max_idle_conns"`
+	MaxOpenCount int    `mapstructure:"max_open_count"`
+	MaxIdleCount int    `mapstructure:"max_idle_count"`
 }
 
 type RedisConfig struct {
@@ -40,7 +37,7 @@ type RedisConfig struct {
 	Port         int    `mapstructure:"port"`
 	DB           int    `mapstructure:"dbname"`
 	PoolSize     int    `mapstructure:"pool_size"`
-	MinIdleConns int    `mapstructure:"min_idle_conns"`
+	MinIdleCount int    `mapstructure:"min_idle_count"`
 }
 
 type LogConfig struct {
@@ -55,17 +52,17 @@ func InitSettings() (err error) {
 	// 获取运行环境
 	mode := os.Getenv("APP_MODE")
 	if mode == "" {
-		mode = "develop" // 默认为开发环境
+		mode = "dev" // 默认为开发环境
 	}
 
 	var configFile string
 	switch mode {
-	case "production":
-		configFile = "./resources/config.production.yaml"
-	case "develop":
-		configFile = "./resources/config.yaml"
+	case "prd":
+		configFile = "./resources/application-prd.yml"
+	case "dev":
+		configFile = "./resources/application-dev.yml"
 	default:
-		configFile = "./resources/config.yaml"
+		configFile = "./resources/application.yml"
 	}
 
 	// 设置配置文件路径
@@ -86,35 +83,35 @@ func InitSettings() (err error) {
 		return err
 	}
 
-	// 把读取到的配置信息反序列化到 Conf 变量中
-	if err := viper.Unmarshal(Conf); err != nil {
+	// 把读取到的配置信息反序列化到 Settings 变量中
+	if err := viper.Unmarshal(Settings); err != nil {
 		log.Printf("viper.Unmarshal failed, err:%v\n", err)
 		return err
 	}
 
 	// 设置默认模式
-	if Conf.Mode == "" {
-		Conf.Mode = mode
+	if Settings.Mode == "" {
+		Settings.Mode = mode
 	}
 
 	// 设置默认日志路径
-	if Conf.LogConfig.Filename == "" {
-		Conf.LogConfig.Filename = "./logs/app.log"
+	if Settings.LogConfig.Filename == "" {
+		Settings.LogConfig.Filename = "./logs/app.log"
 	}
-	if Conf.LogConfig.MaxSize == 0 {
-		Conf.LogConfig.MaxSize = 100
+	if Settings.LogConfig.MaxSize == 0 {
+		Settings.LogConfig.MaxSize = 100
 	}
-	if Conf.LogConfig.MaxAge == 0 {
-		Conf.LogConfig.MaxAge = 30
+	if Settings.LogConfig.MaxAge == 0 {
+		Settings.LogConfig.MaxAge = 30
 	}
-	if Conf.LogConfig.MaxBackups == 0 {
-		Conf.LogConfig.MaxBackups = 7
+	if Settings.LogConfig.MaxBackups == 0 {
+		Settings.LogConfig.MaxBackups = 7
 	}
 
 	viper.WatchConfig()
 	viper.OnConfigChange(func(in fsnotify.Event) {
 		log.Println("配置文件已修改")
-		if err := viper.Unmarshal(Conf); err != nil {
+		if err := viper.Unmarshal(Settings); err != nil {
 			log.Printf("viper.Unmarshal failed, err:%v\n", err)
 		}
 	})

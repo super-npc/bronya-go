@@ -1,12 +1,14 @@
 package register
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"time"
 
 	"github.com/acmestack/gorm-plus/gplus"
 	"github.com/super-npc/bronya-go/src/commons/db"
+	"github.com/super-npc/bronya-go/src/framework/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -28,8 +30,15 @@ func GetDbProvider() db.DBProvider {
 }
 
 func InitDatabase() {
+	config := conf.Settings.MySQLConfig
+	host := config.Host
+	port := config.Port
+	user := config.User
+	password := config.Password
+	dbName := config.DbName
 	// 参考 https://github.com/go-sql-driver/mysql#dsn-data-source-name 获取详情
-	dsn := "root:RrCkEBbmlyktSXhuELo2Fa4SIA3ktKdA@tcp(139.199.207.29:33068)/bronya-demo-one?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		user, password, host, port, dbName)
 
 	mysqlDb, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:                       dsn,   // DSN data source name

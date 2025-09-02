@@ -33,8 +33,7 @@ func Start(e *echo.Echo) {
 	defer log.Sync()
 
 	log.Info("应用启动中...",
-		zap.String("mode", conf.Conf.Mode),
-		zap.String("version", conf.Conf.Version),
+		zap.String("mode", conf.Settings.Mode),
 	)
 
 	registerDatabaseBean() // 初始化数据库表对象
@@ -54,7 +53,7 @@ func Start(e *echo.Echo) {
 	e.Use(middleware.Recover())                             // 捕获 panic
 	e.HTTPErrorHandler = middle_ware.CustomHttpErrorHandler // 全局异常处理
 
-	log.Info("应用启动完成", zap.Int("port", conf.Conf.Port))
+	log.Info("应用启动完成", zap.Int("port", conf.Settings.Port))
 }
 
 func registerDatabaseBean() {

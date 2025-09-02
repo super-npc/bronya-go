@@ -1,10 +1,11 @@
 package middleware
 
 import (
+	"time"
+
 	"github.com/labstack/echo/v4"
 	"github.com/super-npc/bronya-go/src/framework/log"
 	"go.uber.org/zap"
-	"time"
 )
 
 // LoggerMiddleware 自定义日志中间件

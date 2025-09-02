@@ -19,21 +19,21 @@ func InitLogger() error {
 	}
 	var config zap.Config
 
-	if conf.Conf.Mode == "production" {
+	if conf.Settings.Mode == "production" {
 		config = zap.NewProductionConfig()
 	} else {
 		config = zap.NewDevelopmentConfig()
 	}
 
 	// 设置日志级别
-	level, err := zap.ParseAtomicLevel(conf.Conf.LogConfig.Level)
+	level, err := zap.ParseAtomicLevel(conf.Settings.LogConfig.Level)
 	if err != nil {
 		return err
 	}
 	config.Level = level
 
 	// 设置编码器
-	if conf.Conf.Mode == "production" {
+	if conf.Settings.Mode == "production" {
 		config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
 		config.EncoderConfig.TimeKey = "timestamp"
 		config.EncoderConfig.StacktraceKey = "stacktrace"
@@ -43,19 +43,19 @@ func InitLogger() error {
 	}
 
 	// 设置输出路径
-	if conf.Conf.LogConfig.Filename != "" {
+	if conf.Settings.LogConfig.Filename != "" {
 		// 使用 lumberjack 进行日志切割
 		logWriter := &lumberjack.Logger{
-			Filename:   conf.Conf.LogConfig.Filename,
-			MaxSize:    conf.Conf.LogConfig.MaxSize,
-			MaxBackups: conf.Conf.LogConfig.MaxBackups,
-			MaxAge:     conf.Conf.LogConfig.MaxAge,
+			Filename:   conf.Settings.LogConfig.Filename,
+			MaxSize:    conf.Settings.LogConfig.MaxSize,
+			MaxBackups: conf.Settings.LogConfig.MaxBackups,
+			MaxAge:     conf.Settings.LogConfig.MaxAge,
 			Compress:   true,
 		}
 
 		// 设置输出到文件和控制台
-		config.OutputPaths = []string{conf.Conf.LogConfig.Filename}
-		config.ErrorOutputPaths = []string{conf.Conf.LogConfig.Filename}
+		config.OutputPaths = []string{conf.Settings.LogConfig.Filename}
+		config.ErrorOutputPaths = []string{conf.Settings.LogConfig.Filename}
 
 		// 使用日志写入器
 		_ = logWriter

@@ -1,8 +1,5 @@
 name: bronya-go
-mode: develop
-version: v1.0.0
-start_time: "2024-01-01"
-machine_id: 1
+mode: dev
 port: 8080
 
 log:
@@ -18,8 +15,8 @@ mysql:
   user: root
   password: ""
   dbname: bronya_go
-  max_open_conns: 200
-  max_idle_conns: 50
+  max_open_count: 200
+  max_idle_count: 50
 
 redis:
   host: 127.0.0.1
@@ -27,4 +24,4 @@ redis:
   password: ""
   dbname: 0
   pool_size: 100
-  min_idle_conns: 10
+  min_idle_count: 10
