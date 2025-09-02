@@ -7,7 +7,9 @@ import (
 	"runtime/debug"
 
 	"github.com/labstack/echo/v4"
+	"github.com/super-npc/bronya-go/src/framework/log"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/resp"
+	"go.uber.org/zap"
 )
 
 // CustomHttpErrorHandler 自定义的全局错误处理函数
@@ -15,12 +17,6 @@ import (
 // 1. 普通错误：return errors.New("不能存在记录")
 // 2. panic异常：panic("无法绑定请求参数")
 func CustomHttpErrorHandler(err error, c echo.Context) {
-	// 获取Echo的上下文日志
-	logger := c.Logger()
-
-	// 记录详细的错误信息
-	logger.Errorf("Handler error: %v", err)
-
 	// 先尝试将错误转换为 *echo.HTTPError
 	var he *echo.HTTPError
 	ok := errors.As(err, &he)
@@ -43,7 +39,11 @@ func CustomHttpErrorHandler(err error, c echo.Context) {
 	// 对于panic错误，记录堆栈信息
 	if he.Code == http.StatusInternalServerError {
 		stack := debug.Stack()
-		logger.Errorf("Stack trace: %s", stack)
+		log.Error("panic",
+			zap.String("异常", err.Error()),
+			zap.String("Stack", string(stack)),
+			zap.Error(err),
+		)
 	}
 
 	// 返回 JSON 格式的错误响应
@@ -61,7 +61,8 @@ func CustomHttpErrorHandler(err error, c echo.Context) {
 			err = c.JSON(0, result)
 		}
 		if err != nil {
-			logger.Error(err)
+			log.Error("最后错误")
+			//logger.Error(err)
 		}
 	}
 }

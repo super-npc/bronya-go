@@ -148,7 +148,7 @@ func NewStructFromJSONAndName(typeName string, jsonData []byte) RegisterResp {
 
 	// 3. 把 JSON 填进去
 	if err := json.Unmarshal(jsonData, ptr.Interface()); err != nil {
-		panic("json无法转成po实体:" + typeName)
+		panic(err)
 	}
 
 	// 2. 创建该类型的零值指针（*Struct）
