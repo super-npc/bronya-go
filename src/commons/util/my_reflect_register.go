@@ -87,7 +87,7 @@ func getPoFieldTags(isFramework bool, poType reflect.Type) model.AmisMenu {
 	menu := tag.Get("menu")
 	comment := tag.Get("comment")
 	groupMenu := model.Menu{Module: module, Group: group, Menu: menu, Comment: comment}
-	return model.AmisMenu{ModulePath: getModulePath(isFramework), Field_: field_, Menu: groupMenu}
+	return model.AmisMenu{ModulePath: getModulePath(isFramework), Field_: field_, Menu: groupMenu, IsFramework: isFramework}
 }
 
 func getModulePath(isFramework bool) string {

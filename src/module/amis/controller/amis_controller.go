@@ -163,8 +163,8 @@ func Create(c echo.Context) error {
 	}
 
 	_, registerObj := findBean(c, reqBody)
-	proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
 	if registerObj.Proxy != nil {
+		proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
 		proxy.BeforeAdd(reqBody)
 		// 修改后重新序列化
 		_, registerObj = findBean(c, reqBody)
@@ -181,6 +181,7 @@ func Create(c echo.Context) error {
 	var res *gorm.DB
 	createStart := time.Now()
 	if registerObj.Proxy != nil {
+		proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
 		res = dbProvider.GetDb().Create(poBean)
 		proxy.AfterAdd(poBean)
 	} else {
@@ -216,14 +217,15 @@ func Create(c echo.Context) error {
 func Update(c echo.Context) error {
 	start := time.Now()
 	var reqBody map[string]interface{}
+
 	if c.Bind(&reqBody) != nil {
 		log.Error("Update接口参数绑定失败", zap.String("error", "bind_failed"))
 		panic("无法绑定请求参数")
 	}
 
 	_, registerObj := findBean(c, reqBody)
-	proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
 	if registerObj.Proxy != nil {
+		proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
 		proxy.BeforeUpdate(reqBody)
 		// 修改后重新序列化
 		_, registerObj = findBean(c, reqBody)
@@ -240,6 +242,7 @@ func Update(c echo.Context) error {
 	updateStart := time.Now()
 	var res *gorm.DB
 	if registerObj.Proxy != nil {
+		proxy := registerObj.Proxy.(amis_proxy.IAmisProxy)
 		res = dbProvider.GetDb().Updates(poBean)
 		proxy.AfterUpdate(poBean)
 	} else {
@@ -357,6 +360,9 @@ func changeMapByStruct(header req.AmisHeader, body map[string]interface{}) map[s
 
 	for s, i := range body {
 		key := strings.TrimPrefix(s, beanPre)
+		if strings.EqualFold(key, "createTime") || strings.EqualFold(key, "updateTime") {
+			continue
+		}
 		bodyNew[key] = i
 	}
 
