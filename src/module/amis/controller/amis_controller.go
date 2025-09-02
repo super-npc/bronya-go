@@ -35,9 +35,10 @@ func SetDbProvider(provider db.DBProvider) {
 func Page(c echo.Context) error {
 	start := time.Now()
 	pageReq := new(req.PageReq)
-	if c.Bind(pageReq) != nil {
+	err := c.Bind(pageReq)
+	if err != nil {
 		log.Warn("Page接口参数绑定失败", zap.String("error", "invalid_params"))
-		return errors.New("非法参数")
+		panic(err)
 	}
 
 	amisHeader := getAmisHeader(c.Request().Header)

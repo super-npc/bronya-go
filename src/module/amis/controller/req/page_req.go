@@ -8,12 +8,12 @@ type PageReq struct {
 	One2ManyReq struct {
 		Entity         string `json:"entity"`
 		EntityField    string `json:"entityField"`
-		EntityFieldVal string `json:"entityFieldVal"`
+		EntityFieldVal any    `json:"entityFieldVal"`
 	} `json:"One2ManyReq"`
 	BindMiddleChild struct {
 		Entity       string `json:"entity"`
 		SelfField    string `json:"selfField"`
-		SelfFieldVal string `json:"selfFieldVal"`
 		JoinField    string `json:"joinField"`
+		SelfFieldVal any    `json:"selfFieldVal"`
 	} `json:"BindMiddleChild"`
 }

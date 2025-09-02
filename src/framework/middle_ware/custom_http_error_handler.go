@@ -37,14 +37,14 @@ func CustomHttpErrorHandler(err error, c echo.Context) {
 	}
 
 	// 对于panic错误，记录堆栈信息
-	if he.Code == http.StatusInternalServerError {
-		stack := debug.Stack()
-		log.Error("panic",
-			zap.String("异常", err.Error()),
-			zap.String("Stack", string(stack)),
-			zap.Error(err),
-		)
-	}
+	//if he.Code == http.StatusInternalServerError {
+	stack := debug.Stack()
+	log.Error("panic",
+		zap.String("异常", err.Error()),
+		zap.String("Stack", string(stack)),
+		zap.Error(err),
+	)
+	//}
 
 	// 返回 JSON 格式的错误响应
 	if !c.Response().Committed {
