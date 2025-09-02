@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/duke-git/lancet/v2/convertor"
 	"github.com/labstack/echo/v4"
 	"github.com/super-npc/bronya-go/src/commons"
 	"github.com/super-npc/bronya-go/src/commons/constant"
@@ -275,13 +276,15 @@ func DeleteBatch(c echo.Context) error {
 	poBean := registerObj.Po
 
 	// 使用接口获取数据库连接
-	idsStr := strings.Split(deleteBatchReq.Ids, ",")
-	ids, _ := commons.StringsToUints(idsStr)
+	//deleteBatchReq.Ids
+	idsStr := convertor.ToString(deleteBatchReq.Ids)
+	idsSplit := strings.Split(idsStr, ",")
+	ids, _ := commons.StringsToUints(idsSplit)
 
 	log.Debug("DeleteBatch接口开始",
 		zap.String("bean", amisHeader.Bean),
 		zap.Uints("ids", ids),
-		zap.String("raw_ids", deleteBatchReq.Ids),
+		zap.String("raw_ids", idsStr),
 	)
 
 	deleteStart := time.Now()

@@ -5,6 +5,7 @@ go 1.25
 require (
 	github.com/acmestack/gorm-plus v0.1.5
 	github.com/bwmarrin/snowflake v0.3.0
+	github.com/duke-git/lancet/v2 v2.3.7
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/golang-jwt/jwt/v4 v4.5.2

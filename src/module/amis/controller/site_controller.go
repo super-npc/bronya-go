@@ -23,7 +23,10 @@ func GetSiteModuleMap() {
 	// 整理菜单, module
 	for beanName, amisMenu := range amisMenus {
 		path := amisMenu.ModulePath // github.com/super-npc/bronya-go
-		field := amisMenu.Field_    //github.com/super-npc/bronya-go/src/module/sys/user_po
+		if strings.EqualFold(path, "") {
+			panic("app module path is empty")
+		}
+		field := amisMenu.Field_ //github.com/super-npc/bronya-go/src/module/sys/user_po
 		pkgPath := field.PkgPath
 		beanPath := strings.TrimPrefix(pkgPath, path) // 路径相减得到bean路径  /src/module/sys/user_po
 		//计算json资源路径 "get:/src/module/sys/user_po/SysThreadPool.json",

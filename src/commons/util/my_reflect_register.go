@@ -3,7 +3,6 @@ package util
 import (
 	"encoding/json"
 	"reflect"
-	"runtime/debug"
 	"strings"
 
 	"github.com/super-npc/bronya-go/src/commons/constant"
@@ -94,8 +93,12 @@ func getModulePath(isFramework bool) string {
 	if isFramework {
 		return constant.FrameworkModule
 	}
-	info, _ := debug.ReadBuildInfo()
-	return info.Path
+	// app
+	module := constant.AppModule
+	if strings.EqualFold(module, "") {
+		panic("未配置app模块名")
+	}
+	return module
 }
 
 // RegisterByStruct 注册一个结构体（传入指针或值都行）
