@@ -62,6 +62,12 @@ func InitDatabase() {
 	if err != nil {
 		panic(err)
 	}
+	db1, err := mysqlDb.DB()
+	if err != nil {
+		panic(err)
+	}
+	db1.SetMaxIdleConns(config.MaxIdleCount)
+	db1.SetMaxOpenConns(config.MaxOpenCount)
 	MyDb = mysqlDb
 
 	// 初始化gplus
