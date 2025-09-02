@@ -19,6 +19,7 @@ import (
 	"github.com/super-npc/bronya-go/src/module/amis/amis_proxy"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/req"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/resp"
+	"github.com/super-npc/bronya-go/src/module/amis/service"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -63,6 +64,10 @@ func Page(c echo.Context) error {
 	// 使用 GORM 查询数据
 	queryStart := time.Now()
 	dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface())
+	//sql := dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface()).Statement.SQL.String()
+	//dbProvider.GetDb().Raw("select * from ...").Limit(pageSize).Offset(offset).Find(slicePtr.Interface())
+	service.One2Many(amisHeader.Bean, pageReq) // 准备1:n sql拼装
+
 	queryDuration := time.Since(queryStart)
 
 	// 获取实际的切片值
