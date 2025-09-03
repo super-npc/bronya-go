@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/duke-git/lancet/v2/convertor"
+	"github.com/duke-git/lancet/v2/strutil"
 	"github.com/labstack/echo/v4"
 	"github.com/super-npc/bronya-go/src/commons"
 	"github.com/super-npc/bronya-go/src/commons/constant"
@@ -19,7 +20,7 @@ import (
 	"github.com/super-npc/bronya-go/src/module/amis/amis_proxy"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/req"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/resp"
-	"github.com/super-npc/bronya-go/src/module/amis/service"
+	"github.com/super-npc/bronya-go/src/module/amis/service/build_sql"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -57,26 +58,12 @@ func Page(c echo.Context) error {
 		zap.Int("offset", offset),
 	)
 
-	// 根据 bean 的类型创建对应切片
-	sliceType := reflect.SliceOf(reflect.TypeOf(poBean))
-	slicePtr := reflect.New(sliceType)
-
 	// 使用 GORM 查询数据
 	queryStart := time.Now()
-	sql := service.GetOne2ManySql(amisHeader.Bean, pageReq) // 准备1:n sql拼装
-	if sql == "" {
-		dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface())
-	} else {
-		result := dbProvider.GetDb().Limit(pageSize).Offset(offset).Exec(sql).Find(slicePtr.Interface())
-		log.Debug("Page接口查询结束",
-			zap.Int64("size", result.RowsAffected),
-			zap.String("bean", amisHeader.Bean),
-			zap.Int("page", page),
-			zap.Int("page_size", pageSize),
-			zap.Int("offset", offset),
-			zap.String("sql", sql),
-		)
-	}
+
+	sql := "select * from " + strutil.SnakeCase(amisHeader.Bean)
+
+	list := build_sql.ExecSql(dbProvider, sql)
 
 	//dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface())
 	//sql := dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface()).Statement.SQL.String()
@@ -84,34 +71,10 @@ func Page(c echo.Context) error {
 
 	queryDuration := time.Since(queryStart)
 
-	// 获取实际的切片值
-	sliceValue := slicePtr.Elem().Interface()
-
-	// 将结果转换为 []map[string]amis_proxy{}
-	var list []map[string]interface{}
-	if sliceValue != nil {
-		jsonData, err := json.Marshal(sliceValue)
-		if err != nil {
-			log.Error("Page接口数据序列化失败",
-				zap.Error(err),
-				zap.String("operation", "marshal_data"),
-			)
-			return errors.New("序列化数据失败")
-		}
-		err = json.Unmarshal(jsonData, &list)
-		if err != nil {
-			log.Error("Page接口数据反序列化失败",
-				zap.Error(err),
-				zap.String("operation", "unmarshal_data"),
-			)
-			return errors.New("反序列化数据失败")
-		}
-	}
-
 	// 获取总数
 	countStart := time.Now()
 	var total int64
-	dbProvider.GetDb().Model(poBean).Count(&total)
+	dbProvider.GetDb().Model(poBean).Count(&total) // todo 总数需要根据sql查询
 	countDuration := time.Since(countStart)
 
 	// 处理动态代理数据 todo 后续优化点,不需要顺序处理,go协程处理多任务

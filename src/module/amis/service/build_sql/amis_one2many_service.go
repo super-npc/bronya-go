@@ -1,4 +1,4 @@
-package service
+package build_sql
 
 import (
 	"strings"
