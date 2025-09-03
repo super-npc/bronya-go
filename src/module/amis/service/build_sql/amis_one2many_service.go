@@ -6,6 +6,7 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/duke-git/lancet/v2/convertor"
 	"github.com/duke-git/lancet/v2/strutil"
+	"github.com/super-npc/bronya-go/src/commons/util"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/req"
 )
 
@@ -16,12 +17,15 @@ func GetOne2ManySql(poBeanStr string, req *req.PageReq) string {
 		// 没有1:n 不需要拼接
 		return ""
 	}
-	//if !util.ExistRegisterBean(req.One2ManyReq.Entity) { // todo 测试通过要放开
-	//	panic(req.One2ManyReq.Entity + " 未注册")
-	//}
-	//if !util.ExistRegisterBean(poBeanStr) { // todo 测试通过要放开
-	//	panic(poBeanStr + " 未注册")
-	//}
+	{
+		// bean防注入校验
+		if !util.ExistRegisterBean(req.One2ManyReq.Entity) {
+			panic(req.One2ManyReq.Entity + " 未注册")
+		}
+		if !util.ExistRegisterBean(poBeanStr) {
+			panic(poBeanStr + " 未注册")
+		}
+	}
 	poTable := getPoBeanTable(poBeanStr)
 	refSql := getRefSql(poBeanStr, req)
 	refFieldSnakeCase := getRefFieldSnakeCase(req)
@@ -42,14 +46,18 @@ func GetOne2ManySql(poBeanStr string, req *req.PageReq) string {
 // 生成 (SELECT name FROM `student` WHERE  id = hobby.student_id ) as student_id_desc
 func getRefSql(poBeanStr string, req *req.PageReq) string {
 	refBeanStr := req.One2ManyReq.Entity
+	amisMenus := util.GetAmisMenus()
+	amisMenu := amisMenus[poBeanStr]
+	one2ManyTag := amisMenu.One2ManyTags[strutil.UpperFirst(req.One2ManyReq.EntityField)]
+	//poBeanRegister := util.NewStructFromName(poBeanStr)
 	//refBean := util.NewStructFromName(refBeanStr)
-	var labelField = "name" // todo 从 tag注入,对应labelField
+	var labelField = one2ManyTag.Bind1vNLabelField // "name" // 从 tag注入,对应labelField
 	var refBeanTable = strutil.SnakeCase(refBeanStr)
 	refFieldSnakeCase := getRefFieldSnakeCase(req)
 	idVal := GetOne2ManyRefIdVal(poBeanStr, req)
 	sql, _, err := squirrel.Select(labelField).
 		From(refBeanTable).
-		Where(squirrel.Eq{"id": idVal}).
+		Where(squirrel.Eq{one2ManyTag.Bind1vNValueField: idVal}). //  tag
 		ToSql()
 	if err != nil {
 		panic(err)

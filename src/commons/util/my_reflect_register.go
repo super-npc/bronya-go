@@ -55,7 +55,7 @@ func register(isFramework bool, registerAmis RegisterReq) {
 		panic("重复注册" + refType.Po.Name())
 	}
 
-	tags := getPoFieldTags(isFramework, poType)
+	tags := getPoConstructTags(isFramework, poType)
 	resp := RegisterRefType{Po: poType}
 	// 代理类可有可无
 	if registerAmis.Proxy != nil {
@@ -70,23 +70,33 @@ func register(isFramework bool, registerAmis RegisterReq) {
 	amisMenus[poType.Name()] = tags
 }
 
-func getPoFieldTags(isFramework bool, poType reflect.Type) model.AmisMenu {
-	var field_ reflect.StructField
+func getPoConstructTags(isFramework bool, poType reflect.Type) model.AmisMenu {
+	amisMenu := model.AmisMenu{ModulePath: getModulePath(isFramework), IsFramework: isFramework}
+	one2ManyTags := make(map[string]model.One2ManyTag)
 	for i := range poType.NumField() {
 		field := poType.Field(i)
-		if !strings.EqualFold(field.Name, "_") {
-			continue
+		var tag = field.Tag
+		if strings.EqualFold(field.Name, "_") {
+			module := tag.Get("module")
+			group := tag.Get("group")
+			menu := tag.Get("menu")
+			comment := tag.Get("comment")
+			groupMenu := model.ModuleMenu{Field_: field, Module: module, Group: group, Menu: menu, Comment: comment}
+			amisMenu.ModuleMenu = groupMenu
 		}
-		// 所有构造字段,用于提取非普通字段的tag
-		field_ = field
+		bind1vNBean := tag.Get("bind1vNBean")
+		if !strings.EqualFold(bind1vNBean, "") {
+			// 收集一对多
+			manyTag := model.One2ManyTag{}
+			manyTag.Field_ = field
+			manyTag.Bind1vNBean = bind1vNBean
+			manyTag.Bind1vNValueField = tag.Get("bind1vNValueField")
+			manyTag.Bind1vNLabelField = tag.Get("bind1vNLabelField")
+			one2ManyTags[field.Name] = manyTag
+		}
 	}
-	var tag = field_.Tag
-	module := tag.Get("module")
-	group := tag.Get("group")
-	menu := tag.Get("menu")
-	comment := tag.Get("comment")
-	groupMenu := model.Menu{Module: module, Group: group, Menu: menu, Comment: comment}
-	return model.AmisMenu{ModulePath: getModulePath(isFramework), Field_: field_, Menu: groupMenu, IsFramework: isFramework}
+	amisMenu.One2ManyTags = one2ManyTags
+	return amisMenu
 }
 
 func getModulePath(isFramework bool) string {

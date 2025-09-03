@@ -26,7 +26,8 @@ func GetSiteModuleMap() {
 		if strings.EqualFold(path, "") {
 			panic("app module path is empty")
 		}
-		field := amisMenu.Field_ //github.com/super-npc/bronya-go/src/module/sys/user_po
+		moduleMenu := amisMenu.ModuleMenu
+		field := moduleMenu.Field_ //github.com/super-npc/bronya-go/src/module/sys/user_po
 		pkgPath := field.PkgPath
 		beanPath := strings.TrimPrefix(pkgPath, path) // 路径相减得到bean路径  /src/module/sys/user_po
 		//计算json资源路径 "get:/src/module/sys/user_po/SysThreadPool.json",
@@ -34,24 +35,23 @@ func GetSiteModuleMap() {
 		basePath := filepath.Dir(beanPath)
 		newPath := strings.Replace(basePath, "/src", "/json", 1)
 		var jsonPath = "get:" + newPath + "/" + beanName + ".json"
-		menu := amisMenu.Menu
 
 		siteDto := dto.SiteDto{}
-		siteDto.Label = menu.Comment
+		siteDto.Label = moduleMenu.Comment
 		siteDto.SchemaApi = jsonPath
 
-		var leafs, ok = tbl.Get(menu.Group, menu.Menu)
+		var leafs, ok = tbl.Get(moduleMenu.Group, moduleMenu.Menu)
 		if !ok {
 			// 需要初始化
 			si := make([]dto.SiteDto, 0)
 			leafs = &si
-			tbl.Put(menu.Group, menu.Menu, leafs)
+			tbl.Put(moduleMenu.Group, moduleMenu.Menu, leafs)
 		}
 		*leafs = append(*leafs, siteDto)
-		tbl.Put(menu.Group, menu.Menu, leafs)
+		tbl.Put(moduleMenu.Group, moduleMenu.Menu, leafs)
 
 		// 绑定模块
-		module := menu.Module
+		module := moduleMenu.Module
 		SiteModuleMap[module] = tbl
 	}
 }
