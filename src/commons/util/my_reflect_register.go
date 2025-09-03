@@ -117,6 +117,11 @@ func registerByStruct(v interface{}) reflect.Type {
 	return t
 }
 
+func ExistRegisterBean(typeName string) bool {
+	_, ok := typeRegistry[typeName]
+	return ok
+}
+
 func NewStructFromName(typeName string) RegisterResp {
 	// 1. 从注册表拿到类型的 reflect.Type
 	t, ok := typeRegistry[typeName]

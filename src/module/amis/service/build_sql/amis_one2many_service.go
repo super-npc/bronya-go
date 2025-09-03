@@ -5,6 +5,7 @@ import (
 
 	"github.com/duke-git/lancet/v2/convertor"
 	"github.com/duke-git/lancet/v2/strutil"
+	"github.com/super-npc/bronya-go/src/commons/util"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/req"
 )
 
@@ -15,8 +16,13 @@ func GetOne2ManySql(poBeanStr string, req *req.PageReq) string {
 		// 没有1:n 不需要拼接
 		return ""
 	}
+	if !util.ExistRegisterBean(req.One2ManyReq.Entity) {
+		panic(req.One2ManyReq.Entity + " 未注册")
+	}
+	if !util.ExistRegisterBean(poBeanStr) {
+		panic(poBeanStr + " 未注册")
+	}
 	poTable := getPoBeanTable(poBeanStr)
-	//poBean := util.NewStructFromName(poBeanStr)
 	refSql := getRefSql(poBeanStr, req)
 	refFieldSnakeCase := getRefFieldSnakeCase(req)
 	refValStr := getRefValStr(req)
@@ -33,6 +39,7 @@ func getRefSql(poBeanStr string, req *req.PageReq) string {
 	var refBeanTable = strutil.SnakeCase(refBeanStr)
 	refFieldSnakeCase := getRefFieldSnakeCase(req)
 	poTable := getPoBeanTable(poBeanStr)
+
 	return "(SELECT " + labelField + " FROM `" + refBeanTable + "` WHERE  id = " + poTable + "." + refFieldSnakeCase + ") as " + refFieldSnakeCase + "_desc"
 }
 
