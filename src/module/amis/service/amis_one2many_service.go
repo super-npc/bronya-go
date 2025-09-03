@@ -1,25 +1,51 @@
 package service
 
 import (
-	"fmt"
 	"strings"
 
-	"github.com/super-npc/bronya-go/src/commons/util"
+	"github.com/duke-git/lancet/v2/convertor"
+	"github.com/duke-git/lancet/v2/strutil"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/req"
 )
 
-// One2Many
+// GetOne2ManySql
 // SELECT distinct hobby.*, (SELECT name FROM `student` WHERE  id = hobby.student_id ) as student_id_desc FROM `hobby` AS `hobby` WHERE  hobby.student_id = 2
-func One2Many(poBeanStr string, req *req.PageReq) {
-	fmt.Println(req)
+func GetOne2ManySql(poBeanStr string, req *req.PageReq) string {
 	if strings.EqualFold(req.One2ManyReq.Entity, "") {
 		// 没有1:n 不需要拼接
-		return
+		return ""
 	}
-	refBeanStr := req.One2ManyReq.Entity
-	refField := req.One2ManyReq.EntityField
-	refVal := req.One2ManyReq.EntityFieldVal
+	poTable := getPoBeanTable(poBeanStr)
+	//poBean := util.NewStructFromName(poBeanStr)
+	refSql := getRefSql(poBeanStr, req)
+	refFieldSnakeCase := getRefFieldSnakeCase(req)
+	refValStr := getRefValStr(req)
+	// 生成 SELECT distinct hobby.*, FROM `hobby` AS `hobby` WHERE  hobby.student_id = 2
+	return "SELECT distinct " + poTable + ".*," + refSql + " FROM `" + poTable + "` AS `" + poTable + "` WHERE  " + poTable + "." + refFieldSnakeCase + " = " + refValStr
+}
 
-	poBean := util.NewStructFromName(poBeanStr)
-	refBean := util.NewStructFromName(refBeanStr)
+// @BindMany2One(entity = Student.class, valueField = Student.Fields.id, labelField = Student.Fields.name)
+// 生成 (SELECT name FROM `student` WHERE  id = hobby.student_id ) as student_id_desc
+func getRefSql(poBeanStr string, req *req.PageReq) string {
+	refBeanStr := req.One2ManyReq.Entity
+	//refBean := util.NewStructFromName(refBeanStr)
+	var labelField = "name" // 从 tag注入,对应labelField
+	var refBeanTable = strutil.SnakeCase(refBeanStr)
+	refFieldSnakeCase := getRefFieldSnakeCase(req)
+	poTable := getPoBeanTable(poBeanStr)
+	return "(SELECT " + labelField + " FROM `" + refBeanTable + "` WHERE  id = " + poTable + "." + refFieldSnakeCase + ") as " + refFieldSnakeCase + "_desc"
+}
+
+func getPoBeanTable(poBeanStr string) string {
+	return strutil.SnakeCase(poBeanStr)
+}
+
+func getRefFieldSnakeCase(req *req.PageReq) string {
+	refField := req.One2ManyReq.EntityField
+	return strutil.SnakeCase(refField) // student_id
+}
+
+func getRefValStr(req *req.PageReq) string {
+	refVal := req.One2ManyReq.EntityFieldVal
+	return convertor.ToString(refVal)
 }

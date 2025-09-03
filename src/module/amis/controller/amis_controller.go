@@ -63,10 +63,24 @@ func Page(c echo.Context) error {
 
 	// 使用 GORM 查询数据
 	queryStart := time.Now()
-	dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface())
+	sql := service.GetOne2ManySql(amisHeader.Bean, pageReq) // 准备1:n sql拼装
+	if sql == "" {
+		dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface())
+	} else {
+		result := dbProvider.GetDb().Limit(pageSize).Offset(offset).Exec(sql).Find(slicePtr.Interface())
+		log.Debug("Page接口查询结束",
+			zap.Int64("size", result.RowsAffected),
+			zap.String("bean", amisHeader.Bean),
+			zap.Int("page", page),
+			zap.Int("page_size", pageSize),
+			zap.Int("offset", offset),
+			zap.String("sql", sql),
+		)
+	}
+
+	//dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface())
 	//sql := dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface()).Statement.SQL.String()
 	//dbProvider.GetDb().Raw("select * from ...").Limit(pageSize).Offset(offset).Find(slicePtr.Interface())
-	service.One2Many(amisHeader.Bean, pageReq) // 准备1:n sql拼装
 
 	queryDuration := time.Since(queryStart)
 
