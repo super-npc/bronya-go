@@ -25,7 +25,7 @@ func GetOne2ManySql(poBeanStr string, req *req.PageReq) string {
 	poTable := getPoBeanTable(poBeanStr)
 	refSql := getRefSql(poBeanStr, req)
 	refFieldSnakeCase := getRefFieldSnakeCase(req)
-	refValStr := getRefValStr(req)
+	refValStr := GetOne2ManyRefValStr(req)
 	// 生成 SELECT distinct hobby.*, FROM `hobby` AS `hobby` WHERE  hobby.student_id = 2
 
 	poCol := "distinct " + poTable + ".*"
@@ -46,8 +46,7 @@ func getRefSql(poBeanStr string, req *req.PageReq) string {
 	var labelField = "name" // todo 从 tag注入,对应labelField
 	var refBeanTable = strutil.SnakeCase(refBeanStr)
 	refFieldSnakeCase := getRefFieldSnakeCase(req)
-	poTable := getPoBeanTable(poBeanStr)
-	idVal := poTable + "." + refFieldSnakeCase
+	idVal := GetOne2ManyRefIdVal(poBeanStr, req)
 	sql, _, err := squirrel.Select(labelField).
 		From(refBeanTable).
 		Where(squirrel.Eq{"id": idVal}).
@@ -59,6 +58,12 @@ func getRefSql(poBeanStr string, req *req.PageReq) string {
 	//return "(SELECT " + labelField + " FROM `" + refBeanTable + "` WHERE  id = " + poTable + "." + refFieldSnakeCase + ") as " + refFieldSnakeCase + "_desc"
 }
 
+func GetOne2ManyRefIdVal(poBeanStr string, req *req.PageReq) string {
+	refFieldSnakeCase := getRefFieldSnakeCase(req)
+	poTable := getPoBeanTable(poBeanStr)
+	return poTable + "." + refFieldSnakeCase
+}
+
 func getPoBeanTable(poBeanStr string) string {
 	return strutil.SnakeCase(poBeanStr)
 }
@@ -68,7 +73,7 @@ func getRefFieldSnakeCase(req *req.PageReq) string {
 	return strutil.SnakeCase(refField)      // student_id
 }
 
-func getRefValStr(req *req.PageReq) string {
+func GetOne2ManyRefValStr(req *req.PageReq) string {
 	refVal := req.One2ManyReq.EntityFieldVal
 	return convertor.ToString(refVal)
 }

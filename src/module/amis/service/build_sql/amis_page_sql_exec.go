@@ -1,13 +1,25 @@
 package build_sql
 
 import (
+	sql2 "database/sql"
+
 	"github.com/super-npc/bronya-go/src/commons/db"
 )
 
-func ExecSql(dbProvider db.DBProvider, sql string) []map[string]interface{} {
-	rows, err := dbProvider.GetDb().Raw(sql).Rows()
-	if err != nil {
-		panic(err)
+func ExecSql(dbProvider db.DBProvider, sql string, values ...interface{}) []map[string]interface{} {
+	var rows *sql2.Rows
+	if values != nil {
+		rowsTemp, err := dbProvider.GetDb().Raw(sql, values...).Rows()
+		if err != nil {
+			panic(err)
+		}
+		rows = rowsTemp
+	} else {
+		rowsTemp, err := dbProvider.GetDb().Raw(sql).Rows()
+		if err != nil {
+			panic(err)
+		}
+		rows = rowsTemp
 	}
 	defer rows.Close()
 	// 4. 构造结果：[]map[string]interface{}

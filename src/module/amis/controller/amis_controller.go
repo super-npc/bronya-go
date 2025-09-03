@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/duke-git/lancet/v2/convertor"
 	"github.com/duke-git/lancet/v2/strutil"
 	"github.com/labstack/echo/v4"
@@ -61,9 +62,17 @@ func Page(c echo.Context) error {
 	// 使用 GORM 查询数据
 	queryStart := time.Now()
 
-	sql := "select * from " + strutil.SnakeCase(amisHeader.Bean)
-
-	list := build_sql.ExecSql(dbProvider, sql)
+	var list []map[string]interface{}
+	one2manySql := build_sql.GetOne2ManySql(amisHeader.Bean, pageReq)
+	if !strings.EqualFold("", one2manySql) {
+		// 1:n
+		idVal := build_sql.GetOne2ManyRefIdVal(amisHeader.Bean, pageReq)
+		refValStr := build_sql.GetOne2ManyRefValStr(pageReq)
+		list = build_sql.ExecSql(dbProvider, one2manySql, idVal, refValStr)
+	} else {
+		toSql, _, _ := squirrel.Select("*").From(strutil.SnakeCase(amisHeader.Bean)).ToSql()
+		list = build_sql.ExecSql(dbProvider, toSql)
+	}
 
 	//dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface())
 	//sql := dbProvider.GetDb().Limit(pageSize).Offset(offset).Find(slicePtr.Interface()).Statement.SQL.String()
