@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"maps"
+
 	"github.com/labstack/echo/v4"
 	"github.com/super-npc/bronya-go/src/framework/log"
 	"github.com/super-npc/bronya-go/src/module/amis/controller/resp"
@@ -23,12 +25,22 @@ func AppInfo(c echo.Context) error {
 }
 
 func TopRightHeader(c echo.Context) error {
+	siteHeader := c.Request().Header.Get("site")
+	if siteHeader == "" {
+
+	}
+	moduleMap := SiteModuleMap
+	modules := maps.Keys(moduleMap)
+
 	res := resp.TopRightHeaderResp{}
 	var btnList = make([]resp.SubSystemButtons, 0)
-	btnList = append(btnList, resp.SubSystemButtons{Label: "杂货铺1", Level: "light"})
-	btnList = append(btnList, resp.SubSystemButtons{Label: "系统1", Level: "primary"})
-	btnList = append(btnList, resp.SubSystemButtons{Label: "杂货铺2", Level: "light"})
-	btnList = append(btnList, resp.SubSystemButtons{Label: "杂货铺3", Level: "light"})
+	for module := range modules {
+		btnList = append(btnList, resp.SubSystemButtons{Label: module, Level: "light"})
+	}
+	//btnList = append(btnList, resp.SubSystemButtons{Label: "杂货铺1", Level: "light"})
+	//btnList = append(btnList, resp.SubSystemButtons{Label: "系统1", Level: "primary"})
+	//btnList = append(btnList, resp.SubSystemButtons{Label: "杂货铺2", Level: "light"})
+	//btnList = append(btnList, resp.SubSystemButtons{Label: "杂货铺3", Level: "light"})
 	res.SubSystemButtons = btnList
 
 	roles := make([]resp.Role, 0)
