@@ -3,6 +3,7 @@ module github.com/super-npc/bronya-go
 go 1.25
 
 require (
+	github.com/Masterminds/squirrel v1.5.4
 	github.com/acmestack/gorm-plus v0.1.5
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/duke-git/lancet/v2 v2.3.7
@@ -33,6 +34,8 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0 // indirect
+	github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
